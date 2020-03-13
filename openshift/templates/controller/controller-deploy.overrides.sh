@@ -14,7 +14,7 @@ fi
 
 if createOperation; then
   # Randomly generate an api-key without asking ...
-  readParameter "CONTROLLER_API_KEY - Please provide the key for the controller REST APIS.  If left blank, a 32 character long base64 encoded value will be randomly generated using openssl:" CONTROLLER_API_KEY $(generateKey 32) "false"
+  readParameter "CONTROLLER_API_KEY - Please provide the key for the controller REST APIS.  If left blank, a 32 character long hex encoded value will be randomly generated using openssl:" CONTROLLER_API_KEY $(generateKey 32 -hex) "false"
 else
   # Secrets are removed from the configurations during update operations ...
   printStatusMsg "Update operation detected ...\nSkipping the prompts for CONTROLLER_API_KEY secret ... \n"
