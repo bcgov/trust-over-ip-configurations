@@ -9,11 +9,11 @@
 # APP_NAME=vc-authn-oidc
 # APP_GROUP=vc-authn-oidc
 # ROLE=agent
-APPLICATION_DOMAIN=a2a-vc-auth-agent-dev.pathfinder.gov.bc.ca
+APPLICATION_DOMAIN=a2a-vc-authn-agent-dev.pathfinder.gov.bc.ca
 # ROUTE_TIMEOUT=120s
 # IMAGE_NAMESPACE=nnfbch-tools
 TAG_NAME=dev
-# AGENT_LABEL_NAME=vc-authn-agent
+# AGENT_LABEL_NAME=a2a-vc-authn-agent
 # WEBHOOK_URL=http://vc-authn-controller:5000
 # AGENT_ADMIN_PORT=8024
 # ADMIN_API_KEY=[a-zA-Z0-9_~!@#$%^&*()-=<>,.?;:|]{16}
