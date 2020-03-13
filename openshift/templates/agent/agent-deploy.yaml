@@ -116,10 +116,10 @@ objects:
                 - -c
                 - $(echo aca-py start
                   --inbound-transport http '0.0.0.0' ${HTTP_INTERFACE_PORT}
-                  --endpoint https://${AGENT_ENDPOINT}
+                  --endpoint ${AGENT_ENDPOINT}
                   --outbound-transport http
                   --genesis-url "${GENESIS_URL}"
-                  $(echo "${CONTROLLER_WEBHOOK_URL:+--webhook-url ${CONTROLLER_WEBHOOK_URL%/}${CONTROLLER_API_KEY:+/${CONTROLLER_API_KEY}}})
+                  $(echo "${CONTROLLER_WEBHOOK_URL:+--webhook-url ${CONTROLLER_WEBHOOK_URL%/}${CONTROLLER_API_KEY:+/${CONTROLLER_API_KEY}}}")
                   --auto-accept-invites
                   --auto-accept-requests
                   --auto-ping-connection
