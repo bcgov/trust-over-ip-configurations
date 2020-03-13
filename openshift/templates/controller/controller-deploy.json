@@ -90,7 +90,30 @@
                 "env": [
                   {
                     "name": "IdentityServer__ConnectionStrings__Database",
-                    "value": "${IDENTITY_SERVER_DB_CONNECTION_STRING}"
+                    "valueFrom": {
+                      "secretKeyRef": {
+                        "name": "${PREFIX}database",
+                        "key": "database-connectionstring"
+                      }
+                    }
+                  },
+                  {
+                    "name": "UrlShortenerService__ConnectionStrings__Database",
+                    "valueFrom": {
+                      "secretKeyRef": {
+                        "name": "${PREFIX}database",
+                        "key": "database-connectionstring"
+                      }
+                    }
+                  },
+                  {
+                    "name": "SessionStorageService__ConnectionStrings_Database",
+                    "valueFrom": {
+                      "secretKeyRef": {
+                        "name": "${PREFIX}database",
+                        "key": "database-connectionstring"
+                      }
+                    }
                   },
                   {
                     "name": "IdentityServer__CertificateFilename",
@@ -109,16 +132,8 @@
                     "value": "${AGENT_PUBLIC_URL}"
                   },
                   {
-                    "name": "UrlShortenerService__ConnectionStrings__Database",
-                    "value": "${URL_SHORTENER_DATABASE_CONNECTION_STRING}"
-                  },
-                  {
                     "name": "UrlShortenerService__BaseUrl",
                     "value": "https://${APPLICATION_DOMAIN}/url"
-                  },
-                  {
-                    "name": "SessionStorageService__ConnectionStrings_Database",
-                    "value": "${SESSION_STORAGE_SERVICE_DATABASE_CONNECTION_STRING}"
                   },
                   {
                     "name": "SwaggerEnabled",
@@ -407,13 +422,6 @@
       "value": "latest"
     },
     {
-      "name": "IDENTITY_SERVER_DB_CONNECTION_STRING",
-      "displayName": "Database Connection String",
-      "description": "The connection string to use to connect to the database.",
-      "required": true,
-      "value": "Host=vc-authn-database;Port=5432;Database=vc_authn;Username=DB_USER;Password=DB_PASSWORD;"
-    },
-    {
       "name": "APPLICATION_DOMAIN",
       "description": "The exposed hostname that will route to the service, e.g., myappname.pathfinder.gov.bc.ca, if left blank a value will be defaulted.",
       "displayName": "Application Hostname",
@@ -432,20 +440,6 @@
       "description": "The controller agent public URL",
       "required": true,
       "value": ""
-    },
-    {
-      "name": "URL_SHORTENER_DATABASE_CONNECTION_STRING",
-      "displayName": "URL Shortening Service Connection URL",
-      "description": "URL Shortening Service Connection string.",
-      "required": true,
-      "value": "Host=vc-authn-database;Port=5432;Database=vc_authn;Username=DB_USER;Password=DB_PASSWORD;"
-    },
-    {
-      "name": "SESSION_STORAGE_SERVICE_DATABASE_CONNECTION_STRING",
-      "displayName": "Session Storage Service DB",
-      "description": "Session Storage Service DB connection string.",
-      "required": true,
-      "value": "Host=vc-authn-database;Port=5432;Database=vc_authn;Username=DB_USER;Password=DB_PASSWORD;"
     },
     {
       "name": "CONTROLLER_CERTIFICATE_FILE_PATH",

@@ -86,7 +86,7 @@
                 "image": " ",
                 "ports": [
                   {
-                    "containerPort": 5432,
+                    "containerPort": "${{PORT}}",
                     "protocol": "TCP"
                   }
                 ],
@@ -141,7 +141,7 @@
                 ],
                 "livenessProbe": {
                   "tcpSocket": {
-                    "port": 5432
+                    "port": "${{PORT}}"
                   },
                   "initialDelaySeconds": 30,
                   "timeoutSeconds": 1,
@@ -221,9 +221,13 @@
         }
       },
       "stringData": {
+        "database-hostname": "${PREFIX}${NAME}",
+        "database-name": "${POSTGRESQL_DATABASE_NAME}",
+        "database-port": "${PORT}",
         "admin-password": "${POSTGRESQL_ADMIN_PASSWORD}",
+        "database-user": "${POSTGRESQL_USER}",
         "database-password": "${POSTGRESQL_PASSWORD}",
-        "database-user": "${POSTGRESQL_USER}"
+        "database-connectionstring": "Host=${PREFIX}${NAME};Port=${PORT};Database=${POSTGRESQL_DATABASE_NAME};Username=${POSTGRESQL_USER};Password=${POSTGRESQL_PASSWORD};"
       },
       "type": "Opaque"
     },
@@ -249,8 +253,8 @@
           {
             "name": "${PREFIX}${NAME}",
             "protocol": "TCP",
-            "port": 5432,
-            "targetPort": 5432
+            "port": "${{PORT}}",
+            "targetPort": "${{PORT}}"
           }
         ],
         "selector": {
@@ -348,6 +352,13 @@
       "required": true,
       "generate": "expression",
       "from": "[a-zA-Z0-9_~!@#$%^&*()-=<>,.?;:|]{16}"
+    },
+    {
+      "name": "PORT",
+      "displayName": "Port",
+      "description": "The port on which the database service will listen.",
+      "required": true,
+      "value": "5432"
     },
     {
       "name": "MOUNT_PATH",

@@ -12,12 +12,9 @@
 # IMAGE_NAMESPACE=nnfbch-tools
 # NAMESPACE_NAME=nnfbch
 TAG_NAME=dev
-# IDENTITY_SERVER_DB_CONNECTION_STRING=Host=vc-authn-database;Port=5432;Database=vc_authn;Username=DB_USER;Password=DB_PASSWORD;
 APPLICATION_DOMAIN=a2a-vc-auth-controller-dev.pathfinder.gov.bc.ca
 # AGENT_ADMIN_URL=http://vc-authn-agent:8024
 AGENT_PUBLIC_URL=https://a2a-vc-auth-agent-dev.pathfinder.gov.bc.ca
-# URL_SHORTENER_DATABASE_CONNECTION_STRING=Host=vc-authn-database;Port=5432;Database=vc_authn;Username=DB_USER;Password=DB_PASSWORD;
-# SESSION_STORAGE_SERVICE_DATABASE_CONNECTION_STRING=Host=vc-authn-database;Port=5432;Database=vc_authn;Username=DB_USER;Password=DB_PASSWORD;
 # CONTROLLER_CERTIFICATE_FILE_PATH=/controller-data/secret.rsa
 # ASPNETCORE_URLS=http://*:8080
 # CONTROLLER_API_KEY=[a-zA-Z0-9_~!@#$%^&*()-=<>,.?;:|]{16}
