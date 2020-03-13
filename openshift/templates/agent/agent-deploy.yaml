@@ -119,6 +119,7 @@ objects:
                   --endpoint https://${AGENT_ENDPOINT}
                   --outbound-transport http
                   --genesis-url "${GENESIS_URL}"
+                  $(echo "${CONTROLLER_WEBHOOK_URL:+--webhook-url ${CONTROLLER_WEBHOOK_URL%/}${CONTROLLER_API_KEY:+/${CONTROLLER_API_KEY}}})
                   --auto-accept-invites
                   --auto-accept-requests
                   --auto-ping-connection
@@ -182,8 +183,13 @@ objects:
                     secretKeyRef:
                       name: ${PREFIX}${WALLET_CREDENTIAL_STORE_NAME}
                       key: did
-                - name: WEBHOOK_URL
+                - name: CONTROLLER_WEBHOOK_URL
                   value: ${WEBHOOK_URL}
+                - name: CONTROLLER_API_KEY
+                  valueFrom:
+                    secretKeyRef:
+                      name: ${PREFIX}controller
+                      key: controller-api-key
                 - name: HTTP_INTERFACE_PORT
                   value: ${AGENT_HTTP_PORT}
                 - name: ADMIN_INTERFACE_PORT
@@ -352,8 +358,8 @@ parameters:
     required: true
     value: vc-authn-agent
   - name: WEBHOOK_URL
-    displayName: Webhook URL
-    description: The webhook endpoint
+    displayName: Controller Webhook URL
+    description: The webhook endpoint for the controller.
     required: true
     value: http://vc-authn-controller:5000
   - name: AGENT_ADMIN_PORT
