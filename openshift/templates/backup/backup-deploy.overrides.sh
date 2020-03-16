@@ -10,7 +10,7 @@ fi
 # ------------------------------------------------------------------------
 # The generated config map is used to update the Backup configuration.
 # ========================================================================
-CONFIG_MAP_NAME=backup-conf-indy-cat
+CONFIG_MAP_NAME=${CONFIG_MAP_NAME:-backup-conf}
 SOURCE_FILE=$( dirname "$0" )/config/backup.conf
 
 OUTPUT_FORMAT=json
