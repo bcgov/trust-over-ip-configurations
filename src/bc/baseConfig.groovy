@@ -14,6 +14,9 @@ class baseConfig {
   // Instance Prefix
   public static final String  PREFIX = 'vc-authn-'
 
+  // Instance Suffix
+  public static final String  SUFFIX = ''
+
   // Apps - Listed in the order they should be tagged
   public static final String[] APPS = ['vc-authn-database', 'vc-authn-agent', 'vc-authn-controller', 'vc-authn-backup']
 }

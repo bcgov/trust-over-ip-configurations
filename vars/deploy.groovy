@@ -1,4 +1,4 @@
-void call(String appName, String appSuffix, String namespace, String envTag) {
+void call(String appName, String appPrefix, String appSuffix, String namespace, String envTag) {
   openshift.withCluster() {
     openshift.withProject() {
 
@@ -11,9 +11,9 @@ void call(String appName, String appSuffix, String namespace, String envTag) {
       openshift.tag("${appName}@${IMAGE_HASH}", "${appName}:${envTag}")
     }
 
-    echo "Watching rollout of ${appName}${appSuffix} in ${namespace}-${envTag} ..."
+    echo "Watching rollout of ${appPrefix}${appName}${appSuffix} in ${namespace}-${envTag} ..."
     openshift.withProject("${namespace}-${envTag}") {
-        def dc = openshift.selector('dc', "${appName}${appSuffix}")
+        def dc = openshift.selector('dc', "${appPrefix}${appName}${appSuffix}")
         // Wait for the deployment to complete.
         // This will wait until the desired replicas are all available
         dc.rollout().status()
