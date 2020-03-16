@@ -1,19 +1,24 @@
-// This Jenkins file uses a brute force method to promote the application images from DEV to TEST.
-// In other words all of the images that are currently deployed in DEV will be tagged for deployment to TEST.
+def PIPELINE_NAME = "deployment/prod"
 
-// Define these in the order they should be deployed.
-def APP_NAMES = ['vc-authn-agent', 'vc-authn-controller', 'vc-authn-database']
-def SOURCE_TAG = 'test'
-def DESTINATION_TAG = 'prod'
+def LIB_NAME= "custom-lib"
+def LIB_REPO = "https://github.com/WadeBarnes/a2a-trust-over-ip-configurations.git"
+def LIB_BRANCH = "master"
+library identifier: "${LIB_NAME}@${LIB_BRANCH}",
+        retriever: modernSCM(
+          [$class: 'GitSCMSource',
+          remote: "${LIB_REPO}",
+          branches: [[name: "*/${LIB_BRANCH}"]]])
 
 node {
-  APP_NAMES.each { appName ->
-    stage("Deploying ${appName} to ${DESTINATION_TAG}") {
+  def config = load "../workspace@script/jenkins/${PIPELINE_NAME}/config.groovy"
+
+  config.APPS.each { appName ->
+    stage("Deploying ${appName} to ${config.DESTINATION_TAG}") {
       script {
         openshift.withCluster() {
           openshift.withProject() {
-            echo "Tagging ${appName} for deployment to ${DESTINATION_TAG} ..."
-            openshift.tag("${appName}:${SOURCE_TAG}", "${appName}:${DESTINATION_TAG}")
+            echo "Tagging ${appName}:${config.SOURCE_TAG} for deployment to ${config.DESTINATION_TAG} ..."
+            openshift.tag("${appName}:${config.SOURCE_TAG}", "${appName}:${config.DESTINATION_TAG}")
           }
         }
       }
