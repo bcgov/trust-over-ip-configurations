@@ -1,0 +1,39 @@
+#=========================================================
+# OpenShift template parameters for:
+# Component: .
+# Template File: ../openshift/templates/backup/backup-deploy.json
+#=========================================================
+NAME=backup
+PREFIX=
+APP_NAME=Backup
+APP_GROUP=backup
+SOURCE_IMAGE_NAME=backup
+IMAGE_NAMESPACE=nnfbch-tools
+TAG_NAME=dev
+DATABASE_DEPLOYMENT_NAME=vc-authn-database
+WALLET_DB_HOST_NAME=vc-authn-wallet
+DATABASE_USER_KEY_NAME=database-user
+DATABASE_PASSWORD_KEY_NAME=database-password
+BACKUP_STRATEGY=rolling
+WEBHOOK_URL=
+ENVIRONMENT_FRIENDLY_NAME=Access to Audio Trust Over IP (dev)
+ENVIRONMENT_NAME=nnfbch-dev
+BACKUP_DIR=/backups/
+DAILY_BACKUPS=
+WEEKLY_BACKUPS=
+MONTHLY_BACKUPS=
+DATABASE_SERVER_TIMEOUT=120
+CONFIG_FILE_NAME=backup.conf
+CONFIG_MAP_NAME=backup-conf
+CONFIG_MOUNT_PATH=/
+BACKUP_VOLUME_NAME=backup
+BACKUP_VOLUME_SIZE=20Gi
+BACKUP_VOLUME_CLASS=netapp-file-standard
+VERIFICATION_VOLUME_NAME=backup-verification
+VERIFICATION_VOLUME_SIZE=5Gi
+VERIFICATION_VOLUME_CLASS=netapp-file-standard
+VERIFICATION_VOLUME_MOUNT_PATH=/var/lib/pgsql/data
+CPU_REQUEST=0
+CPU_LIMIT=0
+MEMORY_REQUEST=0Mi
+MEMORY_LIMIT=0Mi
