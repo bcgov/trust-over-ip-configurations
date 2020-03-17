@@ -137,7 +137,8 @@ objects:
                   $([ ! -z "${AGENT_ADMIN_API_KEY}" ] && echo "--admin-api-key ${AGENT_ADMIN_API_KEY}" || echo "--admin-insecure-mode")
                   --label "${AGENT_NAME}"
                   --log-level ${AGENT_LOG_LEVEL}
-                  $([ ! -z "${TIMING}" ] && echo "--timing" || echo ""));
+                  $([ ! -z "${TIMING}" ] && echo "--timing" || echo "")
+                  $([ ! -z "${READ_ONLY_LEDGER}" ] && echo "--read-only-ledger" || echo ""));
               env:
                 - name: GENESIS_URL
                   value: ${GENESIS_FILE_URL}
@@ -207,6 +208,8 @@ objects:
                   value: ${LOG_LEVEL}
                 - name: TIMING
                   value: ${AGENT_TIMING}
+                - name: READ_ONLY_LEDGER
+                  value: ${AGENT_READ_ONLY_LEDGER}
               image:
               ports:
                 - containerPort: ${{AGENT_ADMIN_PORT}}
@@ -393,6 +396,11 @@ parameters:
     description: Enable/Disable collection of agent timing information.  Controls the inclusion/exclusion of the agent '--timing' startup parameter.  Defaults to disabled.
     required: false
     value: ""
+  - name: AGENT_READ_ONLY_LEDGER
+    displayName: Set read only ledger flag.
+    description: Enable/Disable the read only ledger flag.  Controls the inclusion/exclusion of the agent '--read-only-ledger' startup parameter.  Defaults to disabled.
+    required: false
+    value: ''
   # ===============================================================================
   # Wallet Configuration
   #--------------------------------------------------------------------------------
