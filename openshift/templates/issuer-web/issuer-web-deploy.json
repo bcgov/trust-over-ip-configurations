@@ -421,7 +421,7 @@
       "displayName": "Image Namespace",
       "name": "IMAGE_NAMESPACE",
       "required": true,
-      "value": "bztwou-tools"
+      "value": "nnfbch-tools"
     },
     {
       "name": "CADDY_CONFIG_FILE_NAME",
