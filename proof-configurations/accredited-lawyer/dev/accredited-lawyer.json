@@ -10,7 +10,7 @@
         "label": "PPID",
         "restrictions": [
           {
-            "issuer_did": "",
+            "issuer_did": "RznYFPVhHpYZgsn4Hu3StV",
             "schema_name": "a2a_toip",
             "schema_version": "0.1.0"
           }
@@ -21,7 +21,7 @@
         "label": "Given Name",
         "restrictions": [
           {
-            "issuer_did": "",
+            "issuer_did": "RznYFPVhHpYZgsn4Hu3StV",
             "schema_name": "a2a_toip",
             "schema_version": "0.1.0"
           }
@@ -32,7 +32,7 @@
         "label": "Surname",
         "restrictions": [
           {
-            "issuer_did": "",
+            "issuer_did": "RznYFPVhHpYZgsn4Hu3StV",
             "schema_name": "a2a_toip",
             "schema_version": "0.1.0"
           }
@@ -43,7 +43,7 @@
         "label": "Membership Status",
         "restrictions": [
           {
-            "issuer_did": "",
+            "issuer_did": "RznYFPVhHpYZgsn4Hu3StV",
             "schema_name": "a2a_toip",
             "schema_version": "0.1.0"
           }
