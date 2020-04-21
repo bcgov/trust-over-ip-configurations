@@ -1,0 +1,39 @@
+{
+  "questions": [
+    {
+      "type": "text",
+      "name": "ppid",
+      "title": "PPID:",
+      "isRequired": true,
+      "requiredErrorText": "Required Field"
+    },
+    {
+      "type": "text",
+      "name": "given_name",
+      "title": "First Name:",
+      "isRequired": true,
+      "requiredErrorText": "Required Field"
+    },
+    {
+      "type": "text",
+      "name": "surname",
+      "title": "Last Name:",
+      "isRequired": true,
+      "requiredErrorText": "Required Field"
+    },
+    {
+      "type": "radiogroup",
+      "name": "membership_status",
+      "title": "Membership Status:",
+      "isRequired": true,
+      "requiredErrorText": "Required Field",
+      "hasNone": false,
+      "colCount": 2,
+      "choices": [
+        "Active",
+        "Inactive"
+      ]
+    }
+  ],
+  "triggers": []
+}
