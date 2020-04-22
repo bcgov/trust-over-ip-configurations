@@ -134,7 +134,7 @@
       "displayName": "Artifact Image Name",
       "description": "The name of the image containing the built artifacts.",
       "required": true,
-      "value": "issuer-web-base-image"
+      "value": "issuer-web-base"
     },
     {
       "name": "ARTIFACT_IMAGE_TAG",
@@ -148,7 +148,7 @@
       "displayName": "Source Image Namespace",
       "description": "The namespace containing the artifact image.",
       "required": true,
-      "value": "bztwou-tools"
+      "value": "nnfbch-tools"
     },
     {
       "name": "ARTIFACT_IMAGE_KIND",

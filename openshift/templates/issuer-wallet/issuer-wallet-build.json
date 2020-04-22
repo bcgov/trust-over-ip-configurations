@@ -44,7 +44,8 @@
           "git": {
             "uri": "${GIT_REPO_URL}",
             "ref": "${GIT_REF}"
-          }
+          },
+          "contextDir": "${SOURCE_CONTEXT_DIR}"
         },
         "strategy": {
           "type": "Source",
@@ -70,7 +71,7 @@
       "displayName": "Name",
       "description": "The name assigned to all of the resources defined in this template.",
       "required": true,
-      "value": "issuer-kit-db"
+      "value": "issuer-kit-wallet"
     },
     {
       "name": "APP_NAME",
@@ -91,7 +92,7 @@
       "displayName": "Git Repo URL",
       "description": "The URL to your GIT repo.",
       "required": true,
-      "value": "https://github.com/bcgov/issuer-kit-poc.git"
+      "value": "https://github.com/bcgov/identity-kit-poc.git"
     },
     {
       "name": "GIT_REF",
@@ -99,6 +100,13 @@
       "description": "The git reference or branch.",
       "required": true,
       "value": "master"
+    },
+    {
+      "name": "SOURCE_CONTEXT_DIR",
+      "displayName": "Source Context Directory",
+      "description": "The source context directory.",
+      "required": false,
+      "value": "wa-wallet/config"
     },
     {
       "name": "SOURCE_IMAGE_KIND",
@@ -112,7 +120,7 @@
       "displayName": "Source Image Name",
       "required": true,
       "description": "The name of the source image.",
-      "value": "registry.access.redhat.com/rhscl/mongodb-36-rhel7"
+      "value": "registry.access.redhat.com/rhscl/postgresql-10-rhel7"
     },
     {
       "name": "SOURCE_IMAGE_TAG",
