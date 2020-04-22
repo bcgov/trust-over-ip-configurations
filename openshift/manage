@@ -1,0 +1,241 @@
+#!/bin/bash
+export MSYS_NO_PATHCONV=1
+SCRIPT_HOME="$( cd "$( dirname "$0" )" && pwd )"
+
+# =================================================================================================================
+# Usage:
+# -----------------------------------------------------------------------------------------------------------------
+usage () {
+  cat <<-EOF
+
+  Allows you to manage certain aspects of project environment.
+
+  Usage:
+    $0 [options] [commands]
+
+  Commands:
+  ========
+    configureProof <baseUrl> <payLoadPath> [namespace] [secretName] [key]
+      - Post a proof configuration to a vc-authn-oidc controller.
+      - To update, PUT, use the '-u' (update) option; see examples below.
+
+        Examples;
+          $0 -p default -e dev configureProof https://a2a-vc-authn-controller-dev.pathfinder.gov.bc.ca ../proof-configurations/accredited-lawyer/dev/accredited-lawyer.json
+          $0 -p default -e dev -u configureProof https://a2a-vc-authn-controller-dev.pathfinder.gov.bc.ca ../proof-configurations/accredited-lawyer/dev/accredited-lawyer.json
+
+    clean
+      - Remove the application components from a given environment.
+        Specify the environment using the -e option.
+
+    delete
+      - Delete allapplication components from a given environment.
+        Specify the environment using the -e option.
+
+    scaleUp
+      - Scale up one or more pods.
+        Example;
+          $0 -p medlab -e prod scaleUp agent-a2a api-a2a issuer-web-a2a
+
+    scaleDown
+      - Scale down one or more pods.
+        Example;
+          $0 -p medlab -e prod scaleDown agent-a2a api-a2a issuer-web-a2a
+
+    recycle
+      - Recycle one or more pods.
+        Example;
+          $0 -p medlab -e prod recycle agent-a2a api-a2a issuer-web-a2a
+EOF
+}
+
+# =================================================================================================================
+# Process the local command line arguments and pass everything else along.
+# - The 'getopts' options string must start with ':' for this to work.
+# -----------------------------------------------------------------------------------------------------------------
+while [ ${OPTIND} -le $# ]; do
+  if getopts :s: FLAG; then
+    case ${FLAG} in
+      # List of local options:
+      s ) resourceSuffix=$OPTARG ;;
+
+      # Pass unrecognized options ...
+      \?) pass+=" -${OPTARG}" ;;
+    esac
+  else
+    # Pass unrecognized arguments ...
+    pass+=" ${!OPTIND}"
+    let OPTIND++
+  fi
+done
+
+# Pass the unrecognized arguments along for further processing ...
+shift $((OPTIND-1))
+set -- "$@" $(echo -e "${pass}" | sed -e 's/^[[:space:]]*//')
+# =================================================================================================================
+
+# -----------------------------------------------------------------------------------------------------------------
+# Define hook scripts:
+# - These must be defined before the main settings script 'settings.sh' is loaded.
+# -----------------------------------------------------------------------------------------------------------------
+onRequiredOptionsExist() {
+  (
+    if [ -z "${DEPLOYMENT_ENV_NAME}" ]; then
+      _red='\033[0;31m'
+      _nc='\033[0m' # No Color
+          echo -e "\n${_red}You MUST specify an environment name using the '-e' flag.${_nc}"
+          echo -e "${_red}Assuming a default would have unwanted consequences.${_nc}\n"
+          return 1
+        else
+          return 0
+    fi
+  )
+}
+
+onUsesCommandLineArguments() {
+  (
+    # This script is expecting command line arguments to be passed ...
+    return 0
+  )
+}
+
+# -----------------------------------------------------------------------------------------------------------------
+# Initialization:
+# -----------------------------------------------------------------------------------------------------------------
+# Load the project settings and functions ...
+_includeFile="ocFunctions.inc"
+_settingsFile="settings.sh"
+if [ ! -z $(type -p ${_includeFile}) ]; then
+  _includeFilePath=$(type -p ${_includeFile})
+  export OCTOOLSBIN=$(dirname ${_includeFilePath})
+
+  if [ -f ${OCTOOLSBIN}/${_settingsFile} ]; then
+    . ${OCTOOLSBIN}/${_settingsFile}
+  fi
+
+  if [ -f ${OCTOOLSBIN}/${_includeFile} ]; then
+    . ${OCTOOLSBIN}/${_includeFile}
+  fi
+else
+  _red='\033[0;31m'
+  _yellow='\033[1;33m'
+  _nc='\033[0m' # No Color
+  echo -e \\n"${_red}${_includeFile} could not be found on the path.${_nc}"
+  echo -e "${_yellow}Please ensure the openshift-developer-tools are installed on and registered on your path.${_nc}"
+  echo -e "${_yellow}https://github.com/BCDevOps/openshift-developer-tools${_nc}"
+fi
+
+# -----------------------------------------------------------------------------------------------------------------
+# Functions:
+# -----------------------------------------------------------------------------------------------------------------
+deleteResources() {
+  (
+    _appName=${1}
+    if [ -z "${_appName}" ]; then
+      echoError "\ncleanResources; You MUST specify the name of the application group.\n"
+      exit 1
+    fi
+
+    printAndAskToContinue "If you contiune all of the resources for '${_appName}' will be deleted.  All data will be lost."
+    oc -n $(getProjectName) delete all,secret,pvc,configmap,NetworkSecurityPolicy -l app-group=${_appName}
+  )
+}
+
+cleanResources() {
+  (
+    _appName=${1}
+    if [ -z "${_appName}" ]; then
+      echoError "\ncleanResources; You MUST specify the name of the application group.\n"
+      exit 1
+    fi
+
+    echoWarning "Cleaning out resources for '${_appName}'.  Secrets and PVCs will be retained."
+    oc -n $(getProjectName) delete all,configmap,NetworkSecurityPolicy -l app-group=${_appName}
+  )
+}
+
+configureProof() {
+  baseUrl=${1}
+  payLoadPath=${2}
+  namespace=${3}
+  secretName=${4}
+  key=${5}
+  if [ -z "${baseUrl}" ] || [ -z "${payLoadPath}" ]|| [ -z "${namespace}" ]|| [ -z "${secretName}" ]|| [ -z "${key}" ]; then
+    echoError "\nconfigureProof; You MUST specify the following parameters:\n- baseUrl\n- payLoadPath\n- namespace\n- secretName\n- key"
+    exit 1
+  fi
+
+  apiKey=$(getSecret "${secretName}" "${key}" "${namespace}")
+  if [ -z "${apiKey}" ]; then
+    echoError "\nconfigureProof; Unable to process request:\n - Unable to locate the API Key for ${baseUrl}.\n   Please ensure you are logged into OpenShift and have access to the following resources.\n   - Namespace: ${namespace}\n   - Secret Name: ${secretName}\n   - Key: ${key}"
+    exit 1
+  fi
+
+  if createOperation; then
+    httpCommand="POST"
+  else
+    httpCommand="PUT"
+  fi
+
+  if [ ${payLoadPath} == "all" ]; then
+    searchPath="../proof-configurations"
+    searchFilter="*.json"
+    payLoadPaths=$(find ${searchPath} -type f -name "${searchFilter}")
+  else
+    payLoadPaths=${payLoadPath}
+  fi
+
+  for payLoadPath in ${payLoadPaths}; do
+    echo -e "\n${httpCommand}ing '${payLoadPath}' to ${baseUrl} ...\n"
+    curl \
+      -X ${httpCommand} \
+      -H X-Api-Key:${apiKey} \
+      -H accept:application/json \
+      -H Content-Type:application/json-patch+json \
+      --data @${payLoadPath} \
+      ${baseUrl}/api/vc-configs
+  done
+}
+# =================================================================================================================
+
+pushd ${SCRIPT_HOME} >/dev/null
+_cmd=$(toLower ${1})
+shift
+
+case "${_cmd}" in
+  clean)
+    appName=${1:-${PROFILE}}
+    cleanResources ${appName}
+    ;;
+
+  delete)
+    appName=${1:-${PROFILE}}
+    deleteResources ${appName}
+    ;;
+
+  configureproof)
+    baseUrl=${1}
+    payLoadPath=${2}
+    namespace=${3:-$(getProjectName)}
+    secretName=${4:-vc-authn-controller}
+    key=${5:-controller-api-key}
+    configureProof ${baseUrl} ${payLoadPath} ${namespace} ${secretName} ${key}
+    ;;
+
+
+  scaleup)
+    scaleUp -w $${@}
+    ;;
+  scaledown)
+    scaleDown -w ${@}
+    ;;
+  recycle)
+    recyclePods -w ${@}
+    ;;
+
+  *)
+    echoWarning "Unrecognized command; ${_cmd}"
+    globalUsage
+    ;;
+esac
+
+popd >/dev/null
