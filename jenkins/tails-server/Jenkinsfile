@@ -1,0 +1,37 @@
+def PIPELINE_NAME = "tails-server"
+
+def LIB_NAME= "custom-lib"
+def LIB_REPO = "https://github.com/bcgov/a2a-trust-over-ip-configurations.git"
+def LIB_BRANCH = "master"
+library identifier: "${LIB_NAME}@${LIB_BRANCH}", 
+        retriever: modernSCM(
+          [$class: 'GitSCMSource',
+          remote: "${LIB_REPO}",
+          branches: [[name: "*/${LIB_BRANCH}"]]])  
+
+node {
+  def config = load "../workspace@script/jenkins/${PIPELINE_NAME}/config.groovy"
+
+  config.BUILDS.each {
+    stage("Build ${it}") {
+      script {
+        openshift.withCluster() {
+          openshift.withProject() {
+            echo "Building the ${it} image ..."
+            build(openshift, "${it}", config.WAIT_TIMEOUT)
+          }
+        }
+      }
+    }
+  }
+
+  stage("Deploy ${config.DEPLOYMENT_ENVIRONMENT_TAGS[0]}") {
+    script {
+      deploy("${config.APP_NAME}",
+             "${config.PREFIX}",
+             "${config.SUFFIX}",
+             "${config.NAME_SPACE}",
+             "${config.DEPLOYMENT_ENVIRONMENT_TAGS[0]}")
+    }
+  }
+}

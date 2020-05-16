@@ -1,0 +1,26 @@
+#=========================================================
+# OpenShift template parameters for:
+# Component: .
+# Template File: ../openshift/templates/tails-server/tails-server-deploy.yaml
+#=========================================================
+# NAME=tails-server
+# SUFFIX=
+# APP_NAME=TailsServer
+# APP_GROUP=tails-server
+# ROLE=tails
+APPLICATION_DOMAIN=tails-server-dev.pathfinder.gov.bc.ca
+# ROUTE_TIMEOUT=120s
+# IMAGE_NAMESPACE=nnfbch-tools
+TAG_NAME=dev
+# LOG_LEVEL=WARNING
+# PORT=6543
+# STORAGE_PATH=/tmp/tails-files
+# PERSISTENT_VOLUME_CLASS=netapp-file-standard
+# PERSISTENT_VOLUME_SIZE=10Gi
+# PERSISTENT_VOLUME_ACCESS_MODE=ReadWriteMany
+# MIN_REPLICAS=2
+# MAX_REPLICAS=4
+# CPU_REQUEST=10m
+# CPU_LIMIT=1000m
+# MEMORY_REQUEST=10Mi
+# MEMORY_LIMIT=1000Mi
