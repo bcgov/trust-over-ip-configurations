@@ -15,6 +15,10 @@ if createOperation; then
   readParameter "WALLET_KEY - Please provide the wallet encryption key for the environment.  If left blank, a 48 character long base64 encoded value will be randomly generated using openssl:" WALLET_KEY $(generateKey) "false"
   readParameter "WALLET_SEED - Please provide the indy wallet seed for the environment.  If left blank, a seed will be randomly generated using openssl:" WALLET_SEED $(generateSeed) "false"
   readParameter "WALLET_DID - Please provide the indy wallet did for the environment.  The default is an empty string:" WALLET_DID "" "false"
+  if [[ "$PROFILE" == "lsbc" ]]; then
+    # additional parameter required by lsbc deployment
+    readParameter "WEBHOOK_URL - Please provide the url to be used by the agent to send webhooks for the environment.  The default is an empty string:" WEBHOOK_URL "" "false"
+  fi 
 else
   # Secrets are removed from the configurations during update operations ...
   printStatusMsg "Update operation detected ...\nSkipping the prompts for ADMIN_API_KEY, WALLET_KEY, WALLET_SEED, and WALLET_DID secrets ... \n"
@@ -22,6 +26,10 @@ else
   writeParameter "WALLET_KEY" "prompt_skipped" "false"
   writeParameter "WALLET_SEED" "prompt_skipped" "false"
   writeParameter "WALLET_DID" "prompt_skipped" "false"
+  if [[ "$PROFILE" == "lsbc" ]]; then
+    # additional parameter required by lsbc deployment
+  writeParameter "WEBHOOK_URL" "prompt_skipped" "false"
+  fi
 fi
 
 SPECIALDEPLOYPARMS="--param-file=${_overrideParamFile}"
