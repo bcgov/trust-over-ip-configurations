@@ -9,6 +9,7 @@
 # SUFFIX=-a2a
 # ROLE=agent
 APPLICATION_DOMAIN=a2a-agent-test.pathfinder.gov.bc.ca
+ADMIN_APPLICATION_DOMAIN=a2a-agent-admin-test.pathfinder.gov.bc.ca
 # IMAGE_NAMESPACE=nnfbch-tools
 # SOURCE_IMAGE_NAME=issuer-agent
 TAG_NAME=test
@@ -18,7 +19,7 @@ AGENT_BASE_URL=https://a2a-agent-test.pathfinder.gov.bc.ca
 # AGENT_ADMIN_PORT=8024
 # ADMIN_API_KEY=[a-zA-Z0-9]{16}
 # AGENT_HTTP_PORT=8021
-# GENESIS_FILE_URL=http://test.bcovrin.vonx.io/genesis
+# GENESIS_FILE_URL=https://raw.githubusercontent.com/sovrin-foundation/sovrin/stable/sovrin/pool_transactions_sandbox_genesis
 # LOG_LEVEL=WARNING
 # WALLET_STORAGE_TYPE=postgres_storage
 # WALLET_HOST=wallet

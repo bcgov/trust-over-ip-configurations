@@ -1,21 +1,21 @@
 #=========================================================
 # OpenShift template parameters for:
 # Component: .
-# Template File: ../openshift/templates/agent/agent-deploy.yaml
+# Template File: ../openshift/templates/issuer-agent/issuer-agent-deploy.yaml
 #=========================================================
 NAME=agent
 APP_NAME=issuer
-APP_GROUP=a2a
-SUFFIX=-a2a
+APP_GROUP=lsbc
+SUFFIX=-lsbc
 ROLE=agent
-APPLICATION_DOMAIN=a2a-agent-dev.pathfinder.gov.bc.ca
-ADMIN_APPLICATION_DOMAIN=a2a-agent-admin-dev.pathfinder.gov.bc.ca
+APPLICATION_DOMAIN=lsbc-agent-dev.pathfinder.gov.bc.ca
+ADMIN_APPLICATION_DOMAIN=lsbc-agent-admin-dev.pathfinder.gov.bc.ca
 IMAGE_NAMESPACE=nnfbch-tools
 SOURCE_IMAGE_NAME=issuer-agent
 TAG_NAME=dev
-AGENT_LABEL_NAME=a2a-agent-dev
-AGENT_BASE_URL=https://a2a-agent-dev.pathfinder.gov.bc.ca
-WEBHOOK_URL=http://api-a2a:8080
+AGENT_LABEL_NAME=lsbc-agent-dev
+AGENT_BASE_URL=https://lsbc-agent-dev.pathfinder.gov.bc.ca
+# WEBHOOK_URL=
 AGENT_ADMIN_PORT=8024
 ADMIN_API_KEY=[a-zA-Z0-9]{16}
 AGENT_HTTP_PORT=8021
