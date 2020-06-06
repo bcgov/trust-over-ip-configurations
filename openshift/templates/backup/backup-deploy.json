@@ -178,8 +178,8 @@
                     "name": "VC_AUTHN_DATABASE_USER",
                     "valueFrom": {
                       "secretKeyRef": {
-                        "name": "${PREFIX}${DATABASE_DEPLOYMENT_NAME}",
-                        "key": "${DATABASE_USER_KEY_NAME}"
+                        "name": "${PREFIX}${VC_AUTHN_DB_HOST_NAME}",
+                        "key": "${DB_USER_KEY_NAME}"
                       }
                     }
                   },
@@ -187,8 +187,8 @@
                     "name": "VC_AUTHN_DATABASE_PASSWORD",
                     "valueFrom": {
                       "secretKeyRef": {
-                        "name": "${PREFIX}${DATABASE_DEPLOYMENT_NAME}",
-                        "key": "${DATABASE_PASSWORD_KEY_NAME}"
+                        "name": "${PREFIX}${VC_AUTHN_DB_HOST_NAME}",
+                        "key": "${DB_PASSWORD_KEY_NAME}"
                       }
                     }
                   },
@@ -196,8 +196,8 @@
                     "name": "VC_AUTHN_WALLET_USER",
                     "valueFrom": {
                       "secretKeyRef": {
-                        "name": "${PREFIX}${WALLET_DB_HOST_NAME}",
-                        "key": "${DATABASE_USER_KEY_NAME}"
+                        "name": "${PREFIX}${VC_AUTHN_WALLET_DB_HOST_NAME}",
+                        "key": "${DB_USER_KEY_NAME}"
                       }
                     }
                   },
@@ -205,8 +205,44 @@
                     "name": "VC_AUTHN_WALLET_PASSWORD",
                     "valueFrom": {
                       "secretKeyRef": {
-                        "name": "${PREFIX}${WALLET_DB_HOST_NAME}",
-                        "key": "${DATABASE_PASSWORD_KEY_NAME}"
+                        "name": "${PREFIX}${VC_AUTHN_WALLET_DB_HOST_NAME}",
+                        "key": "${DB_PASSWORD_KEY_NAME}"
+                      }
+                    }
+                  },
+                  {
+                    "name": "WALLET_LSBC_USER",
+                    "valueFrom": {
+                      "secretKeyRef": {
+                        "name": "${PREFIX}${LSBC_WALLET_DB_HOST_NAME}",
+                        "key": "${DB_USER_KEY_NAME}"
+                      }
+                    }
+                  },
+                  {
+                    "name": "WALLET_LSBC_PASSWORD",
+                    "valueFrom": {
+                      "secretKeyRef": {
+                        "name": "${PREFIX}${LSBC_WALLET_DB_HOST_NAME}",
+                        "key": "${DB_PASSWORD_KEY_NAME}"
+                      }
+                    }
+                  },
+                  {
+                    "name": "WALLET_PRIME_USER",
+                    "valueFrom": {
+                      "secretKeyRef": {
+                        "name": "${PREFIX}${PRIME_WALLET_DB_HOST_NAME}",
+                        "key": "${DB_USER_KEY_NAME}"
+                      }
+                    }
+                  },
+                  {
+                    "name": "WALLET_PRIME_PASSWORD",
+                    "valueFrom": {
+                      "secretKeyRef": {
+                        "name": "${PREFIX}${PRIME_WALLET_DB_HOST_NAME}",
+                        "key": "${DB_PASSWORD_KEY_NAME}"
                       }
                     }
                   },
@@ -315,30 +351,44 @@
       "value": "dev"
     },
     {
-      "name": "DATABASE_DEPLOYMENT_NAME",
+      "name": "VC_AUTHN_DB_HOST_NAME",
       "displayName": "Database Deployment Name",
       "description": "The name associated to the database deployment resources.  In particular, this is used to wire up the credentials associated to the database.",
       "required": true,
       "value": "vc-authn-database"
     },
     {
-      "name": "WALLET_DB_HOST_NAME",
+      "name": "VC_AUTHN_WALLET_DB_HOST_NAME",
       "displayName": "Wallet Database Hostname",
       "description": "The name associated to the wallet database deployment resources.  In particular, this is used to wire up the credentials associated to the database.",
       "required": true,
       "value": "vc-authn-wallet"
     },
     {
-      "name": "DATABASE_USER_KEY_NAME",
+      "name": "LSBC_WALLET_DB_HOST_NAME",
+      "displayName": "Wallet Database Hostname",
+      "description": "The name associated to the wallet database deployment resources.  In particular, this is used to wire up the credentials associated to the database.",
+      "required": true,
+      "value": "wallet-lsbc"
+    },
+    {
+      "name": "PRIME_WALLET_DB_HOST_NAME",
+      "displayName": "Wallet Database Hostname",
+      "description": "The name associated to the wallet database deployment resources.  In particular, this is used to wire up the credentials associated to the database.",
+      "required": true,
+      "value": "wallet-prime"
+    },
+    {
+      "name": "DB_USER_KEY_NAME",
       "displayName": "Database User Key Name",
-      "description": "The datbase user key name stoed in database deployment resources specified by DATABASE_DEPLOYMENT_NAME.",
+      "description": "The datbase user key name stoed in database deployment resources specified by VC_AUTHN_DB_HOST_NAME.",
       "required": true,
       "value": "database-user"
     },
     {
-      "name": "DATABASE_PASSWORD_KEY_NAME",
+      "name": "DB_PASSWORD_KEY_NAME",
       "displayName": "Database Password Key Name",
-      "description": "The database password key name stored in database deployment resources specified by DATABASE_DEPLOYMENT_NAME.",
+      "description": "The database password key name stored in database deployment resources specified by VC_AUTHN_DB_HOST_NAME.",
       "required": true,
       "value": "database-password"
     },
