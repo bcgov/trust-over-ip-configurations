@@ -75,6 +75,24 @@ objects:
         name: ${NAME}${SUFFIX}
         weight: 100
 
+  - kind: PersistentVolumeClaim
+    apiVersion: v1
+    metadata:
+      name: ${NAME}${SUFFIX}-tails
+      labels:
+        name: ${NAME}${SUFFIX}
+        app: ${APP_NAME}${SUFFIX}
+        app-group: ${APP_GROUP}
+        role: ${ROLE}
+        env: ${TAG_NAME}
+    spec:
+      storageClassName: "${TAILS_FILES_VOLUME_CLASS}"
+      accessModes:
+      - ReadWriteMany
+      resources:
+        requests:
+          storage: "${TAILS_FILES_VOLUME_SIZE}"
+
   - kind: Secret
     apiVersion: v1
     metadata:
@@ -132,6 +150,10 @@ objects:
             role: ${ROLE}
             env: ${TAG_NAME}
         spec:
+          volumes:
+            - name: ${NAME}${SUFFIX}-tails
+              persistentVolumeClaim:
+                claimName: ${NAME}${SUFFIX}-tails
           containers:
             - name: ${NAME}${SUFFIX}
               command:
@@ -226,12 +248,17 @@ objects:
                   value: ${AGENT_BASE_URL}
                 - name: AGENT_LOG_LEVEL
                   value: ${LOG_LEVEL}
+                - name: TMPDIR
+                  value: ${TAILS_FILES_DIR}
               image:
               ports:
                 - containerPort: ${{AGENT_ADMIN_PORT}}
                   protocol: TCP
                 - containerPort: ${{AGENT_HTTP_PORT}}
                   protocol: TCP
+              volumeMounts:
+              - name: ${NAME}${SUFFIX}-tails
+                mountPath: ${TAILS_FILES_DIR}
               readinessProbe:
                 timeoutSeconds: 30
                 initialDelaySeconds: 3
@@ -467,6 +494,27 @@ parameters:
     required: false
     generate: expression
     from: "[a-zA-Z0-9]{16}"
+  # ===============================================================================
+  # Tails Files Configuration
+  #--------------------------------------------------------------------------------
+  - name: TAILS_FILES_DIR
+    displayName: Tails File Storage Dir
+    description:
+      The directory where the local copies of the tails files will be stored.
+    required: true
+    value: /tails_files
+  - name: TAILS_FILES_VOLUME_CLASS
+    displayName: Tails File Storage Volume Class
+    description:
+      The class of the volume; gluster-file, gluster-block, gluster-file-db, netapp-file-standard, netapp-block-standard.
+    required: true
+    value: netapp-file-standard
+  - name: TAILS_FILES_VOLUME_SIZE
+    displayName: Tails File Storage Dir
+    description:
+      The size of the persistent volume , e.g. 512Mi, 1Gi, 2Gi.
+    required: true
+    value: 1Gi
   # ===============================================================================
   - name: CPU_REQUEST
     displayName: Resources CPU Request
