@@ -1,0 +1,13 @@
+[
+  {
+    "default": true,
+    "attributes": [
+      "ppid",
+      "surname",
+      "given_name",
+      "membership_status"
+    ],
+    "schema_name": "a2a_toip",
+    "schema_version": "0.1.0"
+  }
+]
