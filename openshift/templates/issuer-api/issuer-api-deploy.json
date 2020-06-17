@@ -346,6 +346,13 @@
       "value": "nnfbch-tools"
     },
     {
+      "name": "NAMESPACE_NAME",
+      "displayName": "Namespace Name",
+      "description": "The name of the namespace being deployed to..",
+      "required": true,
+      "value": "nnfbch"
+    },
+    {
       "name": "SERVICE_PORT",
       "displayName": "Service Port",
       "required": true,

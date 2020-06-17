@@ -388,6 +388,11 @@ parameters:
     displayName: Namespace containing application images.
     required: true
     value: nnfbch-tools
+  - name: NAMESPACE_NAME
+    displayName: Namespace Name
+    description: The name of the namespace being deployed to.
+    required: true
+    value: nnfbch
   - name: SOURCE_IMAGE_NAME
     displayName: Source Image Name
     description: The name of the source image to use for the service.

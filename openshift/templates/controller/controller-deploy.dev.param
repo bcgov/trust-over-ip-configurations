@@ -10,7 +10,6 @@
 # PREFIX=vc-authn-
 # ROLE=controller
 # IMAGE_NAMESPACE=nnfbch-tools
-# NAMESPACE_NAME=nnfbch
 TAG_NAME=dev
 APPLICATION_DOMAIN=a2a-vc-authn-controller-dev.pathfinder.gov.bc.ca
 # AGENT_ADMIN_URL=http://vc-authn-agent:8024

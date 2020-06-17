@@ -4,7 +4,6 @@
 # Template File: ../openshift/templates/controller/controller-deploy.json
 #=========================================================
 NAME=controller
-NAMESPACE_NAME=nnfbch
 APP_NAME=vc-authn-oidc
 APP_GROUP=vc-authn-oidc
 PREFIX=vc-authn-
