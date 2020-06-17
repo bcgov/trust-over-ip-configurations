@@ -9,6 +9,7 @@
 # SUFFIX=-a2a
 # ROLE=public-frontend
 # IMAGE_NAMESPACE=nnfbch-tools
+# NAMESPACE_NAME=nnfbch
 # CADDY_CONFIG_FILE_NAME=Caddyfile
 # CADDY_CONFIG_MAP_NAME=issuer-web-caddy-conf
 # CADDY_CONFIG_MOUNT_PATH=/etc/

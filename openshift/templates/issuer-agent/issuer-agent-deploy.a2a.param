@@ -11,6 +11,7 @@ ROLE=agent
 APPLICATION_DOMAIN=a2a-agent-dev.pathfinder.gov.bc.ca
 ADMIN_APPLICATION_DOMAIN=a2a-agent-admin-dev.pathfinder.gov.bc.ca
 IMAGE_NAMESPACE=nnfbch-tools
+NAMESPACE_NAME=nnfbch
 SOURCE_IMAGE_NAME=issuer-agent
 TAG_NAME=dev
 AGENT_LABEL_NAME=a2a-agent-dev
