@@ -29,6 +29,11 @@ usage () {
         Examples;
           $0 -p a2a -e dev accepttaa https://a2a-vc-authn-controller-dev.pathfinder.gov.bc.ca
 
+    registersovrin <did> <verkey> [ledger]
+      - Register the did/verkey combination on the taget ledger as ENDORSER.
+
+        Examples;
+          $0 -p default -e dev registersovrin mydid
     clean
       - Remove the application components from a given environment.
         Specify the environment using the -e option.
@@ -259,6 +264,24 @@ accepttaa() {
       ${baseUrl}/ledger/taa/accept )  
   rm -f ./taa_payload.json
 }
+
+registersovrin() {
+  did=${1}
+  verkey=${2}
+  ledger=${3}
+  key=${4}
+  if [ -z "${did}" ] || [ -z "${verkey}" ]|| [ -z "${ledger}" ]; then
+    echoError "\naccepttaa; You MUST specify the following parameters:\n- did\n- verkey\n- ledger"
+    exit 1
+  fi
+    
+  echo -e "\nRegistering on ${ledger}...\n"
+  TAA_RESULT=$(curl \
+      -X POST \
+      -H "Content-Type: application/json charset=utf-8" \
+      -d "{\"network\":\"${ledger}\",\"did\":\"${did}\",\"verkey\":\"${verkey}\",\"paymentaddr\":\"\"}" \
+      https://selfserve.sovrin.org/nym )
+}
 # =================================================================================================================
 
 pushd ${SCRIPT_HOME} >/dev/null
@@ -291,6 +314,13 @@ case "${_cmd}" in
     key=${3:-admin-api-key}
     namespace=${4:-$(getProjectName)}
     accepttaa ${baseUrl} ${namespace} ${secretName} ${key}
+    ;;
+  
+  registersovrin)
+    did=${1}
+    verkey=${2}
+    ledger=${3:-stagingnet}
+    registersovrin ${did} ${verkey} ${ledger}
     ;;
 
   scaleup)
