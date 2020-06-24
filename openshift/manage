@@ -276,7 +276,7 @@ registersovrin() {
   fi
     
   echo -e "\nRegistering on ${ledger}...\n"
-  TAA_RESULT=$(curl \
+  RESULT=$(curl \
       -X POST \
       -H "Content-Type: application/json charset=utf-8" \
       -d "{\"network\":\"${ledger}\",\"did\":\"${did}\",\"verkey\":\"${verkey}\",\"paymentaddr\":\"\"}" \
