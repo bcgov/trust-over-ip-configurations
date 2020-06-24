@@ -23,6 +23,12 @@ usage () {
           $0 -p default -e dev configureProof https://a2a-vc-authn-controller-dev.pathfinder.gov.bc.ca ../proof-configurations/accredited-lawyer/dev/accredited-lawyer.json
           $0 -p default -e dev -u configureProof https://a2a-vc-authn-controller-dev.pathfinder.gov.bc.ca ../proof-configurations/accredited-lawyer/dev/accredited-lawyer.json
 
+    accepttaa <baseUrl> <secretName> [key] [namespace]
+      - Retrieve the current TAA from the ledger, and submit a TAA accept transaction.
+
+        Examples;
+          $0 -p a2a -e dev accepttaa https://a2a-vc-authn-controller-dev.pathfinder.gov.bc.ca
+
     clean
       - Remove the application components from a given environment.
         Specify the environment using the -e option.
@@ -195,6 +201,64 @@ configureProof() {
       ${baseUrl}/api/vc-configs
   done
 }
+
+accepttaa() {
+  baseUrl=${1}
+  namespace=${2}
+  secretName="${3}"
+  key=${4}
+  if [ -z "${baseUrl}" ] || [ -z "${namespace}" ]|| [ -z "${secretName}" ]|| [ -z "${key}" ]; then
+    echoError "\naccepttaa; You MUST specify the following parameters:\n- baseUrl\n- secretName\n- key\n- namespace"
+    exit 1
+  fi
+  
+  apiKey=$(getSecret "${secretName}" "${key}" "${namespace}")
+  if [ -z "${apiKey}" ]; then
+    echoError "\accepttaa; Unable to process request:\n - Unable to locate the API Key for ${baseUrl}.\n   Please ensure you are logged into OpenShift and have access to the following resources.\n   - Namespace: ${namespace}\n   - Secret Name: ${secretName}\n   - Key: ${key}"
+    exit 1
+  fi
+
+  # fetch current TAA
+  echo -e "\nFetching TAA...\n"
+  TAA=$(curl \
+      -X GET \
+      -H X-Api-Key:${apiKey} \
+      ${baseUrl}/ledger/taa )
+  
+  TAA_TEXT=$(jq -nr "${TAA} | .result.taa_record.text")
+  TAA_TEXT=$(echo "${TAA_TEXT}" | iconv -t utf-8 | sed 's/"/\\\"/g')
+  TAA_VERSION=$(jq -nr "${TAA} | .result.taa_record.version")
+  
+  TAA_METHODS_KEYS=$(jq -nr "${TAA} | .result.aml_record.aml | keys | .[]")
+  TAA_METHODS_KEYS=$(echo "${TAA_METHODS_KEYS}" | sed 's/$/~/')
+  TAA_METHODS_KEYS=${TAA_METHODS_KEYS//$'\n'/}
+  TAA_METHODS_VALUES=$(jq -nr "${TAA} | .result.aml_record.aml | .[]")
+  TAA_METHODS_VALUES=$(echo "${TAA_METHODS_VALUES}" | sed 's/$/~/')
+  TAA_METHODS_VALUES=${TAA_METHODS_VALUES//$'\n'/}
+
+  IFS='~'
+  read -r -a TAA_METHODS_KEYS <<< "$TAA_METHODS_KEYS"
+  read -r -a TAA_METHODS_VALUES <<< "$TAA_METHODS_VALUES"
+  unset IFS
+
+  # prompt user for TAA signing method
+  unset SELECTED_MECHANISM
+  PS3="Select TAA signing method:"
+  select opt in "${TAA_METHODS_VALUES[@]}"; do
+    SELECTED_MECHANISM=${TAA_METHODS_KEYS[$REPLY]}
+    break
+  done
+  
+  echo -e "\nSigning TAA using method ${SELECTED_MECHANISM}...\n"
+  echo "{\"mechanism\":\"${SELECTED_MECHANISM}\", \"version\": \"${TAA_VERSION}\", \"text\":\"${TAA_TEXT}\"}" > taa_payload.json
+  TAA_RESULT=$(curl \
+      -X POST \
+      -H X-Api-Key:${apiKey} \
+      -H "Content-Type: application/json charset=utf-8" \
+      -d @taa_payload.json \
+      ${baseUrl}/ledger/taa/accept )  
+  rm -f ./taa_payload.json
+}
 # =================================================================================================================
 
 pushd ${SCRIPT_HOME} >/dev/null
@@ -221,6 +285,13 @@ case "${_cmd}" in
     configureProof ${baseUrl} ${payLoadPath} ${namespace} ${secretName} ${key}
     ;;
 
+  accepttaa)
+    baseUrl=${1}
+    secretName=${2:-"agent-${PROFILE}"}
+    key=${3:-admin-api-key}
+    namespace=${4:-$(getProjectName)}
+    accepttaa ${baseUrl} ${namespace} ${secretName} ${key}
+    ;;
 
   scaleup)
     scaleUp -w $${@}
