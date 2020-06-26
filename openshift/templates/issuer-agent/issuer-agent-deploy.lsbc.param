@@ -10,6 +10,7 @@ SUFFIX=-lsbc
 ROLE=agent
 APPLICATION_DOMAIN=lsbc-agent-dev.pathfinder.gov.bc.ca
 ADMIN_APPLICATION_DOMAIN=lsbc-agent-admin-dev.pathfinder.gov.bc.ca
+ROUTE_TIMEOUT=120s
 IMAGE_NAMESPACE=nnfbch-tools
 NAMESPACE_NAME=nnfbch
 SOURCE_IMAGE_NAME=issuer-agent

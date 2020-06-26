@@ -13,6 +13,11 @@
             "issuer_did": "DZBaHghKsVHcJoiwkykG3r",
             "schema_name": "a2a_toip",
             "schema_version": "0.1.0"
+          },
+          {
+            "issuer_did": "DZBaHghKsVHcJoiwkykG3r",
+            "schema_name": "Practicing Certificate",
+            "schema_version": "0.1.0"
           }
         ]
       },
@@ -23,6 +28,11 @@
           {
             "issuer_did": "DZBaHghKsVHcJoiwkykG3r",
             "schema_name": "a2a_toip",
+            "schema_version": "0.1.0"
+          },
+          {
+            "issuer_did": "DZBaHghKsVHcJoiwkykG3r",
+            "schema_name": "Practicing Certificate",
             "schema_version": "0.1.0"
           }
         ]
@@ -35,6 +45,11 @@
             "issuer_did": "DZBaHghKsVHcJoiwkykG3r",
             "schema_name": "a2a_toip",
             "schema_version": "0.1.0"
+          },
+          {
+            "issuer_did": "DZBaHghKsVHcJoiwkykG3r",
+            "schema_name": "Practicing Certificate",
+            "schema_version": "0.1.0"
           }
         ]
       },
@@ -45,6 +60,11 @@
           {
             "issuer_did": "DZBaHghKsVHcJoiwkykG3r",
             "schema_name": "a2a_toip",
+            "schema_version": "0.1.0"
+          },
+          {
+            "issuer_did": "DZBaHghKsVHcJoiwkykG3r",
+            "schema_name": "Practicing Certificate",
             "schema_version": "0.1.0"
           }
         ]

@@ -3,7 +3,7 @@
   "subject_identifier": "ppid",
   "configuration": {
     "name": "accredited-lawyer",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "requested_attributes": [
       {
         "name": "ppid",
@@ -13,6 +13,16 @@
             "issuer_did": "RznYFPVhHpYZgsn4Hu3StV",
             "schema_name": "a2a_toip",
             "schema_version": "0.1.0"
+          },
+          {
+            "issuer_did": "RznYFPVhHpYZgsn4Hu3StV",
+            "schema_name": "Practicing Certificate",
+            "schema_version": "0.1.0"
+          },
+          {
+            "issuer_did": "UUHA3oknprvKrpa7a6sncK",
+            "schema_name": "Practicing Certificate",
+            "schema_version": "1.1.1"
           }
         ]
       },
@@ -24,6 +34,22 @@
             "issuer_did": "RznYFPVhHpYZgsn4Hu3StV",
             "schema_name": "a2a_toip",
             "schema_version": "0.1.0"
+          },
+          {
+            "issuer_did": "RznYFPVhHpYZgsn4Hu3StV",
+            "schema_name": "Practicing Certificate",
+            "schema_version": "0.1.0"
+          }
+        ]
+      },
+      {
+        "name": "Given Name",
+        "label": "Given Name",
+        "restrictions": [
+          {
+            "issuer_did": "UUHA3oknprvKrpa7a6sncK",
+            "schema_name": "Practicing Certificate",
+            "schema_version": "1.1.1"
           }
         ]
       },
@@ -35,6 +61,16 @@
             "issuer_did": "RznYFPVhHpYZgsn4Hu3StV",
             "schema_name": "a2a_toip",
             "schema_version": "0.1.0"
+          },
+          {
+            "issuer_did": "RznYFPVhHpYZgsn4Hu3StV",
+            "schema_name": "Practicing Certificate",
+            "schema_version": "0.1.0"
+          },
+          {
+            "issuer_did": "UUHA3oknprvKrpa7a6sncK",
+            "schema_name": "Practicing Certificate",
+            "schema_version": "1.1.1"
           }
         ]
       },
@@ -45,6 +81,11 @@
           {
             "issuer_did": "RznYFPVhHpYZgsn4Hu3StV",
             "schema_name": "a2a_toip",
+            "schema_version": "0.1.0"
+          },
+          {
+            "issuer_did": "RznYFPVhHpYZgsn4Hu3StV",
+            "schema_name": "Practicing Certificate",
             "schema_version": "0.1.0"
           }
         ]
