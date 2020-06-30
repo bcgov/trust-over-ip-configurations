@@ -1,0 +1,66 @@
+{
+    "id": "prime-enrollee-test",
+    "subject_identifier": "gpid",
+    "configuration": {
+      "name": "prime-enrollee",
+      "version": "0.0.1",
+      "requested_attributes": [
+        {
+          "name": "gpid",
+          "label": "GPID",
+          "restrictions": [
+            {
+              "issuer_did": "TVmQfMZwLFWWK3z1RLgFBR",
+              "schema_name": "enrollee",
+              "schema_version": "2.0"
+            }
+          ]
+        },
+        {
+          "name": "organization_type",
+          "label": "Organization Type",
+          "restrictions": [
+            {
+              "issuer_did": "TVmQfMZwLFWWK3z1RLgFBR",
+              "schema_name": "enrollee",
+              "schema_version": "2.0"
+            }
+          ]
+        },
+        {
+          "name": "remote_access",
+          "label": "Remote Access",
+          "restrictions": [
+            {
+              "issuer_did": "TVmQfMZwLFWWK3z1RLgFBR",
+              "schema_name": "enrollee",
+              "schema_version": "2.0"
+            }
+          ]
+        },
+        {
+          "name": "renewal_date",
+          "label": "Renewal Date",
+          "restrictions": [
+            {
+              "issuer_did": "TVmQfMZwLFWWK3z1RLgFBR",
+              "schema_name": "enrollee",
+              "schema_version": "2.0"
+            }
+          ]
+        },
+        {
+          "name": "user_class",
+          "label": "User Class",
+          "restrictions": [
+            {
+              "issuer_did": "TVmQfMZwLFWWK3z1RLgFBR",
+              "schema_name": "enrollee",
+              "schema_version": "2.0"
+            }
+          ]
+        }
+      ],
+      "requested_predicates": []
+    }
+  }
