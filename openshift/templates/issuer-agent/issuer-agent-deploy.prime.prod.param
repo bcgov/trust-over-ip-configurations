@@ -35,6 +35,7 @@ AGENT_BASE_URL=https://prime-agent.pathfinder.gov.bc.ca
 # TAILS_FILES_DIR=/tails_files
 # TAILS_FILES_VOLUME_CLASS=netapp-file-standard
 # TAILS_FILES_VOLUME_SIZE=1Gi
+TAILS_SERVER_BASE_URL=https://tails.vonx.io
 # CPU_REQUEST=10m
 # CPU_LIMIT=750m
 # MEMORY_REQUEST=10Mi

@@ -182,7 +182,8 @@ objects:
                   --admin '0.0.0.0' ${ADMIN_INTERFACE_PORT}
                   $([ ! -z "${AGENT_ADMIN_API_KEY}" ] && echo "--admin-api-key ${AGENT_ADMIN_API_KEY}" || echo "--admin-insecure-mode")
                   --label "${AGENT_NAME}"
-                  --log-level ${AGENT_LOG_LEVEL});
+                  --log-level ${AGENT_LOG_LEVEL})
+                  --tails-server-base-url ${TAILS_SERVER_BASE_URL};
               env:
                 - name: GENESIS_URL
                   value: ${GENESIS_FILE_URL}
@@ -250,6 +251,8 @@ objects:
                   value: ${LOG_LEVEL}
                 - name: TMPDIR
                   value: ${TAILS_FILES_DIR}
+                - name: TAILS_SERVER_BASE_URL
+                  value: ${TAILS_SERVER_BASE_URL}
               image:
               ports:
                 - containerPort: ${{AGENT_ADMIN_PORT}}
@@ -388,7 +391,6 @@ parameters:
     description: The timeout for the application route.  When this timeout is exceeded the application's route will respond with a 504 Gateway Timeout error.
     required: true
     value: 120s
-    value: issuer-kit-agent-admin.pathfinder.gov.bc.ca
   - name: IMAGE_NAMESPACE
     displayName: Namespace containing application images.
     required: true
@@ -525,6 +527,11 @@ parameters:
       The size of the persistent volume , e.g. 512Mi, 1Gi, 2Gi.
     required: true
     value: 1Gi
+  - name: TAILS_SERVER_BASE_URL
+    displayName: Tails Server Base Url
+    description: The base URL for the Tails Server.
+    required: true
+    value: https://tails-server-dev.pathfinder.gov.bc.ca
   # ===============================================================================
   - name: CPU_REQUEST
     displayName: Resources CPU Request
