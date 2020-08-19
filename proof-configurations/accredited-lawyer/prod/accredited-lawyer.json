@@ -1,5 +1,5 @@
 {
-  "id": "accredited-lawyer-test",
+  "id": "accredited-lawyer",
   "subject_identifier": "ppid",
   "configuration": {
     "name": "accredited-lawyer",
@@ -10,12 +10,7 @@
         "label": "PPID",
         "restrictions": [
           {
-            "issuer_did": "DZBaHghKsVHcJoiwkykG3r",
-            "schema_name": "Practising Certificate",
-            "schema_version": "0.2.0"
-          },
-          {
-            "issuer_did": "AuJrigKQGRLJajKAebTgWu",
+            "issuer_did": "4xE68b6S5VRFrKMMG1U95M",
             "schema_name": "Practicing Certificate",
             "schema_version": "1.0.0"
           }
@@ -26,12 +21,7 @@
         "label": "Given Name",
         "restrictions": [
           {
-            "issuer_did": "DZBaHghKsVHcJoiwkykG3r",
-            "schema_name": "Practising Certificate",
-            "schema_version": "0.2.0"
-          },
-          {
-            "issuer_did": "AuJrigKQGRLJajKAebTgWu",
+            "issuer_did": "4xE68b6S5VRFrKMMG1U95M",
             "schema_name": "Practicing Certificate",
             "schema_version": "1.0.0"
           }
@@ -42,12 +32,7 @@
         "label": "Surname",
         "restrictions": [
           {
-            "issuer_did": "DZBaHghKsVHcJoiwkykG3r",
-            "schema_name": "Practising Certificate",
-            "schema_version": "0.2.0"
-          },
-          {
-            "issuer_did": "AuJrigKQGRLJajKAebTgWu",
+            "issuer_did": "4xE68b6S5VRFrKMMG1U95M",
             "schema_name": "Practicing Certificate",
             "schema_version": "1.0.0"
           }
@@ -58,12 +43,7 @@
         "label": "Membership Status",
         "restrictions": [
           {
-            "issuer_did": "DZBaHghKsVHcJoiwkykG3r",
-            "schema_name": "Practising Certificate",
-            "schema_version": "0.2.0"
-          },
-          {
-            "issuer_did": "AuJrigKQGRLJajKAebTgWu",
+            "issuer_did": "4xE68b6S5VRFrKMMG1U95M",
             "schema_name": "Practicing Certificate",
             "schema_version": "1.0.0"
           }
