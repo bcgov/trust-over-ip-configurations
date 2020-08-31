@@ -3,7 +3,7 @@
   "subject_identifier": "ppid",
   "configuration": {
     "name": "accredited-lawyer",
-    "version": "1.0.1",
+    "version": "1.0.3",
     "requested_attributes": [
       {
         "name": "PPID",
@@ -17,7 +17,7 @@
           {
             "issuer_did": "UUHA3oknprvKrpa7a6sncK",
             "schema_name": "Practicing Certificate",
-            "schema_version": "1.1.2"
+            "schema_version": "1.1.3"
           }
         ]
       },
@@ -33,7 +33,7 @@
           {
             "issuer_did": "UUHA3oknprvKrpa7a6sncK",
             "schema_name": "Practicing Certificate",
-            "schema_version": "1.1.2"
+            "schema_version": "1.1.3"
           }
         ]
       },
@@ -49,7 +49,7 @@
           {
             "issuer_did": "UUHA3oknprvKrpa7a6sncK",
             "schema_name": "Practicing Certificate",
-            "schema_version": "1.1.2"
+            "schema_version": "1.1.3"
           }
         ]
       },
@@ -65,7 +65,7 @@
           {
             "issuer_did": "UUHA3oknprvKrpa7a6sncK",
             "schema_name": "Practicing Certificate",
-            "schema_version": "1.1.2"
+            "schema_version": "1.1.3"
           }
         ]
       }
