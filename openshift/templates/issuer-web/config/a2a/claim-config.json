@@ -22,19 +22,33 @@
       "requiredErrorText": "Required Field"
     },
     {
-      "type": "radiogroup",
+      "type": "text",
       "name": "Membership Status",
       "title": "Membership Status:",
+      "isRequired": true,
+      "requiredErrorText": "Required Field",
+      "readOnly": true
+    },
+    {
+      "type": "radiogroup",
+      "name": "Membership Status Code",
+      "title": "Membership Status Code:",
       "isRequired": true,
       "requiredErrorText": "Required Field",
       "hasNone": false,
       "colCount": 3,
       "choices": [
         "PRAC",
-        "FORM",
+        "RET",
         "OTHER"
       ]
     }
   ],
-  "triggers": []
-}
+  "triggers": [
+    {
+      "type": "runexpression",
+      "expression": "{Membership Status Code} notempty",
+      "runExpression": "updateStatus()"
+    }
+  ]
+}s
