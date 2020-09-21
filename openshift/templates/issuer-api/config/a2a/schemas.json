@@ -5,9 +5,10 @@
       "PPID",
       "Surname",
       "Given Name",
-      "Membership Status"
+      "Membership Status",
+      "Membership Status Code"
     ],
     "schema_name": "Practising Certificate",
-    "schema_version": "0.2.0"
+    "schema_version": "0.3.0"
   }
 ]
