@@ -23,16 +23,16 @@
     },
     {
       "type": "text",
-      "name": "Membership Status",
-      "title": "Membership Status:",
+      "name": "Member Status",
+      "title": "Member Status:",
       "isRequired": true,
       "requiredErrorText": "Required Field",
       "readOnly": true
     },
     {
       "type": "radiogroup",
-      "name": "Membership Status Code",
-      "title": "Membership Status Code:",
+      "name": "Member Status Code",
+      "title": "Member Status Code:",
       "isRequired": true,
       "requiredErrorText": "Required Field",
       "hasNone": false,
@@ -42,12 +42,21 @@
         "RET",
         "OTHER"
       ]
+    },
+    {
+      "type": "radiogroup",
+      "name": "Issuer",
+      "title": "Issuer:",
+      "isRequired": true,
+      "requiredErrorText": "Required Field",
+      "readOnly": true,
+      "defaultValue": "LSBC Demo Issuer (TEST)"
     }
   ],
   "triggers": [
     {
       "type": "runexpression",
-      "expression": "{Membership Status Code} notempty",
+      "expression": "{Member Status Code} notempty",
       "runExpression": "updateStatus()"
     }
   ]

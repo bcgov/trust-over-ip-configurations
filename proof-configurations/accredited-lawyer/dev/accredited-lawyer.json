@@ -1,10 +1,26 @@
 {
   "id": "accredited-lawyer-dev",
-  "subject_identifier": "ppid",
+  "subject_identifier": "PPID",
   "configuration": {
     "name": "accredited-lawyer",
-    "version": "1.1.0",
+    "version": "1.3.1",
     "requested_attributes": [
+      {
+        "name": "Issuer",
+        "label": "Issuer",
+        "restrictions": [
+          {
+            "issuer_did": "RznYFPVhHpYZgsn4Hu3StV",
+            "schema_name": "Practising Certificate",
+            "schema_version": "0.4.0"
+          },
+          {
+            "issuer_did": "UUHA3oknprvKrpa7a6sncK",
+            "schema_name": "Practicing Certificate",
+            "schema_version": "1.3.0"
+          }
+        ]
+      },
       {
         "name": "PPID",
         "label": "PPID",
@@ -12,12 +28,12 @@
           {
             "issuer_did": "RznYFPVhHpYZgsn4Hu3StV",
             "schema_name": "Practising Certificate",
-            "schema_version": "0.3.0"
+            "schema_version": "0.4.0"
           },
           {
             "issuer_did": "UUHA3oknprvKrpa7a6sncK",
             "schema_name": "Practicing Certificate",
-            "schema_version": "1.2.0"
+            "schema_version": "1.3.0"
           }
         ]
       },
@@ -28,12 +44,12 @@
           {
             "issuer_did": "RznYFPVhHpYZgsn4Hu3StV",
             "schema_name": "Practising Certificate",
-            "schema_version": "0.3.0"
+            "schema_version": "0.4.0"
           },
           {
             "issuer_did": "UUHA3oknprvKrpa7a6sncK",
             "schema_name": "Practicing Certificate",
-            "schema_version": "1.2.0"
+            "schema_version": "1.3.0"
           }
         ]
       },
@@ -44,44 +60,44 @@
           {
             "issuer_did": "RznYFPVhHpYZgsn4Hu3StV",
             "schema_name": "Practising Certificate",
-            "schema_version": "0.3.0"
+            "schema_version": "0.4.0"
           },
           {
             "issuer_did": "UUHA3oknprvKrpa7a6sncK",
             "schema_name": "Practicing Certificate",
-            "schema_version": "1.2.0"
+            "schema_version": "1.3.0"
           }
         ]
       },
       {
-        "name": "Membership Status",
-        "label": "Membership Status",
+        "name": "Member Status",
+        "label": "Member Status",
         "restrictions": [
           {
             "issuer_did": "RznYFPVhHpYZgsn4Hu3StV",
             "schema_name": "Practising Certificate",
-            "schema_version": "0.3.0"
+            "schema_version": "0.4.0"
           },
           {
             "issuer_did": "UUHA3oknprvKrpa7a6sncK",
             "schema_name": "Practicing Certificate",
-            "schema_version": "1.2.0"
+            "schema_version": "1.3.0"
           }
         ]
       },
       {
-        "name": "Membership Status Code",
-        "label": "Membership Status Code",
+        "name": "Member Status Code",
+        "label": "Member Status Code",
         "restrictions": [
           {
             "issuer_did": "RznYFPVhHpYZgsn4Hu3StV",
             "schema_name": "Practising Certificate",
-            "schema_version": "0.3.0"
+            "schema_version": "0.4.0"
           },
           {
             "issuer_did": "UUHA3oknprvKrpa7a6sncK",
             "schema_name": "Practicing Certificate",
-            "schema_version": "1.2.0"
+            "schema_version": "1.3.0"
           }
         ]
       }
