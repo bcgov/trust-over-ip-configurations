@@ -1,8 +1,8 @@
 /* Include all your custom JS code in here, it will be available to the app instance */
 
 function updateStatus() {
-    var descriptionField = "Membership Status";
-    var codeField = "Membership Status Code";
+    var descriptionField = "Member Status";
+    var codeField = "Member Status Code";
     var survey = this.survey;
     var mappings = {
       PRAC: "Practising",
