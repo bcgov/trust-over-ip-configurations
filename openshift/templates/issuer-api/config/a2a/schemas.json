@@ -1,6 +1,7 @@
 [
   {
     "default": true,
+    "revocable": true,
     "attributes": [
       "PPID",
       "Surname",
@@ -9,7 +10,7 @@
       "Member Status Code",
       "Issuer"
     ],
-    "schema_name": "Practising Certificate",
-    "schema_version": "0.4.0"
+    "schema_name": "Member Certificate",
+    "schema_version": "1.0.0"
   }
 ]
