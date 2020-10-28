@@ -202,8 +202,8 @@ objects:
                       key: admin-api-key
                 - name: AGENT_NAME
                   value: ${AGENT_LABEL_NAME}
-                # - name: AGENT_ENDPOINT
-                #   value: https://${APPLICATION_DOMAIN}
+                - name: AGENT_ENDPOINT
+                  value: https://${APPLICATION_DOMAIN}
                 - name: AGENT_LOG_LEVEL
                   value: ${LOG_LEVEL}
                 - name: TIMING
