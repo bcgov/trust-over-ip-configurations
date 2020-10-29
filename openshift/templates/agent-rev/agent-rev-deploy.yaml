@@ -189,7 +189,7 @@ objects:
                 - name: CONTROLLER_API_KEY
                   valueFrom:
                     secretKeyRef:
-                      name: ${PREFIX}controller
+                      name: ${PREFIX}controller-tmp
                       key: controller-api-key
                 - name: HTTP_INTERFACE_PORT
                   value: ${AGENT_HTTP_PORT}
@@ -252,7 +252,7 @@ objects:
               - ${PREFIX}${NAME}
             from:
               kind: ImageStreamTag
-              name: ${PREFIX}${NAME}:${TAG_NAME}
+              name: vc-authn-agent:${TAG_NAME}
               namespace: ${IMAGE_NAMESPACE}
 
   - kind: NetworkSecurityPolicy
@@ -400,7 +400,7 @@ parameters:
     displayName: Set read only ledger flag.
     description: Enable/Disable the read only ledger flag.  Controls the inclusion/exclusion of the agent '--read-only-ledger' startup parameter.  Defaults to disabled.
     required: false
-    value: ''
+    value: "true"
   # ===============================================================================
   # Wallet Configuration
   #--------------------------------------------------------------------------------
@@ -437,7 +437,7 @@ parameters:
       The name of the wallet credential store (aka The name of the secret
       that contains the wallet credentials).
     required: true
-    value: agent-wallet-credentials
+    value: agent-tmp-wallet-credentials
   - name: WALLET_KEY
     displayName: Wallet Encryption Key
     description: The encryption key to be used for the wallets.  Needs to be basee64 encoded.
