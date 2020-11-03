@@ -1,6 +1,7 @@
 [
   {
     "default": true,
+    "public": false,
     "revocable": true,
     "attributes": [
       "PPID",

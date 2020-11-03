@@ -37,5 +37,9 @@
     "offerComment": "Credential offer from A2A Issuer DEV",
     "validityDays": -1,
     "multiUse": true
+  },
+  "authentication": {
+    "jwksUri": "https://dev.oidc.gov.bc.ca/auth/realms/sbtyffu4/protocol/openid-connect/certs",
+    "algorithms": ["RS256"]
   }
 }
