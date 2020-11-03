@@ -7,7 +7,7 @@
   "authentication": {
     "enabled": true,
     "oidcSettings": {
-      "authority": "https://sso-dev.pathfinder.gov.bc.ca/auth/realms/sbtyffu4",
+      "authority": "https://dev.oidc.gov.bc.ca/auth/realms/sbtyffu4",
       "clientId": "issuer",
       "redirectUri": "https://a2a-issuer-dev.pathfinder.gov.bc.ca/oidc-callback",
       "redirect_uri": "https://a2a-issuer-dev.pathfinder.gov.bc.ca/oidc-callback-error",
