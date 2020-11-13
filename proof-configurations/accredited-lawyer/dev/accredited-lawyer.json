@@ -6,67 +6,7 @@
     "version": "1.4.0",
     "requested_attributes": [
       {
-        "name": "PPID",
-        "restrictions": [
-          {
-            "issuer_did": "RznYFPVhHpYZgsn4Hu3StV",
-            "schema_name": "Member Certificate",
-            "schema_version": "1.0.0"
-          },
-          {
-            "issuer_did": "UUHA3oknprvKrpa7a6sncK",
-            "schema_name": "Member Card",
-            "schema_version": "1.4.0"
-          }
-        ]
-      },
-      {
-        "name": "Given Name",
-        "restrictions": [
-          {
-            "issuer_did": "RznYFPVhHpYZgsn4Hu3StV",
-            "schema_name": "Member Certificate",
-            "schema_version": "1.0.0"
-          },
-          {
-            "issuer_did": "UUHA3oknprvKrpa7a6sncK",
-            "schema_name": "Member Card",
-            "schema_version": "1.4.0"
-          }
-        ]
-      },
-      {
-        "name": "Surname",
-        "restrictions": [
-          {
-            "issuer_did": "RznYFPVhHpYZgsn4Hu3StV",
-            "schema_name": "Member Certificate",
-            "schema_version": "1.0.0"
-          },
-          {
-            "issuer_did": "UUHA3oknprvKrpa7a6sncK",
-            "schema_name": "Member Card",
-            "schema_version": "1.4.0"
-          }
-        ]
-      },
-      {
-        "name": "Member Status",
-        "restrictions": [
-          {
-            "issuer_did": "RznYFPVhHpYZgsn4Hu3StV",
-            "schema_name": "Member Certificate",
-            "schema_version": "1.0.0"
-          },
-          {
-            "issuer_did": "UUHA3oknprvKrpa7a6sncK",
-            "schema_name": "Member Card",
-            "schema_version": "1.4.0"
-          }
-        ]
-      },
-      {
-        "name": "Member Status Code",
+        "names": ["PPID", "Given Name", "Surname", "Member Status", "Member Status Code"],
         "restrictions": [
           {
             "issuer_did": "RznYFPVhHpYZgsn4Hu3StV",
