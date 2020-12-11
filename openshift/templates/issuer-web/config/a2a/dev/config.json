@@ -6,6 +6,7 @@
   "inviteRequired": false,
   "authentication": {
     "enabled": true,
+    "autoSignOut": true,
     "oidcSettings": {
       "authority": "https://dev.oidc.gov.bc.ca/auth/realms/sbtyffu4",
       "clientId": "issuer",
