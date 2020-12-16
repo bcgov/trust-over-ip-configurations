@@ -1,71 +1,22 @@
 {
   "id": "accredited-lawyer-dev",
-  "subject_identifier": "ppid",
+  "subject_identifier": "PPID",
   "configuration": {
     "name": "accredited-lawyer",
-    "version": "1.0.1",
+    "version": "1.4.0",
     "requested_attributes": [
       {
-        "name": "PPID",
-        "label": "PPID",
+        "names": ["PPID", "Given Name", "Surname", "Member Status", "Member Status Code"],
         "restrictions": [
           {
             "issuer_did": "RznYFPVhHpYZgsn4Hu3StV",
-            "schema_name": "Practising Certificate",
-            "schema_version": "0.2.0"
+            "schema_name": "Member Certificate",
+            "schema_version": "1.0.0"
           },
           {
             "issuer_did": "UUHA3oknprvKrpa7a6sncK",
-            "schema_name": "Practicing Certificate",
-            "schema_version": "1.1.1"
-          }
-        ]
-      },
-      {
-        "name": "Given Name",
-        "label": "Given Name",
-        "restrictions": [          
-          {
-            "issuer_did": "RznYFPVhHpYZgsn4Hu3StV",
-            "schema_name": "Practising Certificate",
-            "schema_version": "0.2.0"
-          },
-          {
-            "issuer_did": "UUHA3oknprvKrpa7a6sncK",
-            "schema_name": "Practicing Certificate",
-            "schema_version": "1.1.1"
-          }
-        ]
-      },
-      {
-        "name": "Surname",
-        "label": "Surname",
-        "restrictions": [
-          {
-            "issuer_did": "RznYFPVhHpYZgsn4Hu3StV",
-            "schema_name": "Practising Certificate",
-            "schema_version": "0.2.0"
-          },
-          {
-            "issuer_did": "UUHA3oknprvKrpa7a6sncK",
-            "schema_name": "Practicing Certificate",
-            "schema_version": "1.1.1"
-          }
-        ]
-      },
-      {
-        "name": "Membership Status",
-        "label": "Membership Status",
-        "restrictions": [
-          {
-            "issuer_did": "RznYFPVhHpYZgsn4Hu3StV",
-            "schema_name": "Practising Certificate",
-            "schema_version": "0.2.0"
-          },
-          {
-            "issuer_did": "UUHA3oknprvKrpa7a6sncK",
-            "schema_name": "Practicing Certificate",
-            "schema_version": "1.1.1"
+            "schema_name": "Member Card",
+            "schema_version": "1.4.0"
           }
         ]
       }

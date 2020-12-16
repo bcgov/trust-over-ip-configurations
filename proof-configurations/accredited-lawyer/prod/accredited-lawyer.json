@@ -1,0 +1,55 @@
+{
+  "id": "accredited-lawyer",
+  "subject_identifier": "ppid",
+  "configuration": {
+    "name": "accredited-lawyer",
+    "version": "1.0.0",
+    "requested_attributes": [
+      {
+        "name": "PPID",
+        "label": "PPID",
+        "restrictions": [
+          {
+            "issuer_did": "4xE68b6S5VRFrKMMG1U95M",
+            "schema_name": "Practicing Certificate",
+            "schema_version": "1.0.0"
+          }
+        ]
+      },
+      {
+        "name": "Given Name",
+        "label": "Given Name",
+        "restrictions": [
+          {
+            "issuer_did": "4xE68b6S5VRFrKMMG1U95M",
+            "schema_name": "Practicing Certificate",
+            "schema_version": "1.0.0"
+          }
+        ]
+      },
+      {
+        "name": "Surname",
+        "label": "Surname",
+        "restrictions": [
+          {
+            "issuer_did": "4xE68b6S5VRFrKMMG1U95M",
+            "schema_name": "Practicing Certificate",
+            "schema_version": "1.0.0"
+          }
+        ]
+      },
+      {
+        "name": "Membership Status",
+        "label": "Membership Status",
+        "restrictions": [
+          {
+            "issuer_did": "4xE68b6S5VRFrKMMG1U95M",
+            "schema_name": "Practicing Certificate",
+            "schema_version": "1.0.0"
+          }
+        ]
+      }
+    ],
+    "requested_predicates": []
+  }
+}

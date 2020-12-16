@@ -181,8 +181,8 @@ objects:
                   --seed "${INDY_WALLET_SEED}"
                   --admin '0.0.0.0' ${ADMIN_INTERFACE_PORT}
                   $([ ! -z "${AGENT_ADMIN_API_KEY}" ] && echo "--admin-api-key ${AGENT_ADMIN_API_KEY}" || echo "--admin-insecure-mode")
-                  --label "${AGENT_NAME}"
-                  --log-level ${AGENT_LOG_LEVEL});
+                  --log-level ${AGENT_LOG_LEVEL}
+                  --tails-server-base-url ${TAILS_SERVER_BASE_URL});
               env:
                 - name: GENESIS_URL
                   value: ${GENESIS_FILE_URL}
@@ -242,14 +242,16 @@ objects:
                     secretKeyRef:
                       name: ${NAME}${SUFFIX}
                       key: admin-api-key
-                - name: AGENT_NAME
+                - name: ACAPY_LABEL
                   value: ${AGENT_LABEL_NAME}
                 - name: AGENT_ENDPOINT
                   value: ${AGENT_BASE_URL}
                 - name: AGENT_LOG_LEVEL
                   value: ${LOG_LEVEL}
-                - name: TMPDIR
+                - name: TAILS_FILES_DIR
                   value: ${TAILS_FILES_DIR}
+                - name: TAILS_SERVER_BASE_URL
+                  value: ${TAILS_SERVER_BASE_URL}
               image:
               ports:
                 - containerPort: ${{AGENT_ADMIN_PORT}}
@@ -258,7 +260,7 @@ objects:
                   protocol: TCP
               volumeMounts:
               - name: ${NAME}${SUFFIX}-tails
-                mountPath: ${TAILS_FILES_DIR}
+                  mountPath: '${TAILS_FILES_DIR}'
 
               readinessProbe:
                 timeoutSeconds: 30
@@ -394,7 +396,6 @@ parameters:
     description: The timeout for the application route.  When this timeout is exceeded the application's route will respond with a 504 Gateway Timeout error.
     required: true
     value: 120s
-    value: issuer-kit-agent-admin.pathfinder.gov.bc.ca
   - name: IMAGE_NAMESPACE
     displayName: Namespace containing application images.
     required: true
@@ -515,10 +516,9 @@ parameters:
   #--------------------------------------------------------------------------------
   - name: TAILS_FILES_DIR
     displayName: Tails File Storage Dir
-    description:
-      The directory where the local copies of the tails files will be stored.
+    description: The directory where the local copies of the tails files will be stored.
     required: true
-    value: /tails_files
+    value: /home/indy/.indy_client/tails
   - name: TAILS_FILES_VOLUME_CLASS
     displayName: Tails File Storage Volume Class
     description:
@@ -531,6 +531,11 @@ parameters:
       The size of the persistent volume , e.g. 512Mi, 1Gi, 2Gi.
     required: true
     value: 1Gi
+  - name: TAILS_SERVER_BASE_URL
+    displayName: Tails Server Base Url
+    description: The base URL for the Tails Server.
+    required: true
+    value: https://tails-server-dev.pathfinder.gov.bc.ca
   # ===============================================================================
   - name: CPU_REQUEST
     displayName: Resources CPU Request
