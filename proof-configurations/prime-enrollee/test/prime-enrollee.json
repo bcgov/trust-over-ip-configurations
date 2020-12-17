@@ -6,52 +6,7 @@
       "version": "0.0.2",
       "requested_attributes": [
         {
-          "name": "gpid",
-          "label": "GPID",
-          "restrictions": [
-            {
-              "issuer_did": "TVmQfMZwLFWWK3z1RLgFBR",
-              "schema_name": "enrollee",
-              "schema_version": "2.0"
-            }
-          ]
-        },
-        {
-          "name": "organization_type",
-          "label": "Organization Type",
-          "restrictions": [
-            {
-              "issuer_did": "TVmQfMZwLFWWK3z1RLgFBR",
-              "schema_name": "enrollee",
-              "schema_version": "2.0"
-            }
-          ]
-        },
-        {
-          "name": "remote_access",
-          "label": "Remote Access",
-          "restrictions": [
-            {
-              "issuer_did": "TVmQfMZwLFWWK3z1RLgFBR",
-              "schema_name": "enrollee",
-              "schema_version": "2.0"
-            }
-          ]
-        },
-        {
-          "name": "renewal_date",
-          "label": "Renewal Date",
-          "restrictions": [
-            {
-              "issuer_did": "TVmQfMZwLFWWK3z1RLgFBR",
-              "schema_name": "enrollee",
-              "schema_version": "2.0"
-            }
-          ]
-        },
-        {
-          "name": "user_class",
-          "label": "User Class",
+          "names": ["gpid", "organization_type", "remote_access", "renewal_date", "user_class"],
           "restrictions": [
             {
               "issuer_did": "TVmQfMZwLFWWK3z1RLgFBR",

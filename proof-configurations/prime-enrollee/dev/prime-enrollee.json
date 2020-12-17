@@ -3,58 +3,18 @@
     "subject_identifier": "gpid",
     "configuration": {
       "name": "prime-enrollee",
-      "version": "0.0.1",
+      "version": "0.0.2",
       "requested_attributes": [
         {
-          "name": "gpid",
-          "label": "GPID",
+          "names": ["gpid", "organization_type", "remote_access", "renewal_date", "user_class"],
           "restrictions": [
             {
               "issuer_did": "QDaSxvduZroHDKkdXKV5gG",
               "schema_name": "enrollee",
               "schema_version": "2.0"
-            }
-          ]
-        },
-        {
-          "name": "organization_type",
-          "label": "Organization Type",
-          "restrictions": [
+            },
             {
-              "issuer_did": "QDaSxvduZroHDKkdXKV5gG",
-              "schema_name": "enrollee",
-              "schema_version": "2.0"
-            }
-          ]
-        },
-        {
-          "name": "remote_access",
-          "label": "Remote Access",
-          "restrictions": [
-            {
-              "issuer_did": "QDaSxvduZroHDKkdXKV5gG",
-              "schema_name": "enrollee",
-              "schema_version": "2.0"
-            }
-          ]
-        },
-        {
-          "name": "renewal_date",
-          "label": "Renewal Date",
-          "restrictions": [
-            {
-              "issuer_did": "QDaSxvduZroHDKkdXKV5gG",
-              "schema_name": "enrollee",
-              "schema_version": "2.0"
-            }
-          ]
-        },
-        {
-          "name": "user_class",
-          "label": "User Class",
-          "restrictions": [
-            {
-              "issuer_did": "QDaSxvduZroHDKkdXKV5gG",
+              "issuer_did": "Cc6hpJk61DjGcztPiAwJyK",
               "schema_name": "enrollee",
               "schema_version": "2.0"
             }
