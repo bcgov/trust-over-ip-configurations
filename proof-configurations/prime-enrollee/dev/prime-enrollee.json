@@ -3,21 +3,21 @@
   "subject_identifier": "gpid",
   "configuration": {
     "name": "prime-enrollee",
-    "version": "0.0.2",
+    "version": "0.0.3",
     "requested_attributes": [
       {
         "names": [
-          "gpid",
-          "organization_type",
-          "remote_access",
-          "renewal_date",
-          "user_class"
+          "GPID",
+          "Renewal Date",
+          "Care Type Setting",
+          "TOA Name",
+          "Remote User"
         ],
         "restrictions": [
           {
             "issuer_did": "QDaSxvduZroHDKkdXKV5gG",
             "schema_name": "enrollee",
-            "schema_version": "2.0"
+            "schema_version": "2.2"
           }
         ]
       }
