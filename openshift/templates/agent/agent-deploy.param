@@ -32,6 +32,6 @@ WALLET_CREDENTIAL_STORE_NAME=agent-wallet-credentials
 # WALLET_SEED=[a-zA-Z0-9_~!@#$%^&*()-=<>,.?;:|]{16}
 # WALLET_DID=[a-zA-Z0-9_~!@#$%^&*()-=<>,.?;:|]{16}
 CPU_REQUEST=10m
-CPU_LIMIT=750m
+CPU_LIMIT=300m
 MEMORY_REQUEST=10Mi
 MEMORY_LIMIT=512Mi

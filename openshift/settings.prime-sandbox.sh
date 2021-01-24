@@ -1,6 +1,6 @@
 # Description: Prime Health sandbox profile for pipeline/development
 export SKIP_PIPELINE_PROCESSING=1
-export include_templates="issuer-agent-deploy"
+export include_templates="issuer-agent-deploy visual-verifier-deploy"
 export ignore_templates=""
 
 # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!

@@ -3,12 +3,12 @@
 # Component: .
 # Template File: ../openshift/templates/visual-verifier/visual-verifier-deploy.json
 #=========================================================
-NAME=visual-verifier
-APP_NAME=issuer
+NAME=visual-verifier-sandbox-prime
+APP_NAME=issuer-prime
 APP_GROUP=prime
-SUFFIX=-prime
+SUFFIX=
 ROLE=visual-verifier
-APPLICATION_DOMAIN=prime-verifier-dev.pathfinder.gov.bc.ca
+APPLICATION_DOMAIN=prime-verifier-sandbox.pathfinder.gov.bc.ca
 IMAGE_NAMESPACE=nnfbch-tools
 TAG_NAME=dev
 APP_FILE=
@@ -16,7 +16,7 @@ APP_CONFIG=
 APP_MODULE=
 # DJANGO_SECRET_KEY=[\w]{50}
 DJANGO_DEBUG=False
-VERIFIER_NAME=Prime Provider Verification - DEV
+VERIFIER_NAME=Prime Provider Verification - SANDBOX
 OIDC_RP_PROVIDER_ENDPOINT=
 OIDC_RP_CLIENT_ID=
 OIDC_RP_CLIENT_SECRET=

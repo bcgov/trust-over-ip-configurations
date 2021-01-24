@@ -1,9 +1,9 @@
 {
-  "id": "prime-enrollee-dev",
+  "id": "prime-enrollee-sandbox",
   "subject_identifier": "gpid",
   "configuration": {
     "name": "prime-enrollee",
-    "version": "0.0.3",
+    "version": "0.0.2",
     "requested_attributes": [
       {
         "names": [
@@ -15,7 +15,7 @@
         ],
         "restrictions": [
           {
-            "issuer_did": "QDaSxvduZroHDKkdXKV5gG",
+            "issuer_did": "Cc6hpJk61DjGcztPiAwJyK",
             "schema_name": "enrollee",
             "schema_version": "2.2"
           }
