@@ -88,7 +88,7 @@ objects:
     spec:
       storageClassName: "${TAILS_FILES_VOLUME_CLASS}"
       accessModes:
-      - ReadWriteMany
+        - ReadWriteMany
       resources:
         requests:
           storage: "${TAILS_FILES_VOLUME_SIZE}"
@@ -172,6 +172,7 @@ objects:
                   --auto-respond-messages
                   --auto-respond-credential-offer
                   --auto-verify-presentation
+                  --auto-provision
                   --wallet-type 'indy'
                   --wallet-name "$(echo ${AGENT_WALLET_NAME} | tr '[:upper:]' '[:lower:]' | sed "s~-~_~g")"
                   --wallet-key "${WALLET_ENCRYPTION_KEY}"
@@ -259,16 +260,15 @@ objects:
                 - containerPort: ${{AGENT_HTTP_PORT}}
                   protocol: TCP
               volumeMounts:
-              - name: ${NAME}${SUFFIX}-tails
-                  mountPath: '${TAILS_FILES_DIR}'
-
+                - name: ${NAME}${SUFFIX}-tails
+                  mountPath: "${TAILS_FILES_DIR}"
               readinessProbe:
                 timeoutSeconds: 30
                 initialDelaySeconds: 3
                 exec:
                   command:
                     - bash
-                    - '-c'
+                    - "-c"
                     - 'curl --fail "http://localhost:${ADMIN_INTERFACE_PORT}/status/ready" -H "X-API-KEY: ${AGENT_ADMIN_API_KEY}"'
               livenessProbe:
                 timeoutSeconds: 30
@@ -276,7 +276,7 @@ objects:
                 exec:
                   command:
                     - bash
-                    - '-c'
+                    - "-c"
                     - 'curl --fail "http://localhost:${ADMIN_INTERFACE_PORT}/status/live" -H "X-API-KEY: ${AGENT_ADMIN_API_KEY}"'
 
               imagePullPolicy: IfNotPresent
@@ -521,14 +521,12 @@ parameters:
     value: /home/indy/.indy_client/tails
   - name: TAILS_FILES_VOLUME_CLASS
     displayName: Tails File Storage Volume Class
-    description:
-      The class of the volume; gluster-file, gluster-block, gluster-file-db, netapp-file-standard, netapp-block-standard.
+    description: The class of the volume; gluster-file, gluster-block, gluster-file-db, netapp-file-standard, netapp-block-standard.
     required: true
     value: netapp-file-standard
   - name: TAILS_FILES_VOLUME_SIZE
     displayName: Tails File Storage Dir
-    description:
-      The size of the persistent volume , e.g. 512Mi, 1Gi, 2Gi.
+    description: The size of the persistent volume , e.g. 512Mi, 1Gi, 2Gi.
     required: true
     value: 1Gi
   - name: TAILS_SERVER_BASE_URL
