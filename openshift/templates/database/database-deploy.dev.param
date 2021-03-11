@@ -7,8 +7,11 @@
 # APP_NAME=vc-authn-oidc
 # APP_GROUP=vc-authn-oidc
 # PREFIX=vc-authn-
+# BACKUP=true
 # ROLE=db
-# IMAGE_NAMESPACE=nnfbch-tools
+# CONTROLLER_ROLE=controller
+# NAMESPACE_NAME=e79518
+# IMAGE_NAMESPACE=e79518-tools
 # SOURCE_IMAGE_NAME=vc-authn-database
 TAG_NAME=dev
 # POSTGRESQL_DATABASE_NAME=vc_authn
