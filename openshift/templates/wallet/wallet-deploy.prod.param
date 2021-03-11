@@ -7,8 +7,11 @@
 # APP_NAME=vc-authn-oidc
 # APP_GROUP=vc-authn-oidc
 # PREFIX=vc-authn-
+# BACKUP=true
 # ROLE=wallet
-# IMAGE_NAMESPACE=nnfbch-tools
+# AGENT_ROLE=agent
+# NAMESPACE_NAME=e79518
+# IMAGE_NAMESPACE=e79518-tools
 # SOURCE_IMAGE_NAME=vc-authn-database
 TAG_NAME=prod
 # POSTGRESQL_DATABASE_NAME=default_wallet
