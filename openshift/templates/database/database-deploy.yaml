@@ -32,6 +32,16 @@ objects:
                 matchLabels:
                   name: ${NAMESPACE_NAME}
                   environment: ${TAG_NAME}
+            - podSelector:
+                matchLabels:
+                  role: ${PREFIX}${CONTROLLER_ROLE}
+                  app: ${APP_NAME}-rev
+                  app-group: ${APP_GROUP}-rev
+                  env: ${TAG_NAME}
+              namespaceSelector:
+                matchLabels:
+                  name: ${NAMESPACE_NAME}
+                  environment: ${TAG_NAME}
           ports:
             - protocol: TCP
               port: ${{PORT}}
