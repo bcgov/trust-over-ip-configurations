@@ -24,7 +24,7 @@ objects:
         - from:
             - podSelector:
                 matchLabels:
-                  role: ${CONTROLLER_ROLE}
+                  role: ${PREFIX}${CONTROLLER_ROLE}
                   app: ${APP_NAME}
                   app-group: ${APP_GROUP}
                   env: ${TAG_NAME}

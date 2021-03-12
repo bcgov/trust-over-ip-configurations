@@ -19,12 +19,12 @@ objects:
         backup: ${BACKUP}
     spec:
       description: |
-        Allow the agent to access the wallet.
+        Allow the vc-authn agent to access the wallet.
       ingress:
         - from:
             - podSelector:
                 matchLabels:
-                  role: ${AGENT_ROLE}
+                  role: ${PREFIX}${AGENT_ROLE}
                   app: ${APP_NAME}
                   app-group: ${APP_GROUP}
                   env: ${TAG_NAME}
@@ -52,8 +52,7 @@ objects:
         app: ${APP_NAME}
         app-group: ${APP_GROUP}
         role: ${PREFIX}${ROLE}
-        env: ${TAG_NAME}
-        template: ${PREFIX}${NAME}-persistent-template
+        env: ${TAG_NAME}        
     spec:
       strategy:
         type: Recreate
@@ -200,7 +199,6 @@ objects:
         app-group: ${APP_GROUP}
         role: ${PREFIX}${ROLE}
         env: ${TAG_NAME}
-        template: ${PREFIX}${NAME}-persistent-template
       annotations:
         template.openshift.io/expose-uri: postgres://{.spec.clusterIP}:{.spec.ports[?(.name=="${PREFIX}${NAME}")].port}
     spec:
