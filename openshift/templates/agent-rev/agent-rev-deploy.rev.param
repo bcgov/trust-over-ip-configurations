@@ -3,18 +3,19 @@
 # Component: .
 # Template File: ../openshift/templates/agent-rev/agent-rev-deploy.yaml
 #=========================================================
-NAME=agent-tmp
-NAMESPACE_NAME=nnfbch
+NAME=agent-rev
+NAMESPACE_NAME=e79518
 PREFIX=vc-authn-
-APP_NAME=vc-authn-oidc-tmp
-APP_GROUP=vc-authn-oidc-tmp
+APP_NAME=vc-authn-oidc-rev
+APP_GROUP=vc-authn-oidc-rev
 ROLE=agent
-APPLICATION_DOMAIN=agent-tmp-nnfbch-dev.pathfinder.gov.bc.ca
+CONTROLLER_ROLE=controller
+APPLICATION_DOMAIN=agent-rev-e79518-dev.pathfinder.gov.bc.ca
 ROUTE_TIMEOUT=120s
-IMAGE_NAMESPACE=nnfbch-tools
+IMAGE_NAMESPACE=e79518-tools
 TAG_NAME=dev
-AGENT_LABEL_NAME=vc-authn-agent-tmp
-WEBHOOK_URL=http://vc-authn-controller-tmp:5000
+AGENT_LABEL_NAME=vc-authn-agent-rev
+WEBHOOK_URL=http://vc-authn-controller-rev:5000
 AGENT_ADMIN_PORT=8024
 # ADMIN_API_KEY=[a-zA-Z0-9_~!@#$%^&*()-=<>,.?;:|]{16}
 AGENT_HTTP_PORT=8021
@@ -27,7 +28,7 @@ WALLET_HOST=wallet
 WALLET_HOST_PORT=5432
 WALLET_STORAGE_CONFIG={\"url\":\"${POSTGRESQL_WALLET_HOST}:${POSTGRESQL_WALLET_PORT}\",\"max_connections\":5}
 WALLET_STORAGE_CREDS={\"account\":\"${POSTGRESQL_WALLET_USER}\",\"password\":\"${POSTGRESQL_WALLET_PASSWORD}\",\"admin_account\":\"postgres\",\"admin_password\":\"${POSTGRESQL_WALLET_ADMIN_PASSWORD}\"}
-# ALLET_CREDENTIAL_STORE_NAME=agent-tmp-wallet-credentials
+# ALLET_CREDENTIAL_STORE_NAME=agent-rev-wallet-credentials
 # WALLET_KEY=[a-zA-Z0-9_~!@#$%^&*()-=<>,.?;:|]{16}
 # WALLET_SEED=[a-zA-Z0-9_~!@#$%^&*()-=<>,.?;:|]{16}
 # WALLET_DID=[a-zA-Z0-9_~!@#$%^&*()-=<>,.?;:|]{16}
