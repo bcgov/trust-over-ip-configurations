@@ -407,13 +407,13 @@ parameters:
   - name: AGENT_TIMING
     displayName: Collect agent timing information.
     description: Enable/Disable collection of agent timing information.  Controls the inclusion/exclusion of the agent '--timing' startup parameter.  Defaults to disabled.
-    required: false
-    value: ""
+    required: true
+    value: "false"
   - name: AGENT_READ_ONLY_LEDGER
     displayName: Set read only ledger flag.
     description: Enable/Disable the read only ledger flag.  Controls the inclusion/exclusion of the agent '--read-only-ledger' startup parameter.  Defaults to disabled.
-    required: false
-    value: ""
+    required: true
+    value: "true"
   # ===============================================================================
   # Wallet Configuration
   #--------------------------------------------------------------------------------
