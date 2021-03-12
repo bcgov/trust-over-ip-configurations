@@ -3,16 +3,17 @@
 # Component: .
 # Template File: ../openshift/templates/controller/controller-deploy.json
 #=========================================================
-NAME=controller-tmp
-APP_NAME=vc-authn-oidc-tmp
-APP_GROUP=vc-authn-oidc-tmp
+NAME=controller-rev
+APP_NAME=vc-authn-oidc-rev
+APP_GROUP=vc-authn-oidc-rev
 PREFIX=vc-authn-
 ROLE=controller
-IMAGE_NAMESPACE=nnfbch-tools
-NAMESPACE_NAME=nnfbch
+AGENT_ROLE=agent
+IMAGE_NAMESPACE=e79518-tools
+NAMESPACE_NAME=e79518
 TAG_NAME=latest
-APPLICATION_DOMAIN=controller-nnfbch-dev.pathfinder.gov.bc.ca
-AGENT_ADMIN_URL=http://vc-authn-agent-tmp:8024
+APPLICATION_DOMAIN=toip-vc-authn-controller-rev-dev.pathfinder.gov.bc.ca
+AGENT_ADMIN_URL=http://vc-authn-agent-rev:8024
 AGENT_PUBLIC_URL=
 CONTROLLER_CERTIFICATE_FILE_PATH=/controller-data/secret.rsa
 ASPNETCORE_URLS=http://*:8080

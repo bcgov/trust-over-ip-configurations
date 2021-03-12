@@ -3,11 +3,11 @@
 # Component: .
 # Template File: ../openshift/templates/controller/controller-build.json
 #=========================================================
-NAME=controller-tmp
-APP_NAME=vc-authn-oidc-tmp
-APP_GROUP=vc-authn-oidc-tmp
+NAME=controller-rev
+APP_NAME=vc-authn-oidc-rev
+APP_GROUP=vc-authn-oidc-rev
 PREFIX=vc-authn-
-NAMESPACE_NAME=nnfbch
+NAMESPACE_NAME=e79518
 ENV_NAME=tools
 GIT_REPO_URL=https://github.com/bcgov/vc-authn-oidc.git
 GIT_REF=feature/revocation-support
