@@ -4,6 +4,64 @@ apiVersion: v1
 metadata:
   name: ${NAME}${SUFFIX}
 objects:
+  - kind: NetworkPolicy
+    apiVersion: networking.k8s.io/v1
+    metadata:
+      name: ${NAME}${SUFFIX}-allow-ingress
+      labels:
+        name: ${NAME}${SUFFIX}-allow-ingress
+        app: ${APP_NAME}${SUFFIX}
+        app-group: ${APP_GROUP}
+        role: ${ROLE}
+        env: ${TAG_NAME}
+    spec:
+      description: |
+        Allow traffic from routes into the ${ROLE} container(s).
+      ingress:
+        - from:
+            - namespaceSelector:
+                matchLabels:
+                  network.openshift.io/policy-group: ingress
+      podSelector:
+        matchLabels:
+          role: ${ROLE}
+          app: ${APP_NAME}${SUFFIX}
+          env: ${TAG_NAME}
+      policyTypes:
+        - Ingress
+
+  - kind: NetworkPolicy
+    apiVersion: networking.k8s.io/v1
+    metadata:
+      name: ${NAME}${SUFFIX}
+      labels:
+        name: ${NAME}${SUFFIX}
+        app: ${APP_NAME}${SUFFIX}
+        app-group: ${APP_GROUP}
+        role: ${ROLE}
+        env: ${TAG_NAME}
+    spec:
+      description: |
+        Allow the API to access the agent admin interface.
+      ingress:
+        - from:
+            - podSelector:
+                matchLabels:
+                  role: ${API_ROLE}
+                  app: ${APP_NAME}${SUFFIX}
+                  env: ${TAG_NAME}
+              namespaceSelector:
+                matchLabels:
+                  name: ${NAMESPACE_NAME}
+                  environment: ${TAG_NAME}
+          ports:
+            - protocol: TCP
+              port: ${{AGENT_ADMIN_PORT}}
+      podSelector:
+        matchLabels:
+          role: ${ROLE}
+          app: ${APP_NAME}${SUFFIX}
+          env: ${TAG_NAME}
   - kind: Service
     apiVersion: v1
     metadata:
@@ -247,6 +305,8 @@ objects:
                   value: ${AGENT_LABEL_NAME}
                 - name: AGENT_ENDPOINT
                   value: ${AGENT_BASE_URL}
+                - name: ACAPY_READ_ONLY_LEDGER
+                  value: ${AGENT_READ_ONLY_LEDGER}
                 - name: AGENT_LOG_LEVEL
                   value: ${LOG_LEVEL}
                 - name: TAILS_FILES_DIR
@@ -306,55 +366,24 @@ objects:
               name: ${SOURCE_IMAGE_NAME}:${TAG_NAME}
               namespace: ${IMAGE_NAMESPACE}
 
-  - kind: NetworkSecurityPolicy
-    apiVersion: secops.pathfinder.gov.bc.ca/v1alpha1
-    metadata:
-      name: custom-${APP_NAME}-${NAME}${SUFFIX}-to-external-network
-      labels:
-        name: custom-${APP_NAME}-${NAME}${SUFFIX}-to-external-network
-        app: ${APP_NAME}${SUFFIX}
-        app-group: ${APP_GROUP}
-        role: ${ROLE}
-        env: ${TAG_NAME}
-    spec:
-      description: |
-        Allow the agent to access the internet.
-      source:
-        - - role=${ROLE}
-          - app=${APP_NAME}${SUFFIX}
-          - env=${TAG_NAME}
-          - $namespace=${NAMESPACE_NAME}-${TAG_NAME}
-      destination:
-        - - ext:network=any
-
-  - kind: NetworkSecurityPolicy
-    apiVersion: secops.pathfinder.gov.bc.ca/v1alpha1
-    metadata:
-      name: custom-${APP_NAME}-${NAME}${SUFFIX}-policy
-      labels:
-        name: custom-${APP_NAME}-${NAME}${SUFFIX}-policy
-        app: ${APP_NAME}${SUFFIX}
-        app-group: ${APP_GROUP}
-        role: ${ROLE}
-        env: ${TAG_NAME}
-    spec:
-      description: |
-        Allow the agent to talk to either the wallet or controller micro services.
-      source:
-        - - role=${ROLE}
-          - app=${APP_NAME}${SUFFIX}
-          - env=${TAG_NAME}
-          - $namespace=${NAMESPACE_NAME}-${TAG_NAME}
-
-      destination:
-        - - role=wallet
-          - app=${APP_NAME}${SUFFIX}
-          - env=${TAG_NAME}
-          - $namespace=${NAMESPACE_NAME}-${TAG_NAME}
-        - - role=controller
-          - app=${APP_NAME}${SUFFIX}
-          - env=${TAG_NAME}
-          - $namespace=${NAMESPACE_NAME}-${TAG_NAME}
+  # - kind: NetworkSecurityPolicy
+  #   apiVersion: secops.pathfinder.gov.bc.ca/v1alpha1
+  #   metadata:
+  #     name: custom-${APP_NAME}-${NAME}${SUFFIX}-to-external-network
+  #     labels:
+  #       name: custom-${APP_NAME}-${NAME}${SUFFIX}-to-external-network
+  #       app: ${APP_NAME}${SUFFIX}
+  #       app-group: ${APP_GROUP}
+  #       role: ${ROLE}
+  #       env: ${TAG_NAME}APP_NAME
+        # - - role=wallet
+        #   - app=${APP_NAME}${SUFFIX}
+        #   - env=${TAG_NAME}
+        #   - $namespace=${NAMESPACE_NAME}-${TAG_NAME}
+        # - - role=controller
+        #   - app=${APP_NAME}${SUFFIX}
+        #   - env=${TAG_NAME}
+        #   - $namespace=${NAMESPACE_NAME}-${TAG_NAME}
 
 parameters:
   - name: NAME
@@ -382,6 +411,13 @@ parameters:
     description: The role of this service within the application - used for Network Policies.
     required: true
     value: agent
+  - name: API_ROLE
+    displayName: Agent Role
+    description:
+      The role of the api service within the application - used for Network
+      Policies
+    required: true
+    value: controller
   - name: APPLICATION_DOMAIN
     displayName: Application Hostname
     description: The exposed hostname that will route to the public service endpoint, if left blank a value will be defaulted.
@@ -399,12 +435,12 @@ parameters:
   - name: IMAGE_NAMESPACE
     displayName: Namespace containing application images.
     required: true
-    value: nnfbch-tools
+    value: 4a9599-tools
   - name: NAMESPACE_NAME
     displayName: Namespace Name
     description: The name of the namespace being deployed to.
     required: true
-    value: nnfbch
+    value: 4a9599
   - name: SOURCE_IMAGE_NAME
     displayName: Source Image Name
     description: The name of the source image to use for the service.
@@ -420,6 +456,11 @@ parameters:
     description: The label/name of the agent
     required: true
     value: issuer-kit-agent
+  - name: AGENT_READ_ONLY_LEDGER
+    displayName: Set read only ledger flag.
+    description: Enable/Disable the read only ledger flag.  Controls the inclusion/exclusion of the agent '--read-only-ledger' startup parameter.  Defaults to disabled.
+    required: true
+    value: "true"
   - name: AGENT_BASE_URL
     displayName: Agent endpoint
     description: The endpoint of the agent

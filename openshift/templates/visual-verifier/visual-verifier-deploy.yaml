@@ -8,6 +8,31 @@ metadata:
     tags: django
     iconClass: icon-python
 objects:
+  - kind: NetworkPolicy
+    apiVersion: networking.k8s.io/v1
+    metadata:
+      name: ${NAME}-allow-ingress
+      labels:
+        name: ${NAME}-allow-ingress
+        app: ${APP_GROUP}
+        app-group: ${APP_GROUP}
+        role: ${ROLE}
+        env: ${TAG_NAME}
+    spec:
+      description: |
+        Allow traffic from routes into the ${ROLE} container(s).
+      ingress:
+        - from:
+            - namespaceSelector:
+                matchLabels:
+                  network.openshift.io/policy-group: ingress
+      podSelector:
+        matchLabels:
+          role: ${ROLE}
+          app: ${APP_GROUP}
+          env: ${TAG_NAME}
+      policyTypes:
+        - Ingress
   - kind: Secret
     apiVersion: v1
     metadata:
@@ -202,6 +227,11 @@ parameters:
     displayName: Role
     description: The role of this service within the application - used for Network
       Policies
+    required: true
+    value: visual-verifier
+  - name: SOURCE_IMAGE_NAME
+    displayName: source image
+    description: The name of the source image build from tools
     required: true
     value: visual-verifier
   - description: The exposed hostname that will route to the service, e.g., myappname.pathfinder.gov.bc.ca,

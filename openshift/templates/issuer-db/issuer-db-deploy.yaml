@@ -6,6 +6,46 @@ metadata:
     tags: ${NAME}${SUFFIX}
   name: ${NAME}${SUFFIX}
 objects:
+  - kind: NetworkPolicy
+    apiVersion: networking.k8s.io/v1
+    metadata:
+      name: ${NAME}
+      labels:
+        name: ${NAME}
+        app: ${APP_NAME}
+        env: ${TAG_NAME}
+    spec:
+      description: |
+        Allow the api(s) to access the db.
+      ingress:
+        - from:
+            - podSelector:
+                matchLabels:
+                  role: ${API_ROLE}
+                  app: ${APP_NAME}
+                  env: ${TAG_NAME}
+              namespaceSelector:
+                matchLabels:
+                  name: ${NAMESPACE_NAME}
+                  environment: ${TAG_NAME}
+            - podSelector:
+                matchLabels:
+                  role: backup-container
+                  app: backup
+                  env: ${TAG_NAME}
+              namespaceSelector:
+                matchLabels:
+                  name: ${NAMESPACE_NAME}
+                  environment: ${TAG_NAME}
+          ports:
+            - protocol: TCP
+              port: 27017
+      podSelector:
+        matchLabels:
+          role: ${ROLE}
+          app: ${APP_NAME}
+          env: ${TAG_NAME}
+
   - kind: DeploymentConfig
     apiVersion: v1
     metadata:
@@ -174,6 +214,11 @@ objects:
       type: ClusterIP
       sessionAffinity: None
 parameters:
+  - name: NAMESPACE_NAME
+    displayName: Namespace Name
+    description: The base namespace name for the project.
+    required: true
+    value: 4a9599
   - name: NAME
     displayName: Name
     description: The name assigned to all of the OpenShift resources associated to
@@ -201,12 +246,19 @@ parameters:
       Policies
     required: true
     value: db
+  - name: API_ROLE
+    displayName: Api Role
+    description:
+      The role of the API service within the application - used for Network
+      Policies
+    required: true
+    value: controller
   - name: IMAGE_NAMESPACE
     displayName: Image Namespace
     required: true
     description: The namespace of the OpenShift project containing the imagestream
       for the application.
-    value: nnfbch-tools
+    value: 4a9599-tools
   - name: SOURCE_IMAGE_NAME
     displayName: Source Image Name
     description: The name of the image to use for this resource.

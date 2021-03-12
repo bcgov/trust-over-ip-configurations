@@ -7,6 +7,47 @@ metadata:
     tags: nodejs
     iconClass: icon-nodejs
 objects:
+  - kind: NetworkPolicy
+    apiVersion: networking.k8s.io/v1
+    metadata:
+      name: ${NAME}${SUFFIX}
+      labels:
+        name: ${NAME}${SUFFIX}
+        app: ${APP_NAME}${SUFFIX}
+        app-group: ${APP_GROUP}
+        role: ${ROLE}
+        env: ${TAG_NAME}
+    spec:
+      description: |
+        Allow the agent and the frontend services to access the PI.
+      ingress:
+        - from:
+            - podSelector:
+                matchLabels:
+                  role: ${AGENT_ROLE}
+                  app: ${APP_NAME}${SUFFIX}
+                  env: ${TAG_NAME}
+              namespaceSelector:
+                matchLabels:
+                  name: ${NAMESPACE_NAME}
+                  environment: ${TAG_NAME}
+            - podSelector:
+                matchLabels:
+                  role: ${PUBLIC_FRONTEND_ROLE}
+                  app: ${APP_NAME}${SUFFIX}
+                  env: ${TAG_NAME}
+              namespaceSelector:
+                matchLabels:
+                  name: ${NAMESPACE_NAME}
+                  environment: ${TAG_NAME}
+          ports:
+            - protocol: TCP
+              port: ${{SERVICE_PORT}}
+      podSelector:
+        matchLabels:
+          role: ${ROLE}
+          app: ${APP_NAME}${SUFFIX}
+          env: ${TAG_NAME}
   - kind: Secret
     apiVersion: v1
     metadata:
@@ -188,76 +229,76 @@ objects:
                 - name: ${NAME}${SUFFIX}-invite-template-volume
                   mountPath: ${APP_CONFIG_MOUNT_PATH}${APP_EMAIL_INVITE_FILE_NAME}
                   subPath: ${APP_EMAIL_INVITE_FILE_NAME}
-  - kind: NetworkSecurityPolicy
-    apiVersion: secops.pathfinder.gov.bc.ca/v1alpha1
-    metadata:
-      name: custom-${APP_NAME}-pods-to-api
-      labels:
-        name: custom-${APP_NAME}-pods-to-api
-        app: ${APP_NAME}
-        app-group: ${APP_GROUP}
-        role: ${ROLE}
-        env: ${TAG_NAME}
-    spec:
-      description: 'Allow pods to talk to the internal api so deployments work.
+  # - kind: NetworkSecurityPolicy
+  #   apiVersion: secops.pathfinder.gov.bc.ca/v1alpha1
+  #   metadata:
+  #     name: custom-${APP_NAME}-pods-to-api
+  #     labels:
+  #       name: custom-${APP_NAME}-pods-to-api
+  #       app: ${APP_NAME}
+  #       app-group: ${APP_GROUP}
+  #       role: ${ROLE}
+  #       env: ${TAG_NAME}
+  #   spec:
+  #     description: 'Allow pods to talk to the internal api so deployments work.
 
-        This only needs to be specified once per environment.
+  #       This only needs to be specified once per environment.
 
-        '
-      source:
-        - - $namespace=${NAMESPACE_NAME}-${TAG_NAME}
-      destination:
-        - - int:network=internal-cluster-api-endpoint
-  - kind: NetworkSecurityPolicy
-    apiVersion: secops.pathfinder.gov.bc.ca/v1alpha1
-    metadata:
-      name: custom-${APP_NAME}-${NAME}-policy
-      labels:
-        name: custom-${APP_NAME}-${NAME}-policy
-        app: ${APP_NAME}
-        app-group: ${APP_GROUP}
-        role: ${ROLE}
-        env: ${TAG_NAME}
-    spec:
-      description: 'Allow the controller to talk to either the database or agent micro
-        services.
+  #       '
+  #     source:
+  #       - - $namespace=${NAMESPACE_NAME}-${TAG_NAME}
+  #     destination:
+  #       - - int:network=internal-cluster-api-endpoint
+  # - kind: NetworkSecurityPolicy
+  #   apiVersion: secops.pathfinder.gov.bc.ca/v1alpha1
+  #   metadata:
+  #     name: custom-${APP_NAME}-${NAME}-policy
+  #     labels:
+  #       name: custom-${APP_NAME}-${NAME}-policy
+  #       app: ${APP_NAME}
+  #       app-group: ${APP_GROUP}
+  #       role: ${ROLE}
+  #       env: ${TAG_NAME}
+  #   spec:
+  #     description: 'Allow the controller to talk to either the database or agent micro
+  #       services.
 
-        '
-      source:
-        - - role=${ROLE}
-          - app=${APP_NAME}
-          - env=${TAG_NAME}
-          - $namespace=${NAMESPACE_NAME}-${TAG_NAME}
-      destination:
-        - - role=db
-          - app=${APP_NAME}
-          - env=${TAG_NAME}
-          - $namespace=${NAMESPACE_NAME}-${TAG_NAME}
-        - - role=agent
-          - app=${APP_NAME}
-          - env=${TAG_NAME}
-          - $namespace=${NAMESPACE_NAME}-${TAG_NAME}
-  - kind: NetworkSecurityPolicy
-    apiVersion: secops.pathfinder.gov.bc.ca/v1alpha1
-    metadata:
-      name: ${NAME}${SUFFIX}-to-external-network
-      labels:
-        name: ${NAME}${SUFFIX}-to-external-network
-        app: ${APP_NAME}${SUFFIX}
-        app-group: ${APP_GROUP}
-        role: ${ROLE}
-        env: ${TAG_NAME}
-    spec:
-      description: 'Allow the controller to access the internet.
+  #       '
+  #     source:
+  #       - - role=${ROLE}
+  #         - app=${APP_NAME}
+  #         - env=${TAG_NAME}
+  #         - $namespace=${NAMESPACE_NAME}-${TAG_NAME}
+  #     destination:
+  #       - - role=db
+  #         - app=${APP_NAME}
+  #         - env=${TAG_NAME}
+  #         - $namespace=${NAMESPACE_NAME}-${TAG_NAME}
+  #       - - role=agent
+  #         - app=${APP_NAME}
+  #         - env=${TAG_NAME}
+  #         - $namespace=${NAMESPACE_NAME}-${TAG_NAME}
+  # - kind: NetworkSecurityPolicy
+  #   apiVersion: secops.pathfinder.gov.bc.ca/v1alpha1
+  #   metadata:
+  #     name: ${NAME}${SUFFIX}-to-external-network
+  #     labels:
+  #       name: ${NAME}${SUFFIX}-to-external-network
+  #       app: ${APP_NAME}${SUFFIX}
+  #       app-group: ${APP_GROUP}
+  #       role: ${ROLE}
+  #       env: ${TAG_NAME}
+  #   spec:
+  #     description: 'Allow the controller to access the internet.
 
-        '
-      source:
-        - - role=${ROLE}
-          - app=${APP_NAME}${SUFFIX}
-          - env=${TAG_NAME}
-          - $namespace=${NAMESPACE_NAME}-${TAG_NAME}
-      destination:
-        - - ext:network=any
+  #       '
+  #     source:
+  #       - - role=${ROLE}
+  #         - app=${APP_NAME}${SUFFIX}
+  #         - env=${TAG_NAME}
+  #         - $namespace=${NAMESPACE_NAME}-${TAG_NAME}
+  #     destination:
+  #       - - ext:network=any
 parameters:
   - name: NAME
     displayName: Name
@@ -286,17 +327,31 @@ parameters:
       Policies
     required: true
     value: controller
+  - name: AGENT_ROLE
+    displayName: Agent Role
+    description:
+      The role of the agent service within the application - used for Network
+      Policies
+    required: true
+    value: agent
+  - name: PUBLIC_FRONTEND_ROLE
+    displayName: Public Frontend Role
+    description:
+      The role of the public frontend service within the application - used for Network
+      Policies
+    required: true
+    value: public-frontend
   - name: IMAGE_NAMESPACE
     displayName: Image Namespace
     required: true
     description: The namespace of the OpenShift project containing the imagestream
       for the application.
-    value: nnfbch-tools
+    value: 4a9599-tools
   - name: NAMESPACE_NAME
     displayName: Namespace Name
     description: The name of the namespace being deployed to..
     required: true
-    value: nnfbch
+    value: 4a9599
   - name: SERVICE_PORT
     displayName: Service Port
     required: true

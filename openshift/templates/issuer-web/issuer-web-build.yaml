@@ -101,7 +101,7 @@ parameters:
     displayName: Source Image Namespace
     description: The namespace containing the artifact image.
     required: true
-    value: nnfbch-tools
+    value: 4a9599-tools
   - name: ARTIFACT_IMAGE_KIND
     displayName: Artifact Image Kind
     description: The 'kind' (type) of the artifact image; typically ImageStreamTag,

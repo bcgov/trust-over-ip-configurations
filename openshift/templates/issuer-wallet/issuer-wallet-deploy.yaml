@@ -6,6 +6,45 @@ metadata:
     tags: ${NAME}${SUFFIX}
   name: ${NAME}${SUFFIX}
 objects:
+  - kind: NetworkPolicy
+    apiVersion: networking.k8s.io/v1
+    metadata:
+      name: ${NAME}
+      labels:
+        name: ${NAME}
+        app: ${APP_NAME}${SUFFIX}
+        env: ${TAG_NAME}
+    spec:
+      description: |
+        Allow the agent(s) to access the wallet.
+      ingress:
+        - from:
+            - podSelector:
+                matchLabels:
+                  role: ${AGENT_ROLE}
+                  app: ${APP_NAME}${SUFFIX}
+                  env: ${TAG_NAME}
+              namespaceSelector:
+                matchLabels:
+                  name: ${NAMESPACE_NAME}
+                  environment: ${TAG_NAME}
+            - podSelector:
+                matchLabels:
+                  role: ${BACKUP_ROLE}
+                  app: ${BACKUP_APP_NAME}
+                  env: ${TAG_NAME}
+              namespaceSelector:
+                matchLabels:
+                  name: ${NAMESPACE_NAME}
+                  environment: ${TAG_NAME}
+          ports:
+            - protocol: TCP
+              port: 5432
+      podSelector:
+        matchLabels:
+          role: ${ROLE}
+          app: ${APP_NAME}${SUFFIX}
+          env: ${TAG_NAME}
   - kind: DeploymentConfig
     apiVersion: v1
     metadata:
@@ -176,6 +215,11 @@ objects:
       type: ClusterIP
       sessionAffinity: None
 parameters:
+  - name: NAMESPACE_NAME
+    displayName: Namespace Name
+    description: The base namespace name for the project.
+    required: true
+    value: 4a9599
   - name: NAME
     displayName: Name
     description: The name assigned to all of the OpenShift resources associated to
@@ -197,12 +241,31 @@ parameters:
     description: A suffix applied to all of the objects in this template.
     required: false
     value: ''
+  - name: BACKUP_APP_NAME
+    displayName: Backup app name
+    description: The name of the Backup app.
+    required: true
+    value: backup
   - name: ROLE
     displayName: Role
     description: The role of this service within the application - used for Network
       Policies
     required: true
     value: wallet
+  - name: AGENT_ROLE
+    displayName: Agent Role
+    description:
+      The role of the agent service within the application - used for Network
+      Policies
+    required: true
+    value: agent
+  - name: BACKUP_ROLE
+    displayName: Backup Role
+    description:
+      The role of the backup container service within the application - used for Network
+      Policies
+    required: true
+    value: backup-container
   - name: IMAGE_NAMESPACE
     displayName: Image Namespace
     required: true

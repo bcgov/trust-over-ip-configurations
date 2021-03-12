@@ -12,6 +12,8 @@ objects:
         app: ${APP_NAME}
         app-group: ${APP_GROUP}
         template: ${PREFIX}${NAME}-template
+        role: ${ROLE}
+        env: ${TAG_NAME}
     spec:
       storageClassName: ${BACKUP_VOLUME_CLASS}
       accessModes:
@@ -28,6 +30,8 @@ objects:
         app: ${APP_NAME}
         app-group: ${APP_GROUP}
         template: ${PREFIX}${NAME}-template
+        role: ${ROLE}
+        env: ${TAG_NAME}
     spec:
       storageClassName: ${VERIFICATION_VOLUME_CLASS}
       accessModes:
@@ -43,6 +47,8 @@ objects:
         name: ${PREFIX}${NAME}
         app: ${APP_NAME}
         app-group: ${APP_GROUP}
+        role: ${ROLE}
+        env: ${TAG_NAME}
     stringData:
       webhook-url: ${WEBHOOK_URL}
     type: Opaque
@@ -55,6 +61,8 @@ objects:
         app: ${APP_NAME}
         app-group: ${APP_GROUP}
         template: ${PREFIX}${NAME}-template
+        role: ${ROLE}
+        env: ${TAG_NAME}
       annotations:
         description: Defines how to deploy the ${PREFIX}${NAME} server
     spec:
@@ -82,6 +90,8 @@ objects:
             app: ${APP_NAME}
             app-group: ${APP_GROUP}
             template: ${PREFIX}${NAME}-template
+            role: ${ROLE}
+            env: ${TAG_NAME}
         spec:
           volumes:
             - name: ${BACKUP_VOLUME_NAME}
@@ -192,12 +202,19 @@ parameters:
     displayName: App Name
     description: Used to group components together in the OpenShift console.
     required: true
-    value: Backup
+    value: backup
   - name: APP_GROUP
     displayName: App Group
     description: The name assigned to all of the deployments in this project.
     required: true
     value: backup
+  - name: ROLE
+    displayName: Role
+    description:
+      The role of this service within the application - used for Network
+      Policies
+    required: true
+    value: backup-container
   - name: SOURCE_IMAGE_NAME
     displayName: Source Image Name
     description: The name of the image to use for this resource.
