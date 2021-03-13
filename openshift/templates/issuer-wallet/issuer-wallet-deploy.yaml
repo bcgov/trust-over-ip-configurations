@@ -215,17 +215,12 @@ objects:
       type: ClusterIP
       sessionAffinity: None
 parameters:
-  - name: NAMESPACE_NAME
-    displayName: Namespace Name
-    description: The base namespace name for the project.
-    required: true
-    value: 4a9599
   - name: NAME
     displayName: Name
     description: The name assigned to all of the OpenShift resources associated to
       the server instance.
     required: true
-    value: issuer-kit-wallet
+    value: wallet
   - name: APP_NAME
     displayName: App Name
     description: Used to group components together in the OpenShift console.
@@ -271,7 +266,12 @@ parameters:
     required: true
     description: The namespace of the OpenShift project containing the imagestream
       for the application.
-    value: nnfbch-tools
+    value: 4a9599-tools
+  - name: NAMESPACE_NAME
+    displayName: Namespace Name
+    description: The base namespace name for the project.
+    required: true
+    value: 4a9599
   - name: SOURCE_IMAGE_NAME
     displayName: Source Image Name
     description: The name of the image to use for this resource.

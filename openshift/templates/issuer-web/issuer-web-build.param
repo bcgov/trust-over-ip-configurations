@@ -3,7 +3,7 @@
 # Component: .
 # Template File: ../openshift/templates/issuer-web/issuer-web-build.json
 #=========================================================
-NAME=issuer-web
+NAME=issuer-kit-web
 APP_NAME=issuer-kit
 APP_GROUP=issuer-kit-runtime
 OUTPUT_IMAGE_TAG=latest

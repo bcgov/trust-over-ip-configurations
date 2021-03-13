@@ -1,9 +1,9 @@
 #=========================================================
 # OpenShift template parameters for:
 # Component: .
-# Template File: ../openshift/templates/issuer-api/api-build.json
+# Template File: ../openshift/templates/issuer-kit-api/api-build.json
 #=========================================================
-NAME=issuer-api
+NAME=issuer-kit-api
 APP_NAME=issuer-kit
 APP_GROUP=issuer-kit-runtime
 ENV_NAME=tools

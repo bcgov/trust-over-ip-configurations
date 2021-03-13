@@ -3,14 +3,16 @@
 # Component: .
 # Template File: ../openshift/templates/wallet/wallet-deploy.json
 #=========================================================
-NAMESPACE_NAME=4a9599
-NAME=issuer-kit-wallet
+NAME=wallet
 APP_NAME=issuer
 APP_GROUP=a2a
 SUFFIX=-a2a
 ROLE=wallet
+AGENT_ROLE=agent
+BACKUP_ROLE=backup-container
 IMAGE_NAMESPACE=4a9599-tools
-SOURCE_IMAGE_NAME=issuer-wallet
+NAMESPACE_NAME=4a9599
+SOURCE_IMAGE_NAME=issuer-kit-wallet
 TAG_NAME=dev
 POSTGRESQL_DATABASE_NAME=identity_kit_wallet
 # POSTGRESQL_USER=[a-zA-Z_][a-zA-Z0-9_]{10}

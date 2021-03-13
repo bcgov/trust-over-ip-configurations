@@ -230,7 +230,7 @@ objects:
                   mountPath: ${APP_CONFIG_MOUNT_PATH}${APP_EMAIL_INVITE_FILE_NAME}
                   subPath: ${APP_EMAIL_INVITE_FILE_NAME}
   # - kind: NetworkSecurityPolicy
-  #   apiVersion: secops.pathfinder.gov.bc.ca/v1alpha1
+  #   apiVersion: secops..apps.silver.devops.gov.bc.ca/v1alpha1
   #   metadata:
   #     name: custom-${APP_NAME}-pods-to-api
   #     labels:
@@ -250,7 +250,7 @@ objects:
   #     destination:
   #       - - int:network=internal-cluster-api-endpoint
   # - kind: NetworkSecurityPolicy
-  #   apiVersion: secops.pathfinder.gov.bc.ca/v1alpha1
+  #   apiVersion: secops..apps.silver.devops.gov.bc.ca/v1alpha1
   #   metadata:
   #     name: custom-${APP_NAME}-${NAME}-policy
   #     labels:
@@ -279,7 +279,7 @@ objects:
   #         - env=${TAG_NAME}
   #         - $namespace=${NAMESPACE_NAME}-${TAG_NAME}
   # - kind: NetworkSecurityPolicy
-  #   apiVersion: secops.pathfinder.gov.bc.ca/v1alpha1
+  #   apiVersion: secops..apps.silver.devops.gov.bc.ca/v1alpha1
   #   metadata:
   #     name: ${NAME}${SUFFIX}-to-external-network
   #     labels:
@@ -305,17 +305,17 @@ parameters:
     description: The name assigned to all of the OpenShift resources associated to
       the server instance.
     required: true
-    value: issuer-kit-controller
+    value: api
   - name: APP_NAME
     displayName: App Name
     description: Used to group components together in the OpenShift console.
     required: true
-    value: issuer-kit
+    value: issuer
   - name: APP_GROUP
     displayName: App Group
     description: The name assigned to all of the deployments in this project.
     required: true
-    value: issuer-kit-controller
+    value: issuer-kit-api
   - name: SUFFIX
     displayName: Suffix
     description: A suffix applied to all of the objects in this template.
@@ -326,7 +326,7 @@ parameters:
     description: The role of this service within the application - used for Network
       Policies
     required: true
-    value: controller
+    value: api
   - name: AGENT_ROLE
     displayName: Agent Role
     description:
@@ -377,7 +377,7 @@ parameters:
     displayName: Source Image Name
     description: The name of the image to use for this resource.
     required: true
-    value: issuer-api
+    value: issuer-kit-api
   - name: TAG_NAME
     displayName: Environment TAG name
     description: The TAG name for this environment, e.g., dev, test, prod
@@ -417,7 +417,7 @@ parameters:
     displayName: Public Site URL
     description: Public Site URL
     required: true
-    value: https://issuer-kit.pathfinder.gov.bc.ca
+    value: https://issuer-kit..apps.silver.devops.gov.bc.ca
   - name: APP_CONFIG_MAP_NAME
     displayName: Application Config Map Name
     description: The name of the configuration map holding the data to configure the

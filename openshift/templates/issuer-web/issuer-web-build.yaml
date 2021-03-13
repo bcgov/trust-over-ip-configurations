@@ -55,7 +55,7 @@ parameters:
     displayName: Name
     description: The name assigned to all of the resources defined in this template.
     required: true
-    value: issuer-web
+    value: issuer-kit-web
   - name: APP_NAME
     displayName: App Name
     description: Used to group components together in the OpenShift console.

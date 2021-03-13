@@ -3,7 +3,7 @@
 # Component: .
 # Template File: ../openshift/templates/issuer-agent/agent-build.json
 #=========================================================
-NAME=issuer-agent
+NAME=issuer-kit-agent
 APP_NAME=issuer-kit
 APP_GROUP=issuer-kit-runtime
 GIT_REPO_URL=https://github.com/bcgov/issuer-kit.git
