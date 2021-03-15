@@ -234,11 +234,11 @@ parameters:
     description: The name of the source image build from tools
     required: true
     value: visual-verifier
-  - description: The exposed hostname that will route to the service, e.g., myappname..apps.silver.devops.gov.bc.ca,
+  - description: The exposed hostname that will route to the service, e.g., myappname.apps.silver.devops.gov.bc.ca,
       if left blank a value will be defaulted.
     displayName: Application Hostname
     name: APPLICATION_DOMAIN
-    value: visual-verifier-dev..apps.silver.devops.gov.bc.ca
+    value: visual-verifier-dev.apps.silver.devops.gov.bc.ca
   - name: IMAGE_NAMESPACE
     displayName: Image Namespace
     required: true

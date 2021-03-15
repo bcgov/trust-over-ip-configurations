@@ -51,7 +51,7 @@ objects:
       triggers:
         - type: ConfigChange
   # - kind: NetworkSecurityPolicy
-  #   apiVersion: secops..apps.silver.devops.gov.bc.ca/v1alpha1
+  #   apiVersion: secops.apps.silver.devops.gov.bc.ca/v1alpha1
   #   metadata:
   #     name: pods-to-external-network
   #     labels:

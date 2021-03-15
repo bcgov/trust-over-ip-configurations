@@ -9,7 +9,6 @@
 # SUFFIX=-lsbc
 # ROLE=wallet
 # AGENT_ROLE=agent
-# BACKUP_ROLE=backup-container
 # IMAGE_NAMESPACE=4a9599-tools
 # SOURCE_IMAGE_NAME=issuer-kit-wallet
 TAG_NAME=test

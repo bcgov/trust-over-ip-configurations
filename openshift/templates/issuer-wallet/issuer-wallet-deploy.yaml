@@ -14,6 +14,7 @@ objects:
         name: ${NAME}
         app: ${APP_NAME}${SUFFIX}
         env: ${TAG_NAME}
+        backup: ${BACKUP}
     spec:
       description: |
         Allow the agent(s) to access the wallet.
@@ -23,15 +24,6 @@ objects:
                 matchLabels:
                   role: ${AGENT_ROLE}
                   app: ${APP_NAME}${SUFFIX}
-                  env: ${TAG_NAME}
-              namespaceSelector:
-                matchLabels:
-                  name: ${NAMESPACE_NAME}
-                  environment: ${TAG_NAME}
-            - podSelector:
-                matchLabels:
-                  role: ${BACKUP_ROLE}
-                  app: ${BACKUP_APP_NAME}
                   env: ${TAG_NAME}
               namespaceSelector:
                 matchLabels:
@@ -57,6 +49,7 @@ objects:
         role: ${ROLE}
         env: ${TAG_NAME}
         template: ${NAME}${SUFFIX}
+        backup: ${BACKUP}
     spec:
       strategy:
         type: Recreate
@@ -87,6 +80,7 @@ objects:
             app-group: ${APP_GROUP}
             role: ${ROLE}
             env: ${TAG_NAME}
+            backup: ${BACKUP}
         spec:
           volumes:
             - name: ${NAME}${SUFFIX}-data
@@ -169,6 +163,7 @@ objects:
         role: ${ROLE}
         env: ${TAG_NAME}
         template: ${NAME}${SUFFIX}
+        backup: ${BACKUP}
     spec:
       storageClassName: ${PERSISTENT_VOLUME_CLASS}
       accessModes:
@@ -186,6 +181,7 @@ objects:
         app-group: ${APP_GROUP}
         role: ${ROLE}
         env: ${TAG_NAME}
+        backup: ${BACKUP}
     stringData:
       admin-password: ${POSTGRESQL_ADMIN_PASSWORD}
       database-password: ${POSTGRESQL_PASSWORD}
@@ -202,6 +198,7 @@ objects:
         role: ${ROLE}
         env: ${TAG_NAME}
         template: ${NAME}${SUFFIX}
+        backup: ${BACKUP}
       annotations:
         template.openshift.io/expose-uri: postgres://{.spec.clusterIP}:{.spec.ports[?(.name=="${NAME}${SUFFIX}")].port}
     spec:
@@ -236,11 +233,6 @@ parameters:
     description: A suffix applied to all of the objects in this template.
     required: false
     value: ''
-  - name: BACKUP_APP_NAME
-    displayName: Backup app name
-    description: The name of the Backup app.
-    required: true
-    value: backup
   - name: ROLE
     displayName: Role
     description: The role of this service within the application - used for Network
@@ -254,13 +246,12 @@ parameters:
       Policies
     required: true
     value: agent
-  - name: BACKUP_ROLE
-    displayName: Backup Role
+  - name: BACKUP
+    displayName: Backup Target
     description:
-      The role of the backup container service within the application - used for Network
-      Policies
+      allow the backup container access to this pod
     required: true
-    value: backup-container
+    value: "true"
   - name: IMAGE_NAMESPACE
     displayName: Image Namespace
     required: true

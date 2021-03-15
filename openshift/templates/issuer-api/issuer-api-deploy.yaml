@@ -230,7 +230,7 @@ objects:
                   mountPath: ${APP_CONFIG_MOUNT_PATH}${APP_EMAIL_INVITE_FILE_NAME}
                   subPath: ${APP_EMAIL_INVITE_FILE_NAME}
   # - kind: NetworkSecurityPolicy
-  #   apiVersion: secops..apps.silver.devops.gov.bc.ca/v1alpha1
+  #   apiVersion: secops.apps.silver.devops.gov.bc.ca/v1alpha1
   #   metadata:
   #     name: custom-${APP_NAME}-pods-to-api
   #     labels:
@@ -250,7 +250,7 @@ objects:
   #     destination:
   #       - - int:network=internal-cluster-api-endpoint
   # - kind: NetworkSecurityPolicy
-  #   apiVersion: secops..apps.silver.devops.gov.bc.ca/v1alpha1
+  #   apiVersion: secops.apps.silver.devops.gov.bc.ca/v1alpha1
   #   metadata:
   #     name: custom-${APP_NAME}-${NAME}-policy
   #     labels:
@@ -279,7 +279,7 @@ objects:
   #         - env=${TAG_NAME}
   #         - $namespace=${NAMESPACE_NAME}-${TAG_NAME}
   # - kind: NetworkSecurityPolicy
-  #   apiVersion: secops..apps.silver.devops.gov.bc.ca/v1alpha1
+  #   apiVersion: secops.apps.silver.devops.gov.bc.ca/v1alpha1
   #   metadata:
   #     name: ${NAME}${SUFFIX}-to-external-network
   #     labels:
@@ -417,7 +417,7 @@ parameters:
     displayName: Public Site URL
     description: Public Site URL
     required: true
-    value: https://issuer-kit..apps.silver.devops.gov.bc.ca
+    value: https://issuer-kit.apps.silver.devops.gov.bc.ca
   - name: APP_CONFIG_MAP_NAME
     displayName: Application Config Map Name
     description: The name of the configuration map holding the data to configure the
