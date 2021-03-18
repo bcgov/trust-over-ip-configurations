@@ -126,7 +126,10 @@ objects:
                       name: ${PREFIX}${NAME}
                       key: admin-password
                 - name: POSTGRESQL_DATABASE
-                  value: ${POSTGRESQL_DATABASE_NAME}
+                  valueFrom:
+                    secretKeyRef:
+                      name: ${PREFIX}${NAME}
+                      key: database-name
               resources:
                 requests:
                   cpu: ${CPU_REQUEST}
