@@ -10,7 +10,7 @@
 # APP_GROUP=vc-authn-oidc-rev
 # ROLE=agent
 # CONTROLLER_ROLE=controller
-APPLICATION_DOMAIN=toip-vc-authn-agent-rev-test.pathfinder.gov.bc.ca
+APPLICATION_DOMAIN=toip-vc-authn-agent-rev-test.apps.silver.devops.gov.bc.ca
 # ROUTE_TIMEOUT=120s
 # IMAGE_NAMESPACE=e79518-tools
 TAG_NAME=test
