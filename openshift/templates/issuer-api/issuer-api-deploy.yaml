@@ -96,6 +96,13 @@ objects:
         app-group: ${APP_GROUP}
         role: ${ROLE}
         env: ${TAG_NAME}
+      annotations:
+        description: Defines how to deploy the ${NAME}${SUFFIX} server
+        app.openshift.io/connects-to: >-
+          [
+            {"apiVersion":"apps.openshift.io/v1","kind":"DeploymentConfig","name":"agent${SUFFIX}"},
+            {"apiVersion":"apps.openshift.io/v1","kind":"DeploymentConfig","name":"db${SUFFIX}"}
+          ]
     spec:
       strategy:
         type: Rolling
