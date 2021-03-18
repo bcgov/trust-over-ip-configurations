@@ -3,20 +3,20 @@
 # Component: .
 # Template File: ../openshift/templates/issuer-agent/issuer-agent-deploy.yaml
 #=========================================================
-# NAME=agent
+# NAME=agent-sandbox-prime
 # APP_NAME=issuer-prime
 # APP_GROUP=prime
 # SUFFIX=
 # ROLE=agent
-APPLICATION_DOMAIN=prime-agent-sandbox.apps.silver.devops.gov.bc.ca
-ADMIN_APPLICATION_DOMAIN=prime-agent-admin-sandbox.apps.silver.devops.gov.bc.ca
+APPLICATION_DOMAIN=prime-agent-sandbox-dev.apps.silver.devops.gov.bc.ca
+ADMIN_APPLICATION_DOMAIN=prime-agent-admin-sandbox-dev.apps.silver.devops.gov.bc.ca
 # ROUTE_TIMEOUT=120s
-# IMAGE_NAMESPACE=4a9599-tools
-# NAMESPACE_NAME=4a9599
-# SOURCE_IMAGE_NAME=issuer-agent
+# IMAGE_NAMESPACE=e79518-tools
+# NAMESPACE_NAME=e79518
+# SOURCE_IMAGE_NAME=issuer-kit-agent
 TAG_NAME=dev
 AGENT_LABEL_NAME=MoH Prime (Sandbox)
-# AGENT_BASE_URL=https://prime-agent-sandbox.apps.silver.devops.gov.bc.ca
+AGENT_BASE_URL=https://prime-agent-sandbox-dev.apps.silver.devops.gov.bc.ca
 # WEBHOOK_URL=
 # AGENT_ADMIN_PORT=8024
 # ADMIN_API_KEY=[a-zA-Z0-9]{16}

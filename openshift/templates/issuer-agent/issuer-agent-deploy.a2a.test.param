@@ -11,9 +11,9 @@
 APPLICATION_DOMAIN=a2a-agent-test.apps.silver.devops.gov.bc.ca
 ADMIN_APPLICATION_DOMAIN=a2a-agent-admin-test.apps.silver.devops.gov.bc.ca
 # ROUTE_TIMEOUT=120s
-# IMAGE_NAMESPACE=4a9599-tools
-# NAMESPACE_NAME=4a9599
-# SOURCE_IMAGE_NAME=issuer-agent
+# IMAGE_NAMESPACE=e79518-tools
+# NAMESPACE_NAME=e79518
+# SOURCE_IMAGE_NAME=issuer-kit-agent
 TAG_NAME=test
 AGENT_LABEL_NAME=LSBC-demo-issuer
 AGENT_BASE_URL=https://a2a-agent-test.apps.silver.devops.gov.bc.ca

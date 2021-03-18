@@ -3,13 +3,13 @@
 # Component: .
 # Template File: ../openshift/templates/visual-verifier/visual-verifier-deploy.json
 #=========================================================
-# NAME=visual-verifier
-# APP_NAME=visual-verifiers
+# NAME=visual-verifier-prime
+# APP_NAME=issuer-prime
 # APP_GROUP=prime
-# SUFFIX=-prime
+# SUFFIX=
 # ROLE=visual-verifier
 APPLICATION_DOMAIN=prime-verifier-test.apps.silver.devops.gov.bc.ca
-# IMAGE_NAMESPACE=4a9599-tools
+# IMAGE_NAMESPACE=e79518-tools
 TAG_NAME=test
 # APP_FILE=
 # APP_CONFIG=

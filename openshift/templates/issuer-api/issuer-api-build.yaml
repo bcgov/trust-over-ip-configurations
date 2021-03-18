@@ -88,7 +88,7 @@ parameters:
     displayName: Namespace Name
     description: The name of the namespace being deployed to..
     required: true
-    value: 4a9599
+    value: e79518
   - name: ENV_NAME
     displayName: Environment Name
     description: Environment name.  For the build environment this will typically

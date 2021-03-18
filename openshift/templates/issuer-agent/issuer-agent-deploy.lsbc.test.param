@@ -11,9 +11,9 @@
 APPLICATION_DOMAIN=lsbc-agent-test.apps.silver.devops.gov.bc.ca
 ADMIN_APPLICATION_DOMAIN=lsbc-agent-admin-test.apps.silver.devops.gov.bc.ca
 # ROUTE_TIMEOUT=120s
-# IMAGE_NAMESPACE=4a9599-tools
-# NAMESPACE_NAME=4a9599
-# SOURCE_IMAGE_NAME=issuer-agent
+# IMAGE_NAMESPACE=e79518-tools
+# NAMESPACE_NAME=e79518
+# SOURCE_IMAGE_NAME=issuer-kit-agent
 TAG_NAME=test
 AGENT_LABEL_NAME=The Law Society of British Columbia (TEST)
 AGENT_BASE_URL=https://lsbc-agent-test.apps.silver.devops.gov.bc.ca

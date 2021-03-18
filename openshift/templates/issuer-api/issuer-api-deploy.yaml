@@ -346,12 +346,12 @@ parameters:
     required: true
     description: The namespace of the OpenShift project containing the imagestream
       for the application.
-    value: 4a9599-tools
+    value: e79518-tools
   - name: NAMESPACE_NAME
     displayName: Namespace Name
     description: The name of the namespace being deployed to..
     required: true
-    value: 4a9599
+    value: e79518
   - name: SERVICE_PORT
     displayName: Service Port
     required: true

@@ -11,10 +11,10 @@ objects:
   - kind: NetworkPolicy
     apiVersion: networking.k8s.io/v1
     metadata:
-      name: ${NAME}-allow-ingress
+      name: ${NAME}${SUFFIX}-allow-ingress
       labels:
-        name: ${NAME}-allow-ingress
-        app: ${APP_GROUP}
+        name: ${NAME}${SUFFIX}-allow-ingress
+        app: ${APP_NAME}${SUFFIX}
         app-group: ${APP_GROUP}
         role: ${ROLE}
         env: ${TAG_NAME}
@@ -29,7 +29,7 @@ objects:
       podSelector:
         matchLabels:
           role: ${ROLE}
-          app: ${APP_GROUP}
+          app: ${APP_NAME}${SUFFIX}
           env: ${TAG_NAME}
       policyTypes:
         - Ingress
@@ -114,7 +114,7 @@ objects:
             from:
               kind: ImageStreamTag
               namespace: ${IMAGE_NAMESPACE}
-              name: ${NAME}:${TAG_NAME}
+              name: ${SOURCE_IMAGE_NAME}:${TAG_NAME}
         - type: ConfigChange
       replicas: 1
       selector:
