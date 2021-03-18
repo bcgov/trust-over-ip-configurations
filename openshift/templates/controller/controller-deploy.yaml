@@ -28,6 +28,7 @@ objects:
         matchLabels:
           role: ${PREFIX}${ROLE}
           app: ${APP_NAME}
+          app-group: ${APP_GROUP}
           env: ${TAG_NAME}
       policyTypes:
         - Ingress
@@ -50,6 +51,7 @@ objects:
             - podSelector:
                 matchLabels:
                   role: ${PREFIX}${AGENT_ROLE}
+                  app-group: ${APP_GROUP}
                   app: ${APP_NAME}
                   env: ${TAG_NAME}
               namespaceSelector:
@@ -61,7 +63,9 @@ objects:
               port: 8080
       podSelector:
         matchLabels:
+          name: ${PREFIX}${NAME}
           role: ${PREFIX}${ROLE}
+          app-group: ${APP_GROUP}
           app: ${APP_NAME}
           env: ${TAG_NAME}
 
@@ -93,6 +97,7 @@ objects:
       replicas: 1
       selector:
         app: ${APP_GROUP}
+        app-group: ${APP_GROUP}
         name: ${PREFIX}${NAME}
         role: ${PREFIX}${ROLE}
         env: ${TAG_NAME}
@@ -107,8 +112,9 @@ objects:
       template:
         metadata:
           labels:
-            app: ${APP_GROUP}
             name: ${PREFIX}${NAME}
+            app: ${APP_NAME}
+            app-group: ${APP_GROUP}
             role: ${PREFIX}${ROLE}
             env: ${TAG_NAME}
         spec:
