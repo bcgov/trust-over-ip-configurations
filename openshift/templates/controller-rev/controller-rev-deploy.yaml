@@ -26,8 +26,10 @@ objects:
                   network.openshift.io/policy-group: ingress
       podSelector:
         matchLabels:
-          role: ${PREFIX}${ROLE}
+          name: ${PREFIX}${NAME}
           app: ${APP_NAME}
+          app-group: ${APP_GROUP}
+          role: ${PREFIX}${ROLE}
           env: ${TAG_NAME}
       policyTypes:
         - Ingress
@@ -58,11 +60,13 @@ objects:
                   environment: ${TAG_NAME}
           ports:
             - protocol: TCP
-              port: 5000
+              port: 8080
       podSelector:
         matchLabels:
-          role: ${PREFIX}${ROLE}
+          name: ${PREFIX}${NAME}
           app: ${APP_NAME}
+          app-group: ${APP_GROUP}
+          role: ${PREFIX}${ROLE}
           env: ${TAG_NAME}
 
   - kind: Secret
@@ -107,8 +111,9 @@ objects:
       template:
         metadata:
           labels:
-            app: ${APP_GROUP}
             name: ${PREFIX}${NAME}
+            app: ${APP_NAME}
+            app-group: ${APP_GROUP}
             role: ${PREFIX}${ROLE}
             env: ${TAG_NAME}
         spec:
@@ -203,7 +208,7 @@ objects:
     spec:
       storageClassName: ${PERSISTENT_VOLUME_CLASS}
       accessModes:
-        - ReadWriteOnce
+        - ReadWriteMany
       resources:
         requests:
           storage: ${PERSISTENT_VOLUME_SIZE}

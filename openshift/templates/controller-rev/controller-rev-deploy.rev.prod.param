@@ -11,7 +11,7 @@
 # AGENT_ROLE=agent
 # IMAGE_NAMESPACE=e79518-tools
 # NAMESPACE_NAME=e79518
-TAG_NAME=latest
+TAG_NAME=prod
 APPLICATION_DOMAIN=toip-vc-authn-controller-rev.pathfinder.gov.bc.ca
 # AGENT_ADMIN_URL=http://vc-authn-agent-rev:8024
 AGENT_PUBLIC_URL=https://toip-vc-authn-agent-rev.pathfinder.gov.bc.ca
