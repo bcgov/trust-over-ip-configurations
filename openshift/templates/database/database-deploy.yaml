@@ -98,6 +98,7 @@ objects:
             app-group: ${APP_GROUP}
             role: ${PREFIX}${ROLE}
             env: ${TAG_NAME}
+            backup: ${BACKUP}
         spec:
           volumes:
             - name: ${PREFIX}${NAME}-data
