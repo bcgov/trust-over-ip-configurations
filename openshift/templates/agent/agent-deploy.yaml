@@ -4,6 +4,65 @@ apiVersion: v1
 metadata:
   name: ${PREFIX}${NAME}
 objects:
+  - kind: NetworkPolicy
+    apiVersion: networking.k8s.io/v1
+    metadata:
+      name: ${PREFIX}${NAME}-allow-ingress
+      labels:
+        name: ${PREFIX}${NAME}-allow-ingress
+        app: ${APP_NAME}
+        app-group: ${APP_GROUP}
+        role: ${ROLE}
+        env: ${TAG_NAME}
+    spec:
+      description: |
+        Allow traffic from routes into the vc-authn-agent container(s).
+      ingress:
+        - from:
+            - namespaceSelector:
+                matchLabels:
+                  network.openshift.io/policy-group: ingress
+      podSelector:
+        matchLabels:
+          role: ${PREFIX}${ROLE}
+          app: ${APP_NAME}
+          env: ${TAG_NAME}
+      policyTypes:
+        - Ingress
+
+  - kind: NetworkPolicy
+    apiVersion: networking.k8s.io/v1
+    metadata:
+      name: ${PREFIX}${NAME}
+      labels:
+        name: ${PREFIX}${NAME}
+        app: ${APP_NAME}
+        app-group: ${APP_GROUP}
+        role: ${PREFIX}${ROLE}
+        env: ${TAG_NAME}
+    spec:
+      description: |
+        Allow the vc-authn controller to access the agent admin interface.
+      ingress:
+        - from:
+            - podSelector:
+                matchLabels:
+                  role: ${PREFIX}${CONTROLLER_ROLE}
+                  app: ${APP_NAME}
+                  env: ${TAG_NAME}
+              namespaceSelector:
+                matchLabels:
+                  name: ${NAMESPACE_NAME}
+                  environment: ${TAG_NAME}
+          ports:
+            - protocol: TCP
+              port: ${{AGENT_ADMIN_PORT}}
+      podSelector:
+        matchLabels:
+          role: ${PREFIX}${ROLE}
+          app: ${APP_NAME}
+          env: ${TAG_NAME}
+
   - kind: Service
     apiVersion: v1
     metadata:
@@ -116,9 +175,7 @@ objects:
                 - -c
                 - $(echo aca-py start
                   --inbound-transport http '0.0.0.0' ${HTTP_INTERFACE_PORT}
-                  $([ ! -z "${AGENT_ENDPOINT}" ] && echo "--endpoint ${AGENT_ENDPOINT}" || echo "")
                   --outbound-transport http
-                  --genesis-url "${GENESIS_URL}"
                   $(echo "${CONTROLLER_WEBHOOK_URL:+--webhook-url ${CONTROLLER_WEBHOOK_URL%/}${CONTROLLER_API_KEY:+/${CONTROLLER_API_KEY}}}")
                   --auto-accept-invites
                   --auto-accept-requests
@@ -129,19 +186,13 @@ objects:
                   --auto-provision
                   --wallet-type 'indy'
                   --wallet-name "$(echo ${AGENT_WALLET_NAME} | tr '[:upper:]' '[:lower:]' | sed "s~-~_~g")"
-                  --wallet-key "${WALLET_ENCRYPTION_KEY}"
                   --wallet-storage-type "${WALLET_TYPE}"
                   --wallet-storage-config "$(eval echo \"${WALLET_STORAGE_CONFIGURATION}\")"
                   --wallet-storage-creds "$(eval echo \"${WALLET_STORAGE_CREDENTIALS}\")"
-                  $([ ! -z "${INDY_WALLET_SEED}" ] && echo "--seed ${INDY_WALLET_SEED}" || echo "")
                   --admin '0.0.0.0' ${ADMIN_INTERFACE_PORT}
-                  $([ ! -z "${AGENT_ADMIN_API_KEY}" ] && echo "--admin-api-key ${AGENT_ADMIN_API_KEY}" || echo "--admin-insecure-mode")
-                  --label "${AGENT_NAME}"
-                  --log-level ${AGENT_LOG_LEVEL}
-                  $([ ! -z "${TIMING}" ] && echo "--timing" || echo "")
-                  $([ ! -z "${READ_ONLY_LEDGER}" ] && echo "--read-only-ledger" || echo ""));
+                  $([ ! -z "${AGENT_ADMIN_API_KEY}" ] && echo "--admin-api-key ${AGENT_ADMIN_API_KEY}" || echo "--admin-insecure-mode"));
               env:
-                - name: GENESIS_URL
+                - name: ACAPY_GENESIS_URL
                   value: ${GENESIS_FILE_URL}
                 - name: AGENT_WALLET_NAME
                   value: ${PREFIX}${NAME}-wallet
@@ -170,12 +221,12 @@ objects:
                     secretKeyRef:
                       name: ${PREFIX}${WALLET_HOST}
                       key: admin-password
-                - name: WALLET_ENCRYPTION_KEY
+                - name: ACAPY_WALLET_KEY
                   valueFrom:
                     secretKeyRef:
                       name: ${PREFIX}${WALLET_CREDENTIAL_STORE_NAME}
                       key: key
-                - name: INDY_WALLET_SEED
+                - name: ACAPY_WALLET_SEED
                   valueFrom:
                     secretKeyRef:
                       name: ${PREFIX}${WALLET_CREDENTIAL_STORE_NAME}
@@ -201,15 +252,15 @@ objects:
                     secretKeyRef:
                       name: ${PREFIX}${NAME}
                       key: admin-api-key
-                - name: AGENT_NAME
+                - name: ACAPY_LABEL
                   value: ${AGENT_LABEL_NAME}
-                - name: AGENT_ENDPOINT
+                - name: ACAPY_ENDPOINT
                   value: https://${APPLICATION_DOMAIN}
-                - name: AGENT_LOG_LEVEL
+                - name: ACAPY_LOG_LEVEL
                   value: ${LOG_LEVEL}
-                - name: TIMING
+                - name: ACAPY_TIMING
                   value: ${AGENT_TIMING}
-                - name: READ_ONLY_LEDGER
+                - name: ACAPY_READ_ONLY_LEDGER
                   value: ${AGENT_READ_ONLY_LEDGER}
               image:
               ports:
@@ -262,56 +313,6 @@ objects:
               name: ${PREFIX}${NAME}:${TAG_NAME}
               namespace: ${IMAGE_NAMESPACE}
 
-  - kind: NetworkSecurityPolicy
-    apiVersion: secops.pathfinder.gov.bc.ca/v1alpha1
-    metadata:
-      name: custom-${APP_NAME}-${NAME}-to-external-network
-      labels:
-        name: custom-${APP_NAME}-${NAME}-to-external-network
-        app: ${APP_NAME}
-        app-group: ${APP_GROUP}
-        role: ${PREFIX}${ROLE}
-        env: ${TAG_NAME}
-    spec:
-      description: |
-        Allow the agent to access the internet.
-      source:
-        - - role=${PREFIX}${ROLE}
-          - app=${APP_NAME}
-          - env=${TAG_NAME}
-          - $namespace=${NAMESPACE_NAME}-${TAG_NAME}
-      destination:
-        - - ext:network=any
-
-  - kind: NetworkSecurityPolicy
-    apiVersion: secops.pathfinder.gov.bc.ca/v1alpha1
-    metadata:
-      name: custom-${APP_NAME}-${NAME}-policy
-      labels:
-        name: custom-${APP_NAME}-${NAME}-policy
-        app: ${APP_NAME}
-        app-group: ${APP_GROUP}
-        role: ${PREFIX}${ROLE}
-        env: ${TAG_NAME}
-    spec:
-      description: |
-        Allow the agent to talk to either the wallet or controller micro services.
-      source:
-        - - role=${PREFIX}${ROLE}
-          - app=${APP_NAME}
-          - env=${TAG_NAME}
-          - $namespace=${NAMESPACE_NAME}-${TAG_NAME}
-
-      destination:
-        - - role=${PREFIX}wallet
-          - app=${APP_NAME}
-          - env=${TAG_NAME}
-          - $namespace=${NAMESPACE_NAME}-${TAG_NAME}
-        - - role=${PREFIX}controller
-          - app=${APP_NAME}
-          - env=${TAG_NAME}
-          - $namespace=${NAMESPACE_NAME}-${TAG_NAME}
-
 parameters:
   - name: NAME
     displayName: Name
@@ -322,7 +323,7 @@ parameters:
     displayName: Namespace Name
     description: The name of the namespace being deployed to.
     required: true
-    value: nnfbch
+    value: e79518
   - name: PREFIX
     displayName: Prefix
     description: A name prefix used for all objects.
@@ -343,6 +344,11 @@ parameters:
     description: The role of this service within the application - used for Network Policies.
     required: true
     value: agent
+  - name: CONTROLLER_ROLE
+    displayName: Controller Role
+    description: The role of the vc-authn controller service within the application - used for Network Policies.
+    required: true
+    value: controller
   - name: APPLICATION_DOMAIN
     displayName: Application Hostname
     description: The exposed hostname that will route to the service, if left blank a value will be defaulted.
@@ -401,13 +407,13 @@ parameters:
   - name: AGENT_TIMING
     displayName: Collect agent timing information.
     description: Enable/Disable collection of agent timing information.  Controls the inclusion/exclusion of the agent '--timing' startup parameter.  Defaults to disabled.
-    required: false
-    value: ""
+    required: true
+    value: "false"
   - name: AGENT_READ_ONLY_LEDGER
     displayName: Set read only ledger flag.
     description: Enable/Disable the read only ledger flag.  Controls the inclusion/exclusion of the agent '--read-only-ledger' startup parameter.  Defaults to disabled.
-    required: false
-    value: ""
+    required: true
+    value: "true"
   # ===============================================================================
   # Wallet Configuration
   #--------------------------------------------------------------------------------
