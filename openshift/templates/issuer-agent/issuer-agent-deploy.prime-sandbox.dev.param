@@ -17,6 +17,7 @@ ADMIN_APPLICATION_DOMAIN=prime-agent-admin-sandbox.apps.silver.devops.gov.bc.ca
 TAG_NAME=dev
 AGENT_LABEL_NAME=MoH Prime (Sandbox)
 AGENT_BASE_URL=https://prime-agent-sandbox.apps.silver.devops.gov.bc.ca
+AGENT_READ_ONLY_LEDGER=false
 # WEBHOOK_URL=
 # AGENT_ADMIN_PORT=8024
 # ADMIN_API_KEY=[a-zA-Z0-9]{16}
