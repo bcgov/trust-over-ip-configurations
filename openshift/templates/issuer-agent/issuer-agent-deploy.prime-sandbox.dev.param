@@ -37,6 +37,6 @@ AGENT_BASE_URL=https://prime-agent-sandbox.apps.silver.devops.gov.bc.ca
 # TAILS_FILES_VOLUME_SIZE=1Gi
 # TAILS_SERVER_BASE_URL=https://tails-server-dev.apps.silver.devops.gov.bc.ca
 # CPU_REQUEST=10m
-# CPU_LIMIT=1000m
+# CPU_LIMIT=300m
 # MEMORY_REQUEST=10Mi
 # MEMORY_LIMIT=512Mi
