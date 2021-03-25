@@ -3,20 +3,20 @@
 # Component: .
 # Template File: ../openshift/templates/issuer-kit-api/issuer-kit-api-deploy.json
 #=========================================================
-NAME=api
-APP_NAME=issuer
+NAME=api-a2a
+APP_NAME=issuer-a2a
 APP_GROUP=a2a
-SUFFIX=-a2a
+SUFFIX=
 ROLE=api
-IMAGE_NAMESPACE=e79518-tools
-NAMESPACE_NAME=e79518
+IMAGE_NAMESPACE=a99fd4-tools
+NAMESPACE_NAME=a99fd4
 SERVICE_PORT=8080
-DB_SERVICE=db
+DB_SERVICE=issuer-kit-db
 DB_PORT=27017
 DB_NAME=issuer_db
 SOURCE_IMAGE_NAME=issuer-kit-api
 TAG_NAME=dev
-AGENT_SERVICE_NAME=agent
+AGENT_SERVICE_NAME=agent-a2a
 AGENT_ADMIN_PORT=8024
 SMTP_SERVER_ADDRESS=
 SMTP_SERVER_PORT=

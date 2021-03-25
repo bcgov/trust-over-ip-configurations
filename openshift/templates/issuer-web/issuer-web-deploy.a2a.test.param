@@ -3,13 +3,13 @@
 # Component: .
 # Template File: ../openshift/templates/issuer-web/issuer-web-deploy.json
 #=========================================================
-# NAME=issuer-web
-# APP_NAME=issuer
+# NAME=issuer-web-a2a
+# APP_NAME=issuer-a2a
 # APP_GROUP=a2a
-# SUFFIX=-a2a
+# SUFFIX=
 # ROLE=public-frontend
-# IMAGE_NAMESPACE=e79518-tools
-# NAMESPACE_NAME=e79518
+# IMAGE_NAMESPACE=a99fd4-tools
+# NAMESPACE_NAME=a99fd4
 # CADDY_CONFIG_FILE_NAME=Caddyfile
 # CADDY_CONFIG_MAP_NAME=issuer-web-caddy-conf
 # CADDY_CONFIG_MOUNT_PATH=/etc/caddy/
@@ -28,7 +28,7 @@
 # API_HOST=api
 # API_PORT=8080
 APPLICATION_DOMAIN=a2a-issuer-test.apps.silver.devops.gov.bc.ca
-# SOURCE_IMAGE_NAME=issuer-web
+# SOURCE_IMAGE_NAME=issuer-kit-web
 TAG_NAME=test
 # CPU_REQUEST=10m
 # CPU_LIMIT=250m
