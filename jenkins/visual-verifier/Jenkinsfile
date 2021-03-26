@@ -19,7 +19,7 @@ def DEP_ENV_NAMES = ['dev', 'test']
 
 
 // The base namespace of you environments.
-def NAME_SPACE = 'nnfbch'
+def NAME_SPACE = 'e79518'
 
 // Get an image's hash tag
 String getImageTagHash(String imageName, String tag = "") {
