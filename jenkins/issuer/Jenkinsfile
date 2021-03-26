@@ -10,7 +10,7 @@ def WAIT_TIMEOUT = 10
 
 // Assumes Builds, Images, and Deployments all have the same name(s)
 // Components will be deployed in the order they are listed.
-def COMPONENTS = ['issuer-wallet', 'issuer-web', 'issuer-agent']
+def COMPONENTS = ['issuer-kit-wallet', 'issuer-kit-agent']
 
 // Edit your environment TAG names below
 def TAG_NAMES = ['dev', 'test', 'prod']
