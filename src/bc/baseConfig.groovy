@@ -9,7 +9,7 @@ class baseConfig {
   public static final String[] DEPLOYMENT_ENVIRONMENT_TAGS = ['dev', 'test', 'prod']
 
   // The name of the project namespace(s).
-  public static final String  NAME_SPACE = 'nnfbch'
+  public static final String  NAME_SPACE = 'e79518'
 
   // Instance Prefix
   public static final String  PREFIX = 'vc-authn-'
