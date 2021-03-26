@@ -18,5 +18,5 @@ class baseConfig {
   public static final String  SUFFIX = ''
 
   // Apps - Listed in the order they should be tagged
-  public static final String[] APPS = ['tails-server', 'vc-authn-database', 'vc-authn-agent', 'vc-authn-controller', 'backup', 'issuer-agent', 'issuer-api', 'issuer-db', 'issuer-wallet', 'issuer-web']
+  public static final String[] APPS = ['tails-server', 'vc-authn-database', 'vc-authn-agent', 'vc-authn-controller', 'backup', 'issuer-kit-agent', 'issuer-kit-wallet']
 }
