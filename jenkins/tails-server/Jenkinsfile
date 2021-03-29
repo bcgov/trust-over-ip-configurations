@@ -1,8 +1,8 @@
 def PIPELINE_NAME = "tails-server"
 
 def LIB_NAME= "custom-lib"
-def LIB_REPO = "https://github.com/wadeking98/a2a-trust-over-ip-configurations.git"
-def LIB_BRANCH = "feature-ocp4"
+def LIB_REPO = "https://github.com/bcgov/a2a-trust-over-ip-configurations.git"
+def LIB_BRANCH = "master"
 library identifier: "${LIB_NAME}@${LIB_BRANCH}", 
         retriever: modernSCM(
           [$class: 'GitSCMSource',

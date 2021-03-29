@@ -5,8 +5,8 @@
 #=========================================================
 # NAME=backup
 # PREFIX=
-# APP_NAME=Backup
-# APP_GROUP=backup
+# APP_NAME=backup-postgres
+# APP_GROUP=backup-postgres
 # SOURCE_IMAGE_NAME=backup
 # NAMESPACE_NAME=e79518
 # IMAGE_NAMESPACE=e79518-tools

@@ -5,7 +5,7 @@
 #=========================================================
 NAME=backup
 PREFIX=
-APP_NAME=backup
+APP_NAME=backup-postgres
 APP_GROUP=backup
 GIT_REPO_URL=https://github.com/BCDevOps/backup-container.git
 GIT_REF=2.0.1
