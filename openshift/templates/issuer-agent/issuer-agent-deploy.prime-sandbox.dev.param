@@ -3,8 +3,8 @@
 # Component: .
 # Template File: ../openshift/templates/issuer-agent/issuer-agent-deploy.yaml
 #=========================================================
-# NAME=agent-sandbox-prime
-# APP_NAME=issuer-prime
+# NAME=agent-sandbox
+# APP_NAME=issuer
 # APP_GROUP=prime
 # SUFFIX=
 # ROLE=agent
@@ -29,7 +29,8 @@ AGENT_READ_ONLY_LEDGER=false
 # WALLET_HOST_PORT=5432
 # WALLET_STORAGE_CONFIG={\"url\":\"${POSTGRESQL_WALLET_HOST}:${POSTGRESQL_WALLET_PORT}\",\"max_connections\":5}
 # WALLET_STORAGE_CREDS={\"account\":\"${POSTGRESQL_WALLET_USER}\",\"password\":\"${POSTGRESQL_WALLET_PASSWORD}\",\"admin_account\":\"postgres\",\"admin_password\":\"${POSTGRESQL_WALLET_ADMIN_PASSWORD}\"}
-# WALLET_CREDENTIAL_STORE_NAME=agent-wallet-credentials
+# WALLET_CREDENTIAL_STORE_NAME=agent-wallet-credentials-sandbox
+# WALLET_SUFFIX=-prime
 # WALLET_KEY=[a-zA-Z0-9]{10}
 # WALLET_SEED=[a-zA-Z0-9]{32}
 # WALLET_DID=[a-zA-Z0-9]{16}

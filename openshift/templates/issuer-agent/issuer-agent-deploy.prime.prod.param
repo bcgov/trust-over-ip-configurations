@@ -33,6 +33,7 @@ GENESIS_FILE_URL=https://raw.githubusercontent.com/sovrin-foundation/sovrin/stab
 # WALLET_KEY=[a-zA-Z0-9]{10}
 # WALLET_SEED=[a-zA-Z0-9]{32}
 # WALLET_DID=[a-zA-Z0-9]{16}
+# WALLET_SUFFIX=-prime
 # TAILS_FILES_DIR=/home/indy/.indy_client/tails
 # TAILS_FILES_VOLUME_CLASS=netapp-file-standard
 # TAILS_FILES_VOLUME_SIZE=1Gi

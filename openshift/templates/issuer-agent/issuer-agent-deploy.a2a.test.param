@@ -3,10 +3,10 @@
 # Component: .
 # Template File: ../openshift/templates/agent/agent-deploy.yaml
 #=========================================================
-# NAME=agent-a2a
-# APP_NAME=issuer-a2a
+# NAME=agent
+# APP_NAME=issuer
 # APP_GROUP=a2a
-# SUFFIX=
+# SUFFIX=-a2a
 # ROLE=agent
 APPLICATION_DOMAIN=a2a-agent-test.apps.silver.devops.gov.bc.ca
 ADMIN_APPLICATION_DOMAIN=a2a-agent-admin-test.apps.silver.devops.gov.bc.ca
@@ -29,10 +29,11 @@ AGENT_READ_ONLY_LEDGER=false
 # WALLET_HOST_PORT=5432
 # WALLET_STORAGE_CONFIG={\"url\":\"${POSTGRESQL_WALLET_HOST}:${POSTGRESQL_WALLET_PORT}\",\"max_connections\":5}
 # WALLET_STORAGE_CREDS={\"account\":\"${POSTGRESQL_WALLET_USER}\",\"password\":\"${POSTGRESQL_WALLET_PASSWORD}\",\"admin_account\":\"postgres\",\"admin_password\":\"${POSTGRESQL_WALLET_ADMIN_PASSWORD}\"}
-# WALLET_CREDENTIAL_STORE_NAME=agent-wallet-credentials-a2a
+# WALLET_CREDENTIAL_STORE_NAME=agent-wallet-credentials
 # WALLET_KEY=[a-zA-Z0-9]{10}
 # WALLET_SEED=[a-zA-Z0-9]{32}
 # WALLET_DID=[a-zA-Z0-9]{16}
+# WALLET_SUFFIX=
 # TAILS_FILES_DIR=/home/indy/.indy_client/tails
 # TAILS_FILES_VOLUME_CLASS=netapp-file-standard
 # TAILS_FILES_VOLUME_SIZE=1Gi
