@@ -6,7 +6,7 @@
 # NAME=agent-sandbox
 # APP_NAME=issuer
 # APP_GROUP=prime
-# SUFFIX=
+# SUFFIX=-prime
 # ROLE=agent
 APPLICATION_DOMAIN=prime-agent-sandbox.apps.silver.devops.gov.bc.ca
 ADMIN_APPLICATION_DOMAIN=prime-agent-admin-sandbox.apps.silver.devops.gov.bc.ca

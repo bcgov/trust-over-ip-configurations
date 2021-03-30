@@ -3,9 +3,9 @@
 # Component: .
 # Template File: ../openshift/templates/backup/backup-deploy.json
 #=========================================================
-# NAME=backup
+# NAME=backup-postgres
 # PREFIX=
-# APP_NAME=backup-postgres
+# APP_NAME=backup-container
 # APP_GROUP=backup-postgres
 # NAMESPACE_NAME=e79518
 # SOURCE_IMAGE_NAME=backup
