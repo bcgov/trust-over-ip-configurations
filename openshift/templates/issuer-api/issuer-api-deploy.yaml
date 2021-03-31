@@ -175,7 +175,7 @@ objects:
                 - name: PORT
                   value: ${SERVICE_PORT}
                 - name: DB_SERVICE
-                  value: ${DB_SERVICE}${SUFFIX}
+                  value: ${DB_SERVICE}${DB_SUFFIX}
                 - name: DB_PORT
                   value: ${DB_PORT}
                 - name: DB_NAME
@@ -183,12 +183,12 @@ objects:
                 - name: DB_USER
                   valueFrom:
                     secretKeyRef:
-                      name: ${DB_SERVICE}${SUFFIX}
+                      name: ${DB_SERVICE}${DB_SUFFIX}
                       key: database-user
                 - name: DB_PASSWORD
                   valueFrom:
                     secretKeyRef:
-                      name: ${DB_SERVICE}${SUFFIX}
+                      name: ${DB_SERVICE}${DB_SUFFIX}
                       key: database-password
                 - name: AGENT_ADMIN_URL
                   value: http://${AGENT_SERVICE_NAME}${SUFFIX}:${AGENT_ADMIN_PORT}
@@ -256,6 +256,11 @@ parameters:
   - name: SUFFIX
     displayName: Suffix
     description: A suffix applied to all of the objects in this template.
+    required: false
+    value: ''
+  - name: DB_SUFFIX
+    displayName: DB Suffix
+    description: A suffix applied to the database name.
     required: false
     value: ''
   - name: ROLE

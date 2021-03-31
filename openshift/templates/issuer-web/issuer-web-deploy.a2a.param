@@ -3,10 +3,10 @@
 # Component: .
 # Template File: ../openshift/templates/issuer-web/issuer-web-deploy.json
 #=========================================================
-NAME=issuer-web-a2a
-APP_NAME=issuer-a2a
+NAME=issuer-web
+APP_NAME=issuer
 APP_GROUP=a2a
-SUFFIX=
+SUFFIX=-a2a
 ROLE=public-frontend
 IMAGE_NAMESPACE=a99fd4-tools
 NAMESPACE_NAME=a99fd4
