@@ -10,7 +10,7 @@ def WAIT_TIMEOUT = 10
 
 // Assumes Builds, Images, and Deployments all have the same name(s)
 // Components will be deployed in the order they are listed.
-def COMPONENTS = ['issuer-wallet', 'issuer-db', 'issuer-web', 'issuer-api', 'issuer-agent']
+def COMPONENTS = ['issuer-kit-wallet', 'issuer-kit-agent']
 
 // Edit your environment TAG names below
 def TAG_NAMES = ['dev', 'test', 'prod']
@@ -20,7 +20,7 @@ def DEP_ENV_NAMES = ['dev', 'test', 'prod']
 
 
 // The base namespace of you environments.
-def NAME_SPACE = 'nnfbch'
+def NAME_SPACE = 'e79518'
 
 // Get an image's hash tag
 String getImageTagHash(String imageName, String tag = "") {

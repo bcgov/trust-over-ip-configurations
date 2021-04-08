@@ -3,13 +3,14 @@
 # Component: .
 # Template File: ../openshift/templates/visual-verifier/visual-verifier-deploy.json
 #=========================================================
-NAME=visual-verifier-sandbox-prime
-APP_NAME=issuer-prime
+NAME=visual-verifier-sandbox
+APP_NAME=issuer
 APP_GROUP=prime
-SUFFIX=
+SUFFIX=-prime
 ROLE=visual-verifier
-APPLICATION_DOMAIN=prime-verifier-sandbox.pathfinder.gov.bc.ca
-IMAGE_NAMESPACE=nnfbch-tools
+APPLICATION_DOMAIN=prime-verifier-sandbox.apps.silver.devops.gov.bc.ca
+IMAGE_NAMESPACE=e79518-tools
+SOURCE_IMAGE_NAME=visual-verifier
 TAG_NAME=dev
 APP_FILE=
 APP_CONFIG=
@@ -24,6 +25,6 @@ OIDC_RP_SCOPES=openid profile vc_authn
 VC_AUTHN_PRES_REQ_CONF_ID=prime-enrollee-dev
 OIDC_CLAIMS_REQUIRED=
 CPU_REQUEST=10m
-CPU_LIMIT=200m
+CPU_LIMIT=100m
 MEMORY_REQUEST=10Mi
 MEMORY_LIMIT=256Mi
