@@ -34,6 +34,21 @@ usage () {
 
         Examples;
           $0 -p default -e dev registersovrin mydid
+
+    addAuthClient <clientName> <clientRedirectUri> [clientCorsOrigin]
+      - Adds a new client to the vc-authn database.
+
+        Examples;
+          $0 -p default -e dev addauthclient mynewclient https:///my.newclient.example
+          $0 -p default -e dev addauthclient mynewclient https:///my.newclient.example https:///my.newclient.weburl
+
+    updateAuthClient <clientName> <clientRedirectUri> [clientCorsOrigin]
+      - Updates the client with the given name in the the vc-authn database.
+
+        Examples;
+          $0 -p default -e dev updateAuthClient myclient https:///my.client.example
+          $0 -p default -e dev updateAuthClient myclient https:///my.client.example https:///my.client.weburl
+
     clean
       - Remove the application components from a given environment.
         Specify the environment using the -e option.
@@ -282,6 +297,117 @@ registersovrin() {
       -d "{\"network\":\"${ledger}\",\"did\":\"${did}\",\"verkey\":\"${verkey}\",\"paymentaddr\":\"\"}" \
       https://selfserve.sovrin.org/nym )
 }
+
+addAuthClient() {
+  _clientName=${1}
+  _clientRedirectUri=${2}
+  _clientCorsOrigin=${3}
+  _podName=${4:-vc-authn-database}
+
+  re="[[:space:]]+"
+  if [ -z "${_clientName}" ] || [ -z "${_clientName}" ] || [ -z "${_clientRedirectUri}" ]; then
+    echo -e \\n"addAuthClient; One or more paramaters are invalid. Required parameters are clientName, clientRedirectUri."\\n
+    exit 1
+  fi
+
+  if [[ $_clientName =~ $re ]]; then
+    echo -e \\n"addAuthClient; The client name cannot include spaces."\\n
+    exit 1
+  fi 
+
+  if [ -z "${_clientCorsOrigin}" ]; then
+    echoWarning "*** You have not specified a CORS origin for this client ***"
+    printAndAskToContinue "If this is correct, press any key to proceed. Otherwise press Ctrl+C to start over..."
+  fi
+
+  # Add new client
+  echo -e "Creating client '${_clientName}'..."
+  runInContainer \
+    ${_podName} \
+    "psql -d \${POSTGRESQL_DATABASE} -ac 'insert into \"Clients\" (\"ClientId\", \"ClientName\", \"Created\", \"Enabled\",\"ProtocolType\",\"RequireClientSecret\",\"Description\",\"ClientUri\",\"LogoUri\",\"RequireConsent\",\"AllowRememberConsent\",\"AlwaysIncludeUserClaimsInIdToken\",\"RequirePkce\",\"AllowPlainTextPkce\",\"AllowAccessTokensViaBrowser\",\"FrontChannelLogoutUri\",\"FrontChannelLogoutSessionRequired\",\"BackChannelLogoutUri\",\"BackChannelLogoutSessionRequired\",\"AllowOfflineAccess\",\"IdentityTokenLifetime\",\"AccessTokenLifetime\",\"AuthorizationCodeLifetime\",\"ConsentLifetime\",\"AbsoluteRefreshTokenLifetime\",\"SlidingRefreshTokenLifetime\",\"RefreshTokenUsage\",\"UpdateAccessTokenClaimsOnRefresh\",\"RefreshTokenExpiration\",\"AccessTokenType\",\"EnableLocalLogin\",\"IncludeJwtId\",\"AlwaysSendClientClaims\",\"ClientClaimsPrefix\",\"PairWiseSubjectSalt\",\"Updated\",\"LastAccessed\",\"UserSsoLifetime\",\"UserCodeType\",\"DeviceCodeLifetime\",\"NonEditable\",\"AllowedIdentityTokenSigningAlgorithms\",\"RequireRequestObject\") VALUES ('\''${_clientName}'\'', '\''${_clientName}'\'',CURRENT_DATE,true,'\''oidc'\'',false,NULL,NULL,NULL,false,true,false,true,false,false,NULL,true,NULL,true,false,300,3600,300,NULL,2592000,1296000,1,false,1,0,true,true,false,'\''client_'\'',NULL,NULL,NULL,NULL,NULL,300,false,NULL,false);'"
+
+  # Retrieve new client id
+  _clientId=$(runInContainer \
+    ${_podName} \
+    "psql -d \${POSTGRESQL_DATABASE} -tAc 'select \"Id\" from \"Clients\" where \"ClientName\" = '\''${_clientName}'\'';'")
+
+  echo -e "Client ${_clientName} has Id=${_clientId}"
+
+  # Add client scopes
+  echo -e "Creating client scopes..."
+  runInContainer \
+    ${_podName} \
+    "psql -d \${POSTGRESQL_DATABASE} -ac 'insert into \"ClientScopes\" (\"Scope\", \"ClientId\") select \"Scope\", ${_clientId} as \"ClientId\" from \"ClientScopes\" where \"ClientId\" = 1;'"
+
+  # Add client grant types
+  echo -e "Creating grant types..."
+  runInContainer \
+    ${_podName} \
+    "psql -d \${POSTGRESQL_DATABASE} -ac 'insert into \"ClientGrantTypes\" (\"GrantType\", \"ClientId\") select \"GrantType\", ${_clientId} as \"ClientId\" from \"ClientGrantTypes\" where \"ClientId\" = 1;'"
+
+  # Add client redirect URI  
+  echo -e "Adding ${_clientRedirectUri} as redirect URI..."
+  runInContainer \
+    ${_podName} \
+    "psql -d \${POSTGRESQL_DATABASE} -ac 'insert into \"ClientRedirectUris\" (\"RedirectUri\", \"ClientId\") values ('\''${_clientRedirectUri}'\'', ${_clientId});'"
+
+  if [ ! -z "${_clientCorsOrigin}" ]; then
+    echo -e "Adding ${_clientCorsOrigin} as CORS origin..."
+    # Add client CORS origin
+    runInContainer \
+      ${_podName} \
+      "psql -d \${POSTGRESQL_DATABASE} -ac 'insert into \"ClientCorsOrigins\" (\"Origin\", \"ClientId\") values ('\''${_clientCorsOrigin}'\'', ${_clientId});'"
+  else
+    echoWarning "No CORS origin specified, skipping..."
+  fi
+
+  echo -e "New client created successfully!"
+}
+
+updateAuthClient() {
+  _clientName=${1}
+  _clientRedirectUri=${2}
+  _clientCorsOrigin=${3}
+  _podName=${4:-vc-authn-database}
+
+  re="[[:space:]]+"
+  if [ -z "${_clientName}" ] || [ -z "${_clientName}" ] || [ -z "${_clientRedirectUri}" ]; then
+    echo -e \\n"addAuthClient; One or more paramaters are invalid. Required parameters are clientName, clientRedirectUri."\\n
+    exit 1
+  fi
+
+  if [[ $_clientName =~ $re ]]; then
+    echo -e \\n"addAuthClient; The client name cannot include spaces."\\n
+    exit 1
+  fi 
+
+  if [ -z "${_clientCorsOrigin}" ]; then
+    echoWarning "*** No CORS origin was specified for the client, any existing value will not be updated ***"
+  fi
+
+  # Retrieve new client id
+  _clientId=$(runInContainer \
+    ${_podName} \
+    "psql -d \${POSTGRESQL_DATABASE} -tAc 'select \"Id\" from \"Clients\" where \"ClientName\" = '\''${_clientName}'\'';'")
+
+  echo -e "Client ${_clientName} has Id=${_clientId}"
+
+  # Update client redirect URI
+  echo -e "Updating client redirect URI..."
+  runInContainer \
+    ${_podName} \
+    "psql -d \${POSTGRESQL_DATABASE} -ac 'update \"ClientRedirectUris\" set \"RedirectUri\" = '\''${_clientRedirectUri}'\'' where \"ClientId\" = ${_clientId};'"
+
+  if [ ! -z "${_clientCorsOrigin}" ]; then
+    # Update client CORS origin
+    echo -e "Update client CORS origin..."
+    runInContainer \
+      ${_podName} \
+      "psql -d \${POSTGRESQL_DATABASE} -ac 'update \"ClientCorsOrigins\" set \"Origin\" = '\''${_clientCorsOrigin}'\'' where \"ClientId\" = ${_clientId};'"
+  fi
+
+  echo -e "Client updated sucessfully!"
+}
 # =================================================================================================================
 
 pushd ${SCRIPT_HOME} >/dev/null
@@ -321,6 +447,22 @@ case "${_cmd}" in
     verkey=${2}
     ledger=${3:-stagingnet}
     registersovrin ${did} ${verkey} ${ledger}
+    ;;
+  
+  addauthclient)
+    clientName=${1}
+    clientRedirectUri=${2}
+    clientCorsOrigin=${3}
+    podName=${4}
+    addAuthClient ${clientName} ${clientRedirectUri} ${clientCorsOrigin} ${podName}
+    ;;
+  
+  updateauthclient)
+    clientName=${1}
+    clientRedirectUri=${2}
+    clientCorsOrigin=${3}
+    podName=${4}
+    updateAuthClient ${clientName} ${clientRedirectUri} ${clientCorsOrigin} ${podName}
     ;;
 
   scaleup)
