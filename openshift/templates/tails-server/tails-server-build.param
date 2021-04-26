@@ -10,4 +10,5 @@ GIT_REPO_URL=https://github.com/bcgov/indy-tails-server.git
 GIT_REF=master
 SOURCE_CONTEXT_DIR=.
 DOCKER_FILE_PATH=docker/Dockerfile.tails-server
+SOURCE_IMAGE_NAME=docker-remote.artifacts.developer.gov.bc.ca/bcgovimages/von-image:next-1
 OUTPUT_IMAGE_TAG=latest

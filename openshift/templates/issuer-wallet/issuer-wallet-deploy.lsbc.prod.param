@@ -8,9 +8,10 @@
 # APP_GROUP=lsbc
 # SUFFIX=-lsbc
 # ROLE=wallet
-# IMAGE_NAMESPACE=nnfbch-tools
-# SOURCE_IMAGE_NAME=issuer-wallet
-TAG_NAME=test
+# AGENT_ROLE=agent
+# IMAGE_NAMESPACE=e79518-tools
+# SOURCE_IMAGE_NAME=issuer-kit-wallet
+TAG_NAME=prod
 # POSTGRESQL_DATABASE_NAME=identity_kit_wallet
 # POSTGRESQL_USER=[a-zA-Z_][a-zA-Z0-9_]{10}
 # POSTGRESQL_PASSWORD=[a-zA-Z0-9_~!@#$%^&*()-=<>,.?;:|]{16}

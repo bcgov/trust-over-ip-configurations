@@ -3,6 +3,7 @@
 *_BuildConfig.json
 *.crt
 *.key
+*.pem
 
 *.local.*
 

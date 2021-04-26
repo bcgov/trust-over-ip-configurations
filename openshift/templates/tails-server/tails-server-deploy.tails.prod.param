@@ -10,7 +10,7 @@
 # ROLE=tails
 APPLICATION_DOMAIN=tails.orgbook.gov.bc.ca
 # ROUTE_TIMEOUT=120s
-# IMAGE_NAMESPACE=nnfbch-tools
+# IMAGE_NAMESPACE=e79518-tools
 TAG_NAME=prod
 # LOG_LEVEL=WARNING
 # PORT=6543

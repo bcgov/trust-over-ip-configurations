@@ -7,8 +7,11 @@
 # APP_NAME=vc-authn-oidc
 # APP_GROUP=vc-authn-oidc
 # PREFIX=vc-authn-
+# BACKUP=true
 # ROLE=wallet
-# IMAGE_NAMESPACE=nnfbch-tools
+# AGENT_ROLE=agent
+# NAMESPACE_NAME=e79518
+# IMAGE_NAMESPACE=e79518-tools
 # SOURCE_IMAGE_NAME=vc-authn-database
 TAG_NAME=prod
 # POSTGRESQL_DATABASE_NAME=default_wallet
@@ -16,8 +19,8 @@ TAG_NAME=prod
 # POSTGRESQL_PASSWORD=[a-zA-Z0-9_~!@#$%^&*()-=<>,.?;:|]{16}
 # POSTGRESQL_ADMIN_PASSWORD=[a-zA-Z0-9_~!@#$%^&*()-=<>,.?;:|]{16}
 # MOUNT_PATH=/var/lib/pgsql/data
-PERSISTENT_VOLUME_SIZE=10Gi
-# PERSISTENT_VOLUME_CLASS=netapp-file-standard
+# PERSISTENT_VOLUME_SIZE=1Gi
+# PERSISTENT_VOLUME_CLASS=netapp-block-standard
 # CPU_REQUEST=10m
 # CPU_LIMIT=1000m
 # MEMORY_REQUEST=10Mi
