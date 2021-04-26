@@ -49,6 +49,12 @@ usage () {
           $0 -p default -e dev updateAuthClient myclient https:///my.client.example
           $0 -p default -e dev updateAuthClient myclient https:///my.client.example https:///my.client.weburl
 
+    getAuthClient <clientName>
+      - Gets the configuration for the client with the given name in the the vc-authn database.
+
+        Examples;
+          $0 -p default -e dev updateAuthClient myclient
+
     clean
       - Remove the application components from a given environment.
         Specify the environment using the -e option.
@@ -408,6 +414,40 @@ updateAuthClient() {
 
   echo -e "Client updated sucessfully!"
 }
+
+getAuthClient() {
+  _clientName=${1}
+  _podName=${2:-vc-authn-database}
+
+  re="[[:space:]]+"
+  if [ -z "${_clientName}" ] || [ -z "${_clientName}" ] || [[ $_clientName =~ $re ]]; then
+    echo -e \\n"addAuthClient; Invalid parameters."\\n
+    exit 1
+  fi
+
+  # Retrieve new client id
+  _clientId=$(runInContainer \
+    ${_podName} \
+    "psql -d \${POSTGRESQL_DATABASE} -tAc 'select \"Id\" from \"Clients\" where \"ClientName\" = '\''${_clientName}'\'';'")
+
+  echo -e "Client ${_clientName} has Id=${_clientId}"
+
+  # Get client redirect URI
+  echo -e "Getting configured client redirect URI..."
+  redirectUri=$(runInContainer \
+    ${_podName} \
+    "psql -d \${POSTGRESQL_DATABASE} -tAc 'select \"RedirectUri\" from \"ClientRedirectUris\" where \"ClientId\" = ${_clientId};'")
+
+  # Get client CORS origin
+  echo -e "Getting configured client CORS origin - if available..."
+  corsOrigin=$(runInContainer \
+    ${_podName} \
+    "psql -d \${POSTGRESQL_DATABASE} -tAc 'select \"Origin\" from \"ClientCorsOrigins\" where \"ClientId\" = ${_clientId};'")
+
+  echo -e \\n"Client configuration:"
+  echo -e "Redirect URI: ${redirectUri}"
+  echo -e "CORS origin: ${corsOrigin:-not set}"
+}
 # =================================================================================================================
 
 pushd ${SCRIPT_HOME} >/dev/null
@@ -463,6 +503,12 @@ case "${_cmd}" in
     clientCorsOrigin=${3}
     podName=${4}
     updateAuthClient ${clientName} ${clientRedirectUri} ${clientCorsOrigin} ${podName}
+    ;;
+  
+  getauthclient)
+    clientName=${1}
+    podName=${2}
+    getAuthClient ${clientName} ${clientRedirectUri} ${clientCorsOrigin} ${podName}
     ;;
 
   scaleup)
