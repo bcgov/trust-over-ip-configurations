@@ -53,7 +53,7 @@ usage () {
       - Gets the configuration for the client with the given name in the the vc-authn database.
 
         Examples;
-          $0 -p default -e dev updateAuthClient myclient
+          $0 -p default -e dev getAuthClient myclient
 
     clean
       - Remove the application components from a given environment.
