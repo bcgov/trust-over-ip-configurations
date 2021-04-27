@@ -420,7 +420,7 @@ getAuthClient() {
   _clientName=${1}
   _podName=${2:-vc-authn-database}
 
-  selectStmt="select c.\"ClientName\", r.\"RedirectUri\", o.\"Origin\" from \"Clients\" c join \"ClientRedirectUris\" r on c.\"Id\"=r.\"ClientId\" join \"ClientCorsOrigins\" o on c.\"Id\"=o.\"ClientId\""
+  selectStmt="select c.\"ClientName\", r.\"RedirectUri\", o.\"Origin\" from \"Clients\" c join \"ClientRedirectUris\" r on c.\"Id\"=r.\"ClientId\" left join \"ClientCorsOrigins\" o on c.\"Id\"=o.\"ClientId\""
   
   if [ ! -z ${_clientName} ]; then
     selectStmt=$(echo ${selectStmt} "where c.\"ClientName\" = '\''${_clientName}'\''")
