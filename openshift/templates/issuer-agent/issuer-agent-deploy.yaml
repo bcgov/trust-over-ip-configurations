@@ -402,7 +402,7 @@ parameters:
       The role of the api service within the application - used for Network
       Policies
     required: true
-    value: controller
+    value: api
   - name: APPLICATION_DOMAIN
     displayName: Application Hostname
     description: The exposed hostname that will route to the public service endpoint, if left blank a value will be defaulted.
@@ -564,7 +564,7 @@ parameters:
     displayName: Tails Server Base Url
     description: The base URL for the Tails Server.
     required: true
-    value: https://tails-server-dev.apps.silver.devops.gov.bc.ca
+    value: https://tails-dev.vonx.io
   # ===============================================================================
   - name: CPU_REQUEST
     displayName: Resources CPU Request
