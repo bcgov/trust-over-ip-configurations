@@ -3,7 +3,7 @@
   "subject_identifier": "PPID",
   "configuration": {
     "name": "accredited-lawyer",
-    "version": "1.4.0",
+    "version": "1.4.1",
     "requested_attributes": [
       {
         "names": ["PPID", "Given Name", "Surname", "Member Status", "Member Status Code"],
@@ -11,7 +11,7 @@
           {
             "issuer_did": "DZBaHghKsVHcJoiwkykG3r",
             "schema_name": "Member Certificate",
-            "schema_version": "1.0.0"
+            "schema_version": "1.0.1"
           },
           {
             "issuer_did": "AuJrigKQGRLJajKAebTgWu",
