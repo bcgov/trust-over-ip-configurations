@@ -3,10 +3,16 @@
   "subject_identifier": "PPID",
   "configuration": {
     "name": "accredited-lawyer",
-    "version": "1.4.1",
+    "version": "1.5.0",
     "requested_attributes": [
       {
-        "names": ["PPID", "Given Name", "Surname", "Member Status", "Member Status Code"],
+        "names": [
+          "PPID",
+          "Given Name",
+          "Surname",
+          "Member Status",
+          "Member Status Code"
+        ],
         "restrictions": [
           {
             "issuer_did": "RznYFPVhHpYZgsn4Hu3StV",
@@ -16,7 +22,7 @@
           {
             "issuer_did": "UUHA3oknprvKrpa7a6sncK",
             "schema_name": "Member Card",
-            "schema_version": "1.4.0"
+            "schema_version": "1.5.0"
           }
         ]
       }
