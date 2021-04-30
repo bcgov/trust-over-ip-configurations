@@ -14,6 +14,7 @@ objects:
       labels:
         name: ${PREFIX}${NAME}
         app: ${APP_NAME}
+        app.kubernetes.io/part-of: ${APP_NAME}
         app-group: ${APP_GROUP}
 
   - kind: BuildConfig
@@ -23,6 +24,7 @@ objects:
       labels:
         name: ${PREFIX}${NAME}
         app: ${APP_NAME}
+        app.kubernetes.io/part-of: ${APP_NAME}
         app-group: ${APP_GROUP}
     spec:
       runPolicy: Serial
