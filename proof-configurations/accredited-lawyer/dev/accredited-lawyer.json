@@ -3,7 +3,7 @@
   "subject_identifier": "PPID",
   "configuration": {
     "name": "accredited-lawyer",
-    "version": "1.5.0",
+    "version": "1.5.1",
     "requested_attributes": [
       {
         "names": [
@@ -22,7 +22,7 @@
           {
             "issuer_did": "UUHA3oknprvKrpa7a6sncK",
             "schema_name": "Member Card",
-            "schema_version": "1.5.0"
+            "schema_version": "1.5.1"
           }
         ]
       }
