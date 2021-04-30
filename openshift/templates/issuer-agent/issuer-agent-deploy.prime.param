@@ -16,6 +16,7 @@ NAMESPACE_NAME=e79518
 SOURCE_IMAGE_NAME=issuer-kit-agent
 TAG_NAME=dev
 AGENT_LABEL_NAME=MoH Prime (Dev)
+AGENT_READ_ONLY_LEDGER=false
 AGENT_BASE_URL=https://prime-agent-dev.apps.silver.devops.gov.bc.ca
 AGENT_READ_ONLY_LEDGER=false
 WEBHOOK_URL=to-be-defined

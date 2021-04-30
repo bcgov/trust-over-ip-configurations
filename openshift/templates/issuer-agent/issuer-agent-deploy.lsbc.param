@@ -16,6 +16,7 @@ NAMESPACE_NAME=e79518
 SOURCE_IMAGE_NAME=issuer-kit-agent
 TAG_NAME=dev
 AGENT_LABEL_NAME=The Law Society of British Columbia (DEV)
+AGENT_READ_ONLY_LEDGER=false
 AGENT_BASE_URL=https://lsbc-agent-dev.apps.silver.devops.gov.bc.ca
 # WEBHOOK_URL=
 AGENT_ADMIN_PORT=8024
