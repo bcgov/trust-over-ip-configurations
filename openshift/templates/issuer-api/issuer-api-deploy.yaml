@@ -103,8 +103,8 @@ objects:
         description: Defines how to deploy the ${NAME}${SUFFIX} server
         app.openshift.io/connects-to: >-
           [
-            {"apiVersion":"apps.openshift.io/v1","kind":"DeploymentConfig","name":"agent${SUFFIX}"},
-            {"apiVersion":"apps.openshift.io/v1","kind":"DeploymentConfig","name":"db${SUFFIX}"}
+            {"apiVersion":"apps.openshift.io/v1","kind":"DeploymentConfig","name":"${DB_SERVICE}"},
+            {"apiVersion":"apps.openshift.io/v1","kind":"DeploymentConfig","name":"${AGENT_SERVICE_NAME}${SUFFIX}"}
           ]
     spec:
       strategy:

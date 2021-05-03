@@ -45,7 +45,7 @@ objects:
       annotations:
         description: Defines how to deploy the ${NAME}${SUFFIX} server
         app.openshift.io/connects-to: >-
-          [{"apiVersion":"apps.openshift.io/v1","kind":"DeploymentConfig","name":"wallet${SUFFIX}"}]
+          [{"apiVersion":"apps.openshift.io/v1","kind":"DeploymentConfig","name":"${API_HOST}${SUFFIX}"}]
     spec:
       replicas: 1
       selector:
