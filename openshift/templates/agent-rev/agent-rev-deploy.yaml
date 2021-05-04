@@ -11,7 +11,6 @@ objects:
       labels:
         name: ${PREFIX}${NAME}-allow-ingress
         app: ${APP_NAME}
-        app.kubernetes.io/part-of: ${APP_NAME}
         app-group: ${APP_GROUP}
         role: ${ROLE}
         env: ${TAG_NAME}
@@ -27,7 +26,6 @@ objects:
         matchLabels:
           role: ${PREFIX}${ROLE}
           app: ${APP_NAME}
-          app.kubernetes.io/part-of: ${APP_NAME}
           env: ${TAG_NAME}
       policyTypes:
         - Ingress
@@ -39,7 +37,6 @@ objects:
       labels:
         name: ${PREFIX}${NAME}
         app: ${APP_NAME}
-        app.kubernetes.io/part-of: ${APP_NAME}
         app-group: ${APP_GROUP}
         role: ${PREFIX}${ROLE}
         env: ${TAG_NAME}
@@ -52,7 +49,6 @@ objects:
                 matchLabels:
                   role: ${PREFIX}${CONTROLLER_ROLE}
                   app: ${APP_NAME}
-                  app.kubernetes.io/part-of: ${APP_NAME}
                   env: ${TAG_NAME}
               namespaceSelector:
                 matchLabels:
@@ -65,7 +61,6 @@ objects:
         matchLabels:
           role: ${PREFIX}${ROLE}
           app: ${APP_NAME}
-          app.kubernetes.io/part-of: ${APP_NAME}
           env: ${TAG_NAME}
 
   - kind: Service

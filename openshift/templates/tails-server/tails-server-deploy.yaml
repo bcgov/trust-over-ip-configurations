@@ -11,7 +11,6 @@ objects:
       labels:
         name: ${NAME}${SUFFIX}-allow-ingress
         app: ${APP_NAME}${SUFFIX}
-        app.kubernetes.io/part-of: ${APP_NAME}${SUFFIX}
         app-group: ${APP_GROUP}
         role: ${ROLE}
         env: ${TAG_NAME}
@@ -27,7 +26,6 @@ objects:
         matchLabels:
           role: ${ROLE}
           app: ${APP_NAME}${SUFFIX}
-          app.kubernetes.io/part-of: ${APP_NAME}${SUFFIX}
           env: ${TAG_NAME}
       policyTypes:
         - Ingress

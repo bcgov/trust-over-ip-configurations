@@ -13,7 +13,6 @@ objects:
       labels:
         name: ${PREFIX}${NAME}
         app: ${APP_NAME}
-        app.kubernetes.io/part-of: ${APP_NAME}
         app-group: ${APP_GROUP}
         role: ${PREFIX}${ROLE}
         env: ${TAG_NAME}
@@ -27,7 +26,6 @@ objects:
                 matchLabels:
                   role: ${PREFIX}${AGENT_ROLE}
                   app: ${APP_NAME}
-                  app.kubernetes.io/part-of: ${APP_NAME}
                   app-group: ${APP_GROUP}
                   env: ${TAG_NAME}
               namespaceSelector:
@@ -38,7 +36,6 @@ objects:
                 matchLabels:
                   role: ${PREFIX}${AGENT_ROLE}
                   app: ${APP_NAME}-rev
-                  app.kubernetes.io/part-of: ${APP_NAME}-rev
                   app-group: ${APP_GROUP}-rev
                   env: ${TAG_NAME}
               namespaceSelector:
@@ -52,7 +49,6 @@ objects:
         matchLabels:
           role: ${PREFIX}${ROLE}
           app: ${APP_NAME}
-          app.kubernetes.io/part-of: ${APP_NAME}
           app-group: ${APP_GROUP}
           env: ${TAG_NAME}
 
