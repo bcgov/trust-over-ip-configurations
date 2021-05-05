@@ -97,7 +97,12 @@ objects:
         role: ${ROLE}
         env: ${TAG_NAME}
       annotations:
-        description: Defines how to deploy the ${PREFIX}${NAME} server
+        description: Defines how to deploy the application server
+        app.openshift.io/connects-to: >-
+          [{"apiVersion":"apps.openshift.io/v1","kind":"DeploymentConfig","name":"${VC_AUTHN_DB_HOST_NAME}"},
+          {"apiVersion":"apps.openshift.io/v1","kind":"DeploymentConfig","name":"${VC_AUTHN_WALLET_DB_HOST_NAME}"},
+          {"apiVersion":"apps.openshift.io/v1","kind":"DeploymentConfig","name":"${LSBC_WALLET_DB_HOST_NAME}"},
+          {"apiVersion":"apps.openshift.io/v1","kind":"DeploymentConfig","name":"${PRIME_WALLET_DB_HOST_NAME}"}]
     spec:
       strategy:
         type: Recreate
