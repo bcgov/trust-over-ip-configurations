@@ -16,6 +16,7 @@ ADMIN_APPLICATION_DOMAIN=prime-agent-admin.apps.silver.devops.gov.bc.ca
 # SOURCE_IMAGE_NAME=issuer-kit-agent
 TAG_NAME=prod
 AGENT_LABEL_NAME=MoH Prime
+AGENT_READ_ONLY_LEDGER=false
 AGENT_BASE_URL=https://prime-agent.apps.silver.devops.gov.bc.ca
 AGENT_READ_ONLY_LEDGER=false
 # WEBHOOK_URL=

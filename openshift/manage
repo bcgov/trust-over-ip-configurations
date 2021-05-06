@@ -20,14 +20,14 @@ usage () {
       - To update, PUT, use the '-u' (update) option; see examples below.
 
         Examples;
-          $0 -p default -e dev configureProof https://a2a-vc-authn-controller-dev.pathfinder.gov.bc.ca ../proof-configurations/accredited-lawyer/dev/accredited-lawyer.json
-          $0 -p default -e dev -u configureProof https://a2a-vc-authn-controller-dev.pathfinder.gov.bc.ca ../proof-configurations/accredited-lawyer/dev/accredited-lawyer.json
+          $0 -p default -e dev configureProof https://toip-vc-authn-controller-dev.apps.silver.devops.gov.bc.ca ../proof-configurations/accredited-lawyer/dev/accredited-lawyer.json
+          $0 -p default -e dev -u configureProof https://toip-vc-authn-controller-dev.apps.silver.devops.gov.bc.ca ../proof-configurations/accredited-lawyer/dev/accredited-lawyer.json
 
     accepttaa <baseUrl> <secretName> [key] [namespace]
       - Retrieve the current TAA from the ledger, and submit a TAA accept transaction.
 
         Examples;
-          $0 -p a2a -e dev accepttaa https://a2a-vc-authn-controller-dev.pathfinder.gov.bc.ca
+          $0 -p a2a -e dev accepttaa https://toip-vc-authn-controller-dev.apps.silver.devops.gov.bc.ca
 
     registersovrin <did> <verkey> [ledger]
       - Register the did/verkey combination on the taget ledger as ENDORSER.

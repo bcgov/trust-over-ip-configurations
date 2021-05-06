@@ -3,49 +3,21 @@
   "subject_identifier": "ppid",
   "configuration": {
     "name": "accredited-lawyer",
-    "version": "1.0.0",
+    "version": "1.5.1",
     "requested_attributes": [
       {
-        "name": "PPID",
-        "label": "PPID",
+        "names": [
+          "PPID",
+          "Given Name",
+          "Surname",
+          "Member Status",
+          "Member Status Code"
+        ],
         "restrictions": [
           {
             "issuer_did": "4xE68b6S5VRFrKMMG1U95M",
-            "schema_name": "Practicing Certificate",
-            "schema_version": "1.0.0"
-          }
-        ]
-      },
-      {
-        "name": "Given Name",
-        "label": "Given Name",
-        "restrictions": [
-          {
-            "issuer_did": "4xE68b6S5VRFrKMMG1U95M",
-            "schema_name": "Practicing Certificate",
-            "schema_version": "1.0.0"
-          }
-        ]
-      },
-      {
-        "name": "Surname",
-        "label": "Surname",
-        "restrictions": [
-          {
-            "issuer_did": "4xE68b6S5VRFrKMMG1U95M",
-            "schema_name": "Practicing Certificate",
-            "schema_version": "1.0.0"
-          }
-        ]
-      },
-      {
-        "name": "Membership Status",
-        "label": "Membership Status",
-        "restrictions": [
-          {
-            "issuer_did": "4xE68b6S5VRFrKMMG1U95M",
-            "schema_name": "Practicing Certificate",
-            "schema_version": "1.0.0"
+            "schema_name": "Member Card",
+            "schema_version": "1.5.1"
           }
         ]
       }

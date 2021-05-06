@@ -8,6 +8,7 @@
 # APP_GROUP=a2a
 # SUFFIX=-a2a
 # ROLE=agent
+# API_ROLE=api
 APPLICATION_DOMAIN=a2a-agent-test.apps.silver.devops.gov.bc.ca
 ADMIN_APPLICATION_DOMAIN=a2a-agent-admin-test.apps.silver.devops.gov.bc.ca
 # ROUTE_TIMEOUT=120s
@@ -37,7 +38,7 @@ AGENT_READ_ONLY_LEDGER=false
 # TAILS_FILES_DIR=/home/indy/.indy_client/tails
 # TAILS_FILES_VOLUME_CLASS=netapp-file-standard
 # TAILS_FILES_VOLUME_SIZE=1Gi
-TAILS_SERVER_BASE_URL=https://tails-server-test.apps.silver.devops.gov.bc.ca
+TAILS_SERVER_BASE_URL=https://tails-test.vonx.io
 # CPU_REQUEST=10m
 # CPU_LIMIT=300m
 # MEMORY_REQUEST=10Mi
