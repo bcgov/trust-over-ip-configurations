@@ -76,6 +76,7 @@ objects:
       labels:
         name: ${PREFIX}${NAME}
         app: ${APP_NAME}
+        app.kubernetes.io/part-of: ${APP_NAME}
         app-group: ${APP_GROUP}
         role: ${PREFIX}${ROLE}
         env: ${TAG_NAME}
@@ -90,6 +91,7 @@ objects:
       labels:
         name: ${PREFIX}${NAME}
         app: ${APP_NAME}
+        app.kubernetes.io/part-of: ${APP_NAME}
         app-group: ${APP_GROUP}
         role: ${PREFIX}${ROLE}
         env: ${TAG_NAME}
@@ -97,6 +99,7 @@ objects:
       replicas: 1
       selector:
         app: ${APP_GROUP}
+        app.kubernetes.io/part-of: ${APP_GROUP}
         app-group: ${APP_GROUP}
         name: ${PREFIX}${NAME}
         role: ${PREFIX}${ROLE}
@@ -114,6 +117,7 @@ objects:
           labels:
             name: ${PREFIX}${NAME}
             app: ${APP_NAME}
+            app.kubernetes.io/part-of: ${APP_NAME}
             app-group: ${APP_GROUP}
             role: ${PREFIX}${ROLE}
             env: ${TAG_NAME}
@@ -203,6 +207,7 @@ objects:
       labels:
         name: ${PREFIX}${NAME}
         app: ${APP_NAME}
+        app.kubernetes.io/part-of: ${APP_NAME}
         app-group: ${APP_GROUP}
         role: ${PREFIX}${ROLE}
         env: ${TAG_NAME}
@@ -221,6 +226,7 @@ objects:
       labels:
         name: ${PREFIX}${NAME}
         app: ${APP_NAME}
+        app.kubernetes.io/part-of: ${APP_NAME}
         app-group: ${APP_GROUP}
         role: ${PREFIX}${ROLE}
         env: ${TAG_NAME}
@@ -242,6 +248,7 @@ objects:
       labels:
         name: ${PREFIX}${NAME}
         app: ${APP_NAME}
+        app.kubernetes.io/part-of: ${APP_NAME}
         app-group: ${APP_GROUP}
         role: ${PREFIX}${ROLE}
         env: ${TAG_NAME}

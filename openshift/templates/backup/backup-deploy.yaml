@@ -39,6 +39,7 @@ objects:
       labels:
         name: ${PREFIX}${NAME}
         app: ${APP_NAME}
+        app.kubernetes.io/part-of: ${APP_NAME}
         app-group: ${APP_GROUP}
         template: ${PREFIX}${NAME}-template
         role: ${ROLE}
@@ -57,6 +58,7 @@ objects:
       labels:
         name: ${PREFIX}${NAME}
         app: ${APP_NAME}
+        app.kubernetes.io/part-of: ${APP_NAME}
         app-group: ${APP_GROUP}
         template: ${PREFIX}${NAME}-template
         role: ${ROLE}
@@ -75,6 +77,7 @@ objects:
       labels:
         name: ${PREFIX}${NAME}
         app: ${APP_NAME}
+        app.kubernetes.io/part-of: ${APP_NAME}
         app-group: ${APP_GROUP}
         role: ${ROLE}
         env: ${TAG_NAME}
@@ -88,12 +91,18 @@ objects:
       labels:
         name: ${PREFIX}${NAME}
         app: ${APP_NAME}
+        app.kubernetes.io/part-of: ${APP_NAME}
         app-group: ${APP_GROUP}
         template: ${PREFIX}${NAME}-template
         role: ${ROLE}
         env: ${TAG_NAME}
       annotations:
-        description: Defines how to deploy the ${PREFIX}${NAME} server
+        description: Defines how to deploy the application server
+        app.openshift.io/connects-to: >-
+          [{"apiVersion":"apps.openshift.io/v1","kind":"DeploymentConfig","name":"${VC_AUTHN_DB_HOST}"},
+          {"apiVersion":"apps.openshift.io/v1","kind":"DeploymentConfig","name":"${VC_AUTHN_WALLET_DB_HOST}"},
+          {"apiVersion":"apps.openshift.io/v1","kind":"DeploymentConfig","name":"${LSBC_WALLET_DB_HOST}"},
+          {"apiVersion":"apps.openshift.io/v1","kind":"DeploymentConfig","name":"${PRIME_WALLET_DB_HOST}"}]
     spec:
       strategy:
         type: Recreate
@@ -117,6 +126,7 @@ objects:
           labels:
             name: ${PREFIX}${NAME}
             app: ${APP_NAME}
+            app.kubernetes.io/part-of: ${APP_NAME}
             app-group: ${APP_GROUP}
             template: ${PREFIX}${NAME}-template
             role: ${ROLE}
@@ -153,42 +163,42 @@ objects:
                 - name: VC_AUTHN_DATABASE_USER
                   valueFrom:
                     secretKeyRef:
-                      name: ${PREFIX}${VC_AUTHN_DB_HOST_NAME}
+                      name: ${PREFIX}${VC_AUTHN_DB_HOST}
                       key: ${DB_USER_KEY_NAME}
                 - name: VC_AUTHN_DATABASE_PASSWORD
                   valueFrom:
                     secretKeyRef:
-                      name: ${PREFIX}${VC_AUTHN_DB_HOST_NAME}
+                      name: ${PREFIX}${VC_AUTHN_DB_HOST}
                       key: ${DB_PASSWORD_KEY_NAME}
                 - name: VC_AUTHN_WALLET_USER
                   valueFrom:
                     secretKeyRef:
-                      name: ${PREFIX}${VC_AUTHN_WALLET_DB_HOST_NAME}
+                      name: ${PREFIX}${VC_AUTHN_WALLET_DB_HOST}
                       key: ${DB_USER_KEY_NAME}
                 - name: VC_AUTHN_WALLET_PASSWORD
                   valueFrom:
                     secretKeyRef:
-                      name: ${PREFIX}${VC_AUTHN_WALLET_DB_HOST_NAME}
+                      name: ${PREFIX}${VC_AUTHN_WALLET_DB_HOST}
                       key: ${DB_PASSWORD_KEY_NAME}
                 - name: WALLET_LSBC_USER
                   valueFrom:
                     secretKeyRef:
-                      name: ${PREFIX}${LSBC_WALLET_DB_HOST_NAME}
+                      name: ${PREFIX}${LSBC_WALLET_DB_HOST}
                       key: ${DB_USER_KEY_NAME}
                 - name: WALLET_LSBC_PASSWORD
                   valueFrom:
                     secretKeyRef:
-                      name: ${PREFIX}${LSBC_WALLET_DB_HOST_NAME}
+                      name: ${PREFIX}${LSBC_WALLET_DB_HOST}
                       key: ${DB_PASSWORD_KEY_NAME}
                 - name: WALLET_PRIME_USER
                   valueFrom:
                     secretKeyRef:
-                      name: ${PREFIX}${PRIME_WALLET_DB_HOST_NAME}
+                      name: ${PREFIX}${PRIME_WALLET_DB_HOST}
                       key: ${DB_USER_KEY_NAME}
                 - name: WALLET_PRIME_PASSWORD
                   valueFrom:
                     secretKeyRef:
-                      name: ${PREFIX}${PRIME_WALLET_DB_HOST_NAME}
+                      name: ${PREFIX}${PRIME_WALLET_DB_HOST}
                       key: ${DB_PASSWORD_KEY_NAME}
                 - name: WEBHOOK_URL
                   valueFrom:
@@ -265,25 +275,25 @@ parameters:
     description: The TAG name for this environment, e.g., dev, test, prod
     required: true
     value: dev
-  - name: VC_AUTHN_DB_HOST_NAME
+  - name: VC_AUTHN_DB_HOST
     displayName: Database Deployment Name
     description: The name associated to the database deployment resources.  In particular,
       this is used to wire up the credentials associated to the database.
     required: true
     value: vc-authn-database
-  - name: VC_AUTHN_WALLET_DB_HOST_NAME
+  - name: VC_AUTHN_WALLET_DB_HOST
     displayName: Wallet Database Hostname
     description: The name associated to the wallet database deployment resources.  In
       particular, this is used to wire up the credentials associated to the database.
     required: true
     value: vc-authn-wallet
-  - name: LSBC_WALLET_DB_HOST_NAME
+  - name: LSBC_WALLET_DB_HOST
     displayName: Wallet Database Hostname
     description: The name associated to the wallet database deployment resources.  In
       particular, this is used to wire up the credentials associated to the database.
     required: true
     value: wallet-lsbc
-  - name: PRIME_WALLET_DB_HOST_NAME
+  - name: PRIME_WALLET_DB_HOST
     displayName: Wallet Database Hostname
     description: The name associated to the wallet database deployment resources.  In
       particular, this is used to wire up the credentials associated to the database.

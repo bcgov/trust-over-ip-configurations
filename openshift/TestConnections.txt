@@ -1,9 +1,7 @@
 # Uses the 'testConnection' script from https://github.com/BCDevOps/openshift-developer-tools
 # Example:
-# echo -e "vc-authn-agent\n vc-authn-controller\n" | xargs -I {} testConnection -n e79518-dev -f TestConnections.txt -p {}
+# echo -e "agent-a2a\n api-a2a\n issuer-web-a2a" | xargs -I {} testConnection -n a99fd4-dev -f TestConnections.txt -p {}
 
 google.com:80
-wallet-prime:5432
-wallet-lsbc:5432
-vc-authn-database:5432
-vc-authn-wallet:5432
+agent-a2a:8024
+api-a2a:8080
