@@ -29,11 +29,15 @@ usage () {
         Examples;
           $0 -p a2a -e dev accepttaa https://toip-vc-authn-controller-dev.apps.silver.devops.gov.bc.ca
 
-    registersovrin <did> <verkey> [ledger]
+    registerSovrin <did> <verkey> [ledger:buildernet|stagingnet]
       - Register the did/verkey combination on the taget ledger as ENDORSER.
+      
+      - did: Your DID.
+      - verkey: The verKey associated to your DID.
+      - ledger: Optional - Either buildernet or stagingnet.  Defaults to stagingnet.
 
         Examples;
-          $0 -p default -e dev registersovrin mydid
+          $0 -p default -e dev registersovrin "mydid" "verkey" "buildernet"
 
     addAuthClient <clientName> <clientRedirectUri> [clientCorsOrigin]
       - Adds a new client to the vc-authn database.
@@ -290,10 +294,9 @@ accepttaa() {
 registersovrin() {
   did=${1}
   verkey=${2}
-  ledger=${3}
-  key=${4}
+  ledger=$(toLower ${3})
   if [ -z "${did}" ] || [ -z "${verkey}" ]|| [ -z "${ledger}" ]; then
-    echoError "\naccepttaa; You MUST specify the following parameters:\n- did\n- verkey\n- ledger"
+    echoError "\nregistersovrin; You MUST specify the following parameters:\n- did\n- verkey\n- ledger"
     exit 1
   fi
     
