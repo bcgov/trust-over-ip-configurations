@@ -66,6 +66,15 @@ usage () {
           $0 -p default -e dev registerSovrin https://agent-admin-url-dev.apps.silver.devops.gov.bc.ca stagingnet
           $0 -p phg -e dev registerSovrin https://public-health-gateway-agent-admin-dev.apps.silver.devops.gov.bc.ca StagingNet agent-public-health-gateway
 
+    [didRole=<didRole>] getLedgerNymCmd <baseUrl> <stagingnet|buildernet> [secretName] [secretKey] [namespace]
+      - Get the indy-cli 'ledger nym' command needed to register the agent's DID on the ledger.
+      - Default role is ENDORSER.
+
+        Examples;
+          $0 -p default -e dev getLedgerNymCmd https://agent-admin-url-dev.apps.silver.devops.gov.bc.ca
+          $0 -p phg -e dev getLedgerNymCmd https://public-health-gateway-agent-admin-dev.apps.silver.devops.gov.bc.ca StagingNet agent-public-health-gateway
+          didRole=TRUSTEE $0 -p phg -e dev getLedgerNymCmd https://public-health-gateway-agent-admin-dev.apps.silver.devops.gov.bc.ca StagingNet agent-public-health-gateway
+
     addAuthClient <clientName> <clientRedirectUri> [clientCorsOrigin]
       - Adds a new client to the vc-authn database.
 
@@ -336,11 +345,21 @@ accepttaa() {
 }
 
 registerSovrin() {
+  local OPTIND
+  local _auto_register=1
+  while getopts c FLAG; do
+    case $FLAG in
+      c ) unset _auto_register ;;
+    esac
+  done
+  shift $((OPTIND-1))
+
   baseUrl=${1}
   ledger=$(toLower ${2})
   secretName=${3}
   secretKey=${4}
   namespace=${5}
+  didRole=${6:-ENDORSER}
 
   if [ -z "${baseUrl}" ] || [ -z "${namespace}" ]|| [ -z "${secretName}" ]|| [ -z "${secretKey}" ]; then
     echoError "\nregisterSovrin; You MUST specify the following parameters:\n- baseUrl\n- secretName\n- secretKey\n- namespace"
@@ -364,20 +383,24 @@ registerSovrin() {
   did=$(echo $AGENT_PUBLIC_INFO | ${JQ_EXE} --raw-output '.result.did')
   verkey=$(echo $AGENT_PUBLIC_INFO | ${JQ_EXE} --raw-output '.result.verkey')
 
-  echoWarning "Registering DID: '${did}' and verKey: '${verkey}' on ledger: '${ledger}' ..."
-  httpCode=$(${CURL_EXE} \
-      -s \
-      -o /dev/null \
-      -w %{http_code} \
-      -X POST \
-      -H "Content-Type: application/json charset=utf-8" \
-      -d "{\"network\":\"${ledger}\",\"did\":\"${did}\",\"verkey\":\"${verkey}\",\"paymentaddr\":\"\"}" \
-      https://selfserve.sovrin.org/nym )
+  if [ ! -z "${_auto_register}" ]; then
+    echoWarning "Registering DID: '${did}' and verKey: '${verkey}' on ledger: '${ledger}' ..."
+    httpCode=$(${CURL_EXE} \
+        -s \
+        -o /dev/null \
+        -w %{http_code} \
+        -X POST \
+        -H "Content-Type: application/json charset=utf-8" \
+        -d "{\"network\":\"${ledger}\",\"did\":\"${did}\",\"verkey\":\"${verkey}\",\"paymentaddr\":\"\"}" \
+        https://selfserve.sovrin.org/nym )
 
-  if [[ "${httpCode}" == "200" ]]; then
-    echo "Successully registered the agent's DID on ${ledger}."
+    if [[ "${httpCode}" == "200" ]]; then
+      echo "Successully registered the agent's DID on ${ledger}."
+    else
+      echoError "There was an error registering the agent's DID on ${ledger}.  Please ensure all of the parameters are correct and try again."
+    fi
   else
-    echoError "There was an error registering the agent's DID on ${ledger}.  Please ensure all of the parameters are correct and try again."
+    echo -e "\nledger nym did=${did} verkey=${verkey} role=${didRole}"
   fi
 }
 
@@ -558,6 +581,19 @@ case "${_cmd}" in
     secretKey=${4:-"admin-api-key"}
     namespace=${5:-$(getProjectName)}
     registerSovrin ${baseUrl} ${ledger} ${secretName} ${secretKey} ${namespace}
+    ;;
+
+  getledgernymcmd)
+    isCurlInstalled
+    isJQInstalled
+
+    baseUrl=${1}
+    ledger=${2}
+    secretName=${3:-"agent-${PROFILE}"}
+    secretKey=${4:-"admin-api-key"}
+    namespace=${5:-$(getProjectName)}
+    didRole=${6:-${didRole}}
+    registerSovrin -c ${baseUrl} ${ledger} ${secretName} ${secretKey} ${namespace} ${didRole}
     ;;
 
   addauthclient)
