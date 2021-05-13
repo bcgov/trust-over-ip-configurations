@@ -64,7 +64,7 @@ usage () {
 
         Examples;
           $0 -p default -e dev registerSovrin https://agent-admin-url-dev.apps.silver.devops.gov.bc.ca stagingnet
-          $0 -p phg -e dev registerSovrin https://public-health-gateway-agent-admin-dev.apps.silver.devops.gov.bc.ca BuilderNet agent-public-health-gateway
+          $0 -p phg -e dev registerSovrin https://public-health-gateway-agent-admin-dev.apps.silver.devops.gov.bc.ca StagingNet agent-public-health-gateway
 
     addAuthClient <clientName> <clientRedirectUri> [clientCorsOrigin]
       - Adds a new client to the vc-authn database.
