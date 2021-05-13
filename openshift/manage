@@ -2,6 +2,35 @@
 export MSYS_NO_PATHCONV=1
 SCRIPT_HOME="$( cd "$( dirname "$0" )" && pwd )"
 
+function isInstalled () {
+  rtnVal=$(type "$1" >/dev/null 2>&1)
+  rtnCd=$?
+  if [ ${rtnCd} -ne 0 ]; then
+    return 1
+  else
+    return 0
+  fi
+}
+
+function isCurlInstalled () {
+  CURL_EXE=curl
+  if ! isInstalled ${CURL_EXE}; then
+    echoRed "The ${CURL_EXE} executable is required and was not found on your path."
+    echoRed "If your shell of choice doesn't come with curl preinstalled, try installing it using either [Homebrew](https://brew.sh/) (MAC) or [Chocolatey](https://chocolatey.org/) (Windows)."
+    exit 1
+  fi
+}
+
+function isJQInstalled () {
+  JQ_EXE=jq
+  if ! isInstalled ${JQ_EXE}; then
+    echoRed "The ${JQ_EXE} executable is required and was not found on your path."
+    echoRed "Installation instructions can be found here: https://stedolan.github.io/jq/download"
+    echoRed "Alternatively, a package manager such as Chocolatey (Windows) or Brew (Mac) can be used to install this dependecy."
+    exit 1
+  fi
+}
+
 # =================================================================================================================
 # Usage:
 # -----------------------------------------------------------------------------------------------------------------
@@ -23,17 +52,17 @@ usage () {
           $0 -p default -e dev configureProof https://toip-vc-authn-controller-dev.apps.silver.devops.gov.bc.ca ../proof-configurations/accredited-lawyer/dev/accredited-lawyer.json
           $0 -p default -e dev -u configureProof https://toip-vc-authn-controller-dev.apps.silver.devops.gov.bc.ca ../proof-configurations/accredited-lawyer/dev/accredited-lawyer.json
 
-    accepttaa <baseUrl> <secretName> [key] [namespace]
+    accepttaa <baseUrl> [namespace] [secretName] [key]
       - Retrieve the current TAA from the ledger, and submit a TAA accept transaction.
 
         Examples;
-          $0 -p a2a -e dev accepttaa https://toip-vc-authn-controller-dev.apps.silver.devops.gov.bc.ca
+          $0 -p a2a -e dev -p myprofile accepttaa https://agent-adin-url-dev.apps.silver.devops.gov.bc.ca
 
-    registersovrin <did> <verkey> [ledger]
-      - Register the did/verkey combination on the taget ledger as ENDORSER.
+    registersovrin <baseUrl> <stagingnet|buildernet> [namespace] [secretName] [key]
+      - Register the agent on the taget ledger as ENDORSER.
 
         Examples;
-          $0 -p default -e dev registersovrin mydid
+          $0 -p default -e dev -p myprofile registersovrin https://agent-adin-url-dev.apps.silver.devops.gov.bc.ca stagingnet
 
     addAuthClient <clientName> <clientRedirectUri> [clientCorsOrigin]
       - Adds a new client to the vc-authn database.
@@ -219,7 +248,7 @@ configureProof() {
 
   for payLoadPath in ${payLoadPaths}; do
     echo -e "\n${httpCommand}ing '${payLoadPath}' to ${baseUrl} ...\n"
-    curl \
+    ${CURL_EXE} \
       -X ${httpCommand} \
       -H X-Api-Key:${apiKey} \
       -H accept:application/json \
@@ -247,19 +276,20 @@ accepttaa() {
 
   # fetch current TAA
   echo -e "\nFetching TAA...\n"
-  TAA=$(curl \
+  TAA=$(${CURL_EXE} \
+      -s \
       -X GET \
       -H X-Api-Key:${apiKey} \
       ${baseUrl}/ledger/taa )
-  
-  TAA_TEXT=$(jq -nr "${TAA} | .result.taa_record.text")
+
+  TAA_TEXT=$(${JQ_EXE} -n "${TAA} | .result.taa_record.text")
   TAA_TEXT=$(echo "${TAA_TEXT}" | iconv -t utf-8 | sed 's/"/\\\"/g')
-  TAA_VERSION=$(jq -nr "${TAA} | .result.taa_record.version")
+  TAA_VERSION=$(${JQ_EXE} -nr "${TAA} | .result.taa_record.version")
   
-  TAA_METHODS_KEYS=$(jq -nr "${TAA} | .result.aml_record.aml | keys | .[]")
+  TAA_METHODS_KEYS=$(${JQ_EXE} -nr "${TAA} | .result.aml_record.aml | keys_unsorted | .[]")
   TAA_METHODS_KEYS=$(echo "${TAA_METHODS_KEYS}" | sed 's/$/~/')
   TAA_METHODS_KEYS=${TAA_METHODS_KEYS//$'\n'/}
-  TAA_METHODS_VALUES=$(jq -nr "${TAA} | .result.aml_record.aml | .[]")
+  TAA_METHODS_VALUES=$(${JQ_EXE} -nr "${TAA} | .result.aml_record.aml | .[]")
   TAA_METHODS_VALUES=$(echo "${TAA_METHODS_VALUES}" | sed 's/$/~/')
   TAA_METHODS_VALUES=${TAA_METHODS_VALUES//$'\n'/}
 
@@ -272,13 +302,13 @@ accepttaa() {
   unset SELECTED_MECHANISM
   PS3="Select TAA signing method:"
   select opt in "${TAA_METHODS_VALUES[@]}"; do
-    SELECTED_MECHANISM=${TAA_METHODS_KEYS[$REPLY]}
+    SELECTED_MECHANISM=${TAA_METHODS_KEYS[$REPLY-1]}
     break
   done
   
   echo -e "\nSigning TAA using method ${SELECTED_MECHANISM}...\n"
   echo "{\"mechanism\":\"${SELECTED_MECHANISM}\", \"version\": \"${TAA_VERSION}\", \"text\":\"${TAA_TEXT}\"}" > taa_payload.json
-  TAA_RESULT=$(curl \
+  TAA_RESULT=$(${CURL_EXE} \
       -X POST \
       -H X-Api-Key:${apiKey} \
       -H "Content-Type: application/json charset=utf-8" \
@@ -288,17 +318,35 @@ accepttaa() {
 }
 
 registersovrin() {
-  did=${1}
-  verkey=${2}
-  ledger=${3}
-  key=${4}
-  if [ -z "${did}" ] || [ -z "${verkey}" ]|| [ -z "${ledger}" ]; then
-    echoError "\naccepttaa; You MUST specify the following parameters:\n- did\n- verkey\n- ledger"
+  baseUrl=${1}
+  ledger=${2}
+  namespace=${3}
+  secretName=${4}
+  key=${5}
+
+  if [ -z "${baseUrl}" ] || [ -z "${namespace}" ]|| [ -z "${secretName}" ]|| [ -z "${key}" ]; then
+    echoError "\naccepttaa; You MUST specify the following parameters:\n- baseUrl\n- secretName\n- key\n- namespace"
     exit 1
   fi
+  
+  apiKey=$(getSecret "${secretName}" "${key}" "${namespace}")
+  if [ -z "${apiKey}" ]; then
+    echoError "\accepttaa; Unable to process request:\n - Unable to locate the API Key for ${baseUrl}.\n   Please ensure you are logged into OpenShift and have access to the following resources.\n   - Namespace: ${namespace}\n   - Secret Name: ${secretName}\n   - Key: ${key}"
+    exit 1
+  fi
+
+  echo -e "\nRetrieving agent settings from ${baseUrl}..."
+  AGENT_PUBLIC_INFO=$(${CURL_EXE} \
+                    -s \
+                    -X GET \
+                    -H  "accept: application/json" \
+                    -H  "X-Api-Key: ${apiKey}"\
+                    "${baseUrl}/wallet/did/public")
+  did=$(echo $AGENT_PUBLIC_INFO | ${JQ_EXE} '.result.did')
+  verkey=$(echo $AGENT_PUBLIC_INFO | ${JQ_EXE} '.result.verkey')
     
   echo -e "\nRegistering on ${ledger}...\n"
-  RESULT=$(curl \
+  RESULT=$(${CURL_EXE} \
       -X POST \
       -H "Content-Type: application/json charset=utf-8" \
       -d "{\"network\":\"${ledger}\",\"did\":\"${did}\",\"verkey\":\"${verkey}\",\"paymentaddr\":\"\"}" \
@@ -450,6 +498,9 @@ case "${_cmd}" in
     ;;
 
   configureproof)
+    isCurlInstalled
+    isJQInstalled
+
     baseUrl=${1}
     payLoadPath=${2}
     namespace=${3:-$(getProjectName)}
@@ -459,18 +510,26 @@ case "${_cmd}" in
     ;;
 
   accepttaa)
+    isCurlInstalled
+    isJQInstalled
+
     baseUrl=${1}
-    secretName=${2:-"agent-${PROFILE}"}
-    key=${3:-admin-api-key}
-    namespace=${4:-$(getProjectName)}
+    namespace=${2:-$(getProjectName)}
+    secretName=${3:-"agent-${PROFILE}"}
+    key=${4:-admin-api-key}
     accepttaa ${baseUrl} ${namespace} ${secretName} ${key}
     ;;
   
   registersovrin)
-    did=${1}
-    verkey=${2}
-    ledger=${3:-stagingnet}
-    registersovrin ${did} ${verkey} ${ledger}
+    isCurlInstalled
+    isJQInstalled
+
+    baseUrl=${1}
+    ledger=${2}
+    namespace=${3:-$(getProjectName)}
+    secretName=${4:-"agent-${PROFILE}"}
+    key=${5:-"admin-api-key"}
+    registersovrin ${baseUrl} ${ledger} ${namespace} ${secretName} ${key}
     ;;
   
   addauthclient)
