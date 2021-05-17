@@ -5,8 +5,8 @@
 #=========================================================
 NAME=wallet
 APP_NAME=issuer
-APP_GROUP=public-health-gateway
-SUFFIX=-public-health-gateway
+APP_GROUP=health-gateway
+SUFFIX=-health-gateway
 ROLE=wallet
 AGENT_ROLE=agent
 BACKUP=true

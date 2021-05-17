@@ -57,14 +57,14 @@ usage () {
 
         Examples;
           $0 -p a2a -e dev accepttaa https://agent-admin-url-dev.apps.silver.devops.gov.bc.ca
-          $0 -p phg -e dev accepttaa https://public-health-gateway-agent-admin-dev.apps.silver.devops.gov.bc.ca agent-public-health-gateway
+          $0 -p health-gateway -e dev accepttaa https://health-gateway-agent-admin-dev.apps.silver.devops.gov.bc.ca agent-health-gateway
 
     registerSovrin <baseUrl> <stagingnet|buildernet> [secretName] [secretKey] [namespace]
       - Register the agent on the target ledger as an ENDORSER.
 
         Examples;
           $0 -p default -e dev registerSovrin https://agent-admin-url-dev.apps.silver.devops.gov.bc.ca stagingnet
-          $0 -p phg -e dev registerSovrin https://public-health-gateway-agent-admin-dev.apps.silver.devops.gov.bc.ca StagingNet agent-public-health-gateway
+          $0 -p health-gateway -e dev registerSovrin https://health-gateway-agent-admin-dev.apps.silver.devops.gov.bc.ca StagingNet agent-health-gateway
 
     [didRole=<didRole>] getLedgerNymCmd <baseUrl> <stagingnet|buildernet> [secretName] [secretKey] [namespace]
       - Get the indy-cli 'ledger nym' command needed to register the agent's DID on the ledger.
@@ -72,8 +72,8 @@ usage () {
 
         Examples;
           $0 -p default -e dev getLedgerNymCmd https://agent-admin-url-dev.apps.silver.devops.gov.bc.ca
-          $0 -p phg -e dev getLedgerNymCmd https://public-health-gateway-agent-admin-dev.apps.silver.devops.gov.bc.ca StagingNet agent-public-health-gateway
-          didRole=TRUSTEE $0 -p phg -e dev getLedgerNymCmd https://public-health-gateway-agent-admin-dev.apps.silver.devops.gov.bc.ca StagingNet agent-public-health-gateway
+          $0 -p health-gateway -e dev getLedgerNymCmd https://health-gateway-agent-admin-dev.apps.silver.devops.gov.bc.ca StagingNet agent-health-gateway
+          didRole=TRUSTEE $0 -p health-gateway -e dev getLedgerNymCmd https://health-gateway-agent-admin-dev.apps.silver.devops.gov.bc.ca StagingNet agent-health-gateway
 
     addAuthClient <clientName> <clientRedirectUri> [clientCorsOrigin]
       - Adds a new client to the vc-authn database.
