@@ -2,6 +2,35 @@
 export MSYS_NO_PATHCONV=1
 SCRIPT_HOME="$( cd "$( dirname "$0" )" && pwd )"
 
+function isInstalled () {
+  rtnVal=$(type "$1" >/dev/null 2>&1)
+  rtnCd=$?
+  if [ ${rtnCd} -ne 0 ]; then
+    return 1
+  else
+    return 0
+  fi
+}
+
+function isCurlInstalled () {
+  CURL_EXE=curl
+  if ! isInstalled ${CURL_EXE}; then
+    echoRed "The ${CURL_EXE} executable is required and was not found on your path."
+    echoRed "If your shell of choice doesn't come with curl preinstalled, try installing it using either [Homebrew](https://brew.sh/) (MAC) or [Chocolatey](https://chocolatey.org/) (Windows)."
+    exit 1
+  fi
+}
+
+function isJQInstalled () {
+  JQ_EXE=jq
+  if ! isInstalled ${JQ_EXE}; then
+    echoRed "The ${JQ_EXE} executable is required and was not found on your path."
+    echoRed "Installation instructions can be found here: https://stedolan.github.io/jq/download"
+    echoRed "Alternatively, a package manager such as Chocolatey (Windows) or Brew (Mac) can be used to install this dependecy."
+    exit 1
+  fi
+}
+
 # =================================================================================================================
 # Usage:
 # -----------------------------------------------------------------------------------------------------------------
@@ -15,7 +44,7 @@ usage () {
 
   Commands:
   ========
-    configureProof <baseUrl> <payLoadPath> [namespace] [secretName] [key]
+    configureProof <baseUrl> <payLoadPath> [namespace] [secretName] [secretKey]
       - Post a proof configuration to a vc-authn-oidc controller.
       - To update, PUT, use the '-u' (update) option; see examples below.
 
@@ -23,17 +52,28 @@ usage () {
           $0 -p default -e dev configureProof https://toip-vc-authn-controller-dev.apps.silver.devops.gov.bc.ca ../proof-configurations/accredited-lawyer/dev/accredited-lawyer.json
           $0 -p default -e dev -u configureProof https://toip-vc-authn-controller-dev.apps.silver.devops.gov.bc.ca ../proof-configurations/accredited-lawyer/dev/accredited-lawyer.json
 
-    accepttaa <baseUrl> <secretName> [key] [namespace]
+    accepttaa <baseUrl> [secretName] [secretKey] [namespace]
       - Retrieve the current TAA from the ledger, and submit a TAA accept transaction.
 
         Examples;
-          $0 -p a2a -e dev accepttaa https://toip-vc-authn-controller-dev.apps.silver.devops.gov.bc.ca
+          $0 -p a2a -e dev accepttaa https://agent-admin-url-dev.apps.silver.devops.gov.bc.ca
+          $0 -p health-gateway -e dev accepttaa https://health-gateway-agent-admin-dev.apps.silver.devops.gov.bc.ca agent-health-gateway
 
-    registersovrin <did> <verkey> [ledger]
-      - Register the did/verkey combination on the taget ledger as ENDORSER.
+    registerSovrin <baseUrl> <stagingnet|buildernet> [secretName] [secretKey] [namespace]
+      - Register the agent on the target ledger as an ENDORSER.
 
         Examples;
-          $0 -p default -e dev registersovrin mydid
+          $0 -p default -e dev registerSovrin https://agent-admin-url-dev.apps.silver.devops.gov.bc.ca stagingnet
+          $0 -p health-gateway -e dev registerSovrin https://health-gateway-agent-admin-dev.apps.silver.devops.gov.bc.ca StagingNet agent-health-gateway
+
+    [didRole=<didRole>] getLedgerNymCmd <baseUrl> <stagingnet|buildernet> [secretName] [secretKey] [namespace]
+      - Get the indy-cli 'ledger nym' command needed to register the agent's DID on the ledger.
+      - Default role is ENDORSER.
+
+        Examples;
+          $0 -p default -e dev getLedgerNymCmd https://agent-admin-url-dev.apps.silver.devops.gov.bc.ca
+          $0 -p health-gateway -e dev getLedgerNymCmd https://health-gateway-agent-admin-dev.apps.silver.devops.gov.bc.ca StagingNet agent-health-gateway
+          didRole=TRUSTEE $0 -p health-gateway -e dev getLedgerNymCmd https://health-gateway-agent-admin-dev.apps.silver.devops.gov.bc.ca StagingNet agent-health-gateway
 
     addAuthClient <clientName> <clientRedirectUri> [clientCorsOrigin]
       - Adds a new client to the vc-authn database.
@@ -191,15 +231,15 @@ configureProof() {
   payLoadPath=${2}
   namespace=${3}
   secretName=${4}
-  key=${5}
-  if [ -z "${baseUrl}" ] || [ -z "${payLoadPath}" ]|| [ -z "${namespace}" ]|| [ -z "${secretName}" ]|| [ -z "${key}" ]; then
-    echoError "\nconfigureProof; You MUST specify the following parameters:\n- baseUrl\n- payLoadPath\n- namespace\n- secretName\n- key"
+  secretKey=${5}
+  if [ -z "${baseUrl}" ] || [ -z "${payLoadPath}" ]|| [ -z "${namespace}" ]|| [ -z "${secretName}" ]|| [ -z "${secretKey}" ]; then
+    echoError "\nconfigureProof; You MUST specify the following parameters:\n- baseUrl\n- payLoadPath\n- namespace\n- secretName\n- secretKey"
     exit 1
   fi
 
-  apiKey=$(getSecret "${secretName}" "${key}" "${namespace}")
+  apiKey=$(getSecret "${secretName}" "${secretKey}" "${namespace}")
   if [ -z "${apiKey}" ]; then
-    echoError "\nconfigureProof; Unable to process request:\n - Unable to locate the API Key for ${baseUrl}.\n   Please ensure you are logged into OpenShift and have access to the following resources.\n   - Namespace: ${namespace}\n   - Secret Name: ${secretName}\n   - Key: ${key}"
+    echoError "\nconfigureProof; Unable to process request:\n - Unable to locate the API Key for ${baseUrl}.\n   Please ensure you are logged into OpenShift and have access to the following resources.\n   - Namespace: ${namespace}\n   - Secret Name: ${secretName}\n   - Key: ${secretKey}"
     exit 1
   fi
 
@@ -219,7 +259,7 @@ configureProof() {
 
   for payLoadPath in ${payLoadPaths}; do
     echo -e "\n${httpCommand}ing '${payLoadPath}' to ${baseUrl} ...\n"
-    curl \
+    ${CURL_EXE} \
       -X ${httpCommand} \
       -H X-Api-Key:${apiKey} \
       -H accept:application/json \
@@ -231,35 +271,34 @@ configureProof() {
 
 accepttaa() {
   baseUrl=${1}
-  namespace=${2}
-  secretName="${3}"
-  key=${4}
-  if [ -z "${baseUrl}" ] || [ -z "${namespace}" ]|| [ -z "${secretName}" ]|| [ -z "${key}" ]; then
-    echoError "\naccepttaa; You MUST specify the following parameters:\n- baseUrl\n- secretName\n- key\n- namespace"
+  secretName=${2}
+  secretKey=${3}
+  namespace=${4}
+
+  if [ -z "${baseUrl}" ] || [ -z "${namespace}" ]|| [ -z "${secretName}" ]|| [ -z "${secretKey}" ]; then
+    echoError "\naccepttaa; You MUST specify the following parameters:\n- baseUrl\n- secretName\n- secretKey\n- namespace"
     exit 1
   fi
-  
-  apiKey=$(getSecret "${secretName}" "${key}" "${namespace}")
+
+  apiKey=$(getSecret "${secretName}" "${secretKey}" "${namespace}")
   if [ -z "${apiKey}" ]; then
-    echoError "\accepttaa; Unable to process request:\n - Unable to locate the API Key for ${baseUrl}.\n   Please ensure you are logged into OpenShift and have access to the following resources.\n   - Namespace: ${namespace}\n   - Secret Name: ${secretName}\n   - Key: ${key}"
+    echoError "\accepttaa; Unable to process request:\n - Unable to locate the API Key for ${baseUrl}.\n   Please ensure you are logged into OpenShift and have access to the following resources.\n   - Namespace: ${namespace}\n   - Secret Name: ${secretName}\n   - Secret Key: ${secretKey}"
     exit 1
   fi
 
   # fetch current TAA
-  echo -e "\nFetching TAA...\n"
-  TAA=$(curl \
+  echo -e "\nFetching TAA ...\n"
+  TAA=$(${CURL_EXE} \
+      -s \
       -X GET \
       -H X-Api-Key:${apiKey} \
       ${baseUrl}/ledger/taa )
-  
-  TAA_TEXT=$(jq -nr "${TAA} | .result.taa_record.text")
-  TAA_TEXT=$(echo "${TAA_TEXT}" | iconv -t utf-8 | sed 's/"/\\\"/g')
-  TAA_VERSION=$(jq -nr "${TAA} | .result.taa_record.version")
-  
-  TAA_METHODS_KEYS=$(jq -nr "${TAA} | .result.aml_record.aml | keys | .[]")
+
+  TAA_VERSION=$(${JQ_EXE} -nr "${TAA} | .result.taa_record.version")
+  TAA_METHODS_KEYS=$(${JQ_EXE} -nr "${TAA} | .result.aml_record.aml | keys_unsorted | .[]")
   TAA_METHODS_KEYS=$(echo "${TAA_METHODS_KEYS}" | sed 's/$/~/')
   TAA_METHODS_KEYS=${TAA_METHODS_KEYS//$'\n'/}
-  TAA_METHODS_VALUES=$(jq -nr "${TAA} | .result.aml_record.aml | .[]")
+  TAA_METHODS_VALUES=$(${JQ_EXE} -nr "${TAA} | .result.aml_record.aml | .[]")
   TAA_METHODS_VALUES=$(echo "${TAA_METHODS_VALUES}" | sed 's/$/~/')
   TAA_METHODS_VALUES=${TAA_METHODS_VALUES//$'\n'/}
 
@@ -268,41 +307,101 @@ accepttaa() {
   read -r -a TAA_METHODS_VALUES <<< "$TAA_METHODS_VALUES"
   unset IFS
 
-  # prompt user for TAA signing method
+  # Prompt user for TAA signing method
+  echoWarning "Please select from the following Transaction Author Agreement signing options:"
   unset SELECTED_MECHANISM
-  PS3="Select TAA signing method:"
+  PS3="Option: "
   select opt in "${TAA_METHODS_VALUES[@]}"; do
-    SELECTED_MECHANISM=${TAA_METHODS_KEYS[$REPLY]}
-    break
+    SELECTED_MECHANISM=${TAA_METHODS_KEYS[$REPLY-1]}
+    if (($REPLY-1 >= 0)) && [ ! -z "${SELECTED_MECHANISM}" ]; then
+      break
+    else
+      echoWarning "\n'${REPLY}' is not one of the available options.  Please select from one of the available options, or press Ctrl+C to quit."
+    fi
   done
-  
-  echo -e "\nSigning TAA using method ${SELECTED_MECHANISM}...\n"
-  echo "{\"mechanism\":\"${SELECTED_MECHANISM}\", \"version\": \"${TAA_VERSION}\", \"text\":\"${TAA_TEXT}\"}" > taa_payload.json
-  TAA_RESULT=$(curl \
+
+  printAndAskToContinue "Please review your selection:\n\n  - ${SELECTED_MECHANISM}: ${TAA_METHODS_VALUES[$REPLY-1]}\n\nIf this is correct, press any key to proceed. Otherwise press Ctrl+C to start over."
+
+  echo -e "Signing TAA using method ${SELECTED_MECHANISM} ...\n"
+  # The less processing done on ''.result.taa_record.text' the better.
+  echo "{\"mechanism\":\"${SELECTED_MECHANISM}\", \"version\": \"${TAA_VERSION}\", \"text\":$(${JQ_EXE} -n "${TAA} | .result.taa_record.text")}" > taa_payload.json
+
+  httpCode=$(${CURL_EXE} \
+      -s \
+      -o /dev/null \
+      -w %{http_code} \
       -X POST \
       -H X-Api-Key:${apiKey} \
       -H "Content-Type: application/json charset=utf-8" \
       -d @taa_payload.json \
-      ${baseUrl}/ledger/taa/accept )  
+      ${baseUrl}/ledger/taa/accept )
   rm -f ./taa_payload.json
+
+  if [[ "${httpCode}" == "200" ]]; then
+    echo "Successully accepted the TAA on behalf of the agent."
+  else
+    echoError "There was an error accepting the TAA on behalf of the agent.  Please ensure all of the parameters are correct and try again."
+  fi
 }
 
-registersovrin() {
-  did=${1}
-  verkey=${2}
-  ledger=${3}
-  key=${4}
-  if [ -z "${did}" ] || [ -z "${verkey}" ]|| [ -z "${ledger}" ]; then
-    echoError "\naccepttaa; You MUST specify the following parameters:\n- did\n- verkey\n- ledger"
+registerSovrin() {
+  local OPTIND
+  local _auto_register=1
+  while getopts c FLAG; do
+    case $FLAG in
+      c ) unset _auto_register ;;
+    esac
+  done
+  shift $((OPTIND-1))
+
+  baseUrl=${1}
+  ledger=$(toLower ${2})
+  secretName=${3}
+  secretKey=${4}
+  namespace=${5}
+  didRole=${6:-ENDORSER}
+
+  if [ -z "${baseUrl}" ] || [ -z "${namespace}" ]|| [ -z "${secretName}" ]|| [ -z "${secretKey}" ]; then
+    echoError "\nregisterSovrin; You MUST specify the following parameters:\n- baseUrl\n- secretName\n- secretKey\n- namespace"
     exit 1
   fi
-    
-  echo -e "\nRegistering on ${ledger}...\n"
-  RESULT=$(curl \
-      -X POST \
-      -H "Content-Type: application/json charset=utf-8" \
-      -d "{\"network\":\"${ledger}\",\"did\":\"${did}\",\"verkey\":\"${verkey}\",\"paymentaddr\":\"\"}" \
-      https://selfserve.sovrin.org/nym )
+
+  apiKey=$(getSecret "${secretName}" "${secretKey}" "${namespace}")
+  if [ -z "${apiKey}" ]; then
+    echoError "\nregisterSovrin; Unable to process request:\n - Unable to locate the API Key for ${baseUrl}.\n   Please ensure you are logged into OpenShift and have access to the following resources.\n   - Namespace: ${namespace}\n   - Secret Name: ${secretName}\n   - Secret Key: ${secretKey}"
+    exit 1
+  fi
+
+  echo -e "\nRetrieving the agent's DID and verKey from ${baseUrl} ..."
+  AGENT_PUBLIC_INFO=$(${CURL_EXE} \
+                    -s \
+                    -X GET \
+                    -H  "accept: application/json" \
+                    -H  "X-Api-Key: ${apiKey}"\
+                    "${baseUrl}/wallet/did/public")
+
+  did=$(echo $AGENT_PUBLIC_INFO | ${JQ_EXE} --raw-output '.result.did')
+  verkey=$(echo $AGENT_PUBLIC_INFO | ${JQ_EXE} --raw-output '.result.verkey')
+
+  if [ ! -z "${_auto_register}" ]; then
+    echoWarning "Registering DID: '${did}' and verKey: '${verkey}' on ledger: '${ledger}' ..."
+    httpCode=$(${CURL_EXE} \
+        -s \
+        -o /dev/null \
+        -w %{http_code} \
+        -X POST \
+        -H "Content-Type: application/json charset=utf-8" \
+        -d "{\"network\":\"${ledger}\",\"did\":\"${did}\",\"verkey\":\"${verkey}\",\"paymentaddr\":\"\"}" \
+        https://selfserve.sovrin.org/nym )
+
+    if [[ "${httpCode}" == "200" ]]; then
+      echo "Successully registered the agent's DID on ${ledger}."
+    else
+      echoError "There was an error registering the agent's DID on ${ledger}.  Please ensure all of the parameters are correct and try again."
+    fi
+  else
+    echo -e "\nledger nym did=${did} verkey=${verkey} role=${didRole}"
+  fi
 }
 
 addAuthClient() {
@@ -320,11 +419,11 @@ addAuthClient() {
   if [[ $_clientName =~ $re ]]; then
     echo -e \\n"addAuthClient; The client name cannot include spaces."\\n
     exit 1
-  fi 
+  fi
 
   if [ -z "${_clientCorsOrigin}" ]; then
     echoWarning "*** You have not specified a CORS origin for this client ***"
-    printAndAskToContinue "If this is correct, press any key to proceed. Otherwise press Ctrl+C to start over..."
+    printAndAskToContinue "If this is correct, press any key to proceed. Otherwise press Ctrl+C to start over ..."
   fi
 
   # Add new client
@@ -341,31 +440,31 @@ addAuthClient() {
   echo -e "Client ${_clientName} has Id=${_clientId}"
 
   # Add client scopes
-  echo -e "Creating client scopes..."
+  echo -e "Creating client scopes ..."
   runInContainer \
     ${_podName} \
     "psql -d \${POSTGRESQL_DATABASE} -ac 'insert into \"ClientScopes\" (\"Scope\", \"ClientId\") select \"Scope\", ${_clientId} as \"ClientId\" from \"ClientScopes\" where \"ClientId\" = 1;'"
 
   # Add client grant types
-  echo -e "Creating grant types..."
+  echo -e "Creating grant types ..."
   runInContainer \
     ${_podName} \
     "psql -d \${POSTGRESQL_DATABASE} -ac 'insert into \"ClientGrantTypes\" (\"GrantType\", \"ClientId\") select \"GrantType\", ${_clientId} as \"ClientId\" from \"ClientGrantTypes\" where \"ClientId\" = 1;'"
 
-  # Add client redirect URI  
-  echo -e "Adding ${_clientRedirectUri} as redirect URI..."
+  # Add client redirect URI
+  echo -e "Adding ${_clientRedirectUri} as redirect URI ..."
   runInContainer \
     ${_podName} \
     "psql -d \${POSTGRESQL_DATABASE} -ac 'insert into \"ClientRedirectUris\" (\"RedirectUri\", \"ClientId\") values ('\''${_clientRedirectUri}'\'', ${_clientId});'"
 
   if [ ! -z "${_clientCorsOrigin}" ]; then
-    echo -e "Adding ${_clientCorsOrigin} as CORS origin..."
+    echo -e "Adding ${_clientCorsOrigin} as CORS origin ..."
     # Add client CORS origin
     runInContainer \
       ${_podName} \
       "psql -d \${POSTGRESQL_DATABASE} -ac 'insert into \"ClientCorsOrigins\" (\"Origin\", \"ClientId\") values ('\''${_clientCorsOrigin}'\'', ${_clientId});'"
   else
-    echoWarning "No CORS origin specified, skipping..."
+    echoWarning "No CORS origin specified, skipping ..."
   fi
 
   echo -e "New client created successfully!"
@@ -386,7 +485,7 @@ updateAuthClient() {
   if [[ $_clientName =~ $re ]]; then
     echo -e \\n"addAuthClient; The client name cannot include spaces."\\n
     exit 1
-  fi 
+  fi
 
   if [ -z "${_clientCorsOrigin}" ]; then
     echoWarning "*** No CORS origin was specified for the client, any existing value will not be updated ***"
@@ -400,14 +499,14 @@ updateAuthClient() {
   echo -e "Client ${_clientName} has Id=${_clientId}"
 
   # Update client redirect URI
-  echo -e "Updating client redirect URI..."
+  echo -e "Updating client redirect URI ..."
   runInContainer \
     ${_podName} \
     "psql -d \${POSTGRESQL_DATABASE} -ac 'update \"ClientRedirectUris\" set \"RedirectUri\" = '\''${_clientRedirectUri}'\'' where \"ClientId\" = ${_clientId};'"
 
   if [ ! -z "${_clientCorsOrigin}" ]; then
     # Update client CORS origin
-    echo -e "Update client CORS origin..."
+    echo -e "Update client CORS origin ..."
     runInContainer \
       ${_podName} \
       "psql -d \${POSTGRESQL_DATABASE} -ac 'update \"ClientCorsOrigins\" set \"Origin\" = '\''${_clientCorsOrigin}'\'' where \"ClientId\" = ${_clientId};'"
@@ -421,7 +520,7 @@ getAuthClient() {
   _podName=${2:-vc-authn-database}
 
   selectStmt="select c.\"ClientName\", r.\"RedirectUri\", o.\"Origin\" from \"Clients\" c join \"ClientRedirectUris\" r on c.\"Id\"=r.\"ClientId\" left join \"ClientCorsOrigins\" o on c.\"Id\"=o.\"ClientId\""
-  
+
   if [ ! -z ${_clientName} ]; then
     selectStmt=$(echo ${selectStmt} "where c.\"ClientName\" = '\''${_clientName}'\''")
   else
@@ -450,29 +549,53 @@ case "${_cmd}" in
     ;;
 
   configureproof)
+    isCurlInstalled
+    isJQInstalled
+
     baseUrl=${1}
     payLoadPath=${2}
     namespace=${3:-$(getProjectName)}
     secretName=${4:-vc-authn-controller}
-    key=${5:-controller-api-key}
-    configureProof ${baseUrl} ${payLoadPath} ${namespace} ${secretName} ${key}
+    secretKey=${5:-controller-api-key}
+    configureProof ${baseUrl} ${payLoadPath} ${namespace} ${secretName} ${secretKey}
     ;;
 
   accepttaa)
+    isCurlInstalled
+    isJQInstalled
+
     baseUrl=${1}
     secretName=${2:-"agent-${PROFILE}"}
-    key=${3:-admin-api-key}
+    secretKey=${3:-admin-api-key}
     namespace=${4:-$(getProjectName)}
-    accepttaa ${baseUrl} ${namespace} ${secretName} ${key}
+    accepttaa ${baseUrl} ${secretName} ${secretKey} ${namespace}
     ;;
-  
+
   registersovrin)
-    did=${1}
-    verkey=${2}
-    ledger=${3:-stagingnet}
-    registersovrin ${did} ${verkey} ${ledger}
+    isCurlInstalled
+    isJQInstalled
+
+    baseUrl=${1}
+    ledger=${2}
+    secretName=${3:-"agent-${PROFILE}"}
+    secretKey=${4:-"admin-api-key"}
+    namespace=${5:-$(getProjectName)}
+    registerSovrin ${baseUrl} ${ledger} ${secretName} ${secretKey} ${namespace}
     ;;
-  
+
+  getledgernymcmd)
+    isCurlInstalled
+    isJQInstalled
+
+    baseUrl=${1}
+    ledger=${2}
+    secretName=${3:-"agent-${PROFILE}"}
+    secretKey=${4:-"admin-api-key"}
+    namespace=${5:-$(getProjectName)}
+    didRole=${6:-${didRole}}
+    registerSovrin -c ${baseUrl} ${ledger} ${secretName} ${secretKey} ${namespace} ${didRole}
+    ;;
+
   addauthclient)
     clientName=${1}
     clientRedirectUri=${2}
@@ -480,7 +603,7 @@ case "${_cmd}" in
     podName=${4}
     addAuthClient ${clientName} ${clientRedirectUri} ${clientCorsOrigin} ${podName}
     ;;
-  
+
   updateauthclient)
     clientName=${1}
     clientRedirectUri=${2}
@@ -488,7 +611,7 @@ case "${_cmd}" in
     podName=${4}
     updateAuthClient ${clientName} ${clientRedirectUri} ${clientCorsOrigin} ${podName}
     ;;
-  
+
   getauthclient)
     clientName=${1}
     podName=${2}
