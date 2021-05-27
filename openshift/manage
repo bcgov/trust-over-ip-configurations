@@ -209,7 +209,7 @@ deleteResources() {
     fi
 
     printAndAskToContinue "If you contiune all of the resources for '${_appName}' will be deleted.  All data will be lost."
-    oc -n $(getProjectName) delete all,secret,pvc,configmap,NetworkSecurityPolicy -l app-group=${_appName}
+    oc -n $(getProjectName) delete all,secret,pvc,configmap,NetworkPolicy -l app-group=${_appName}
   )
 }
 
@@ -222,7 +222,7 @@ cleanResources() {
     fi
 
     echoWarning "Cleaning out resources for '${_appName}'.  Secrets and PVCs will be retained."
-    oc -n $(getProjectName) delete all,configmap,NetworkSecurityPolicy -l app-group=${_appName}
+    oc -n $(getProjectName) delete all,configmap,NetworkPolicy -l app-group=${_appName}
   )
 }
 
