@@ -3,7 +3,8 @@ apiVersion: v1
 metadata:
   name: ${NAME}${SUFFIX}-deployment-template
   annotations:
-    description: Deployment template for a django server connected to a PostGreSQL
+    description:
+      Deployment template for a django server connected to a PostGreSQL
       database.
     tags: django
     iconClass: icon-python
@@ -33,6 +34,7 @@ objects:
           env: ${TAG_NAME}
       policyTypes:
         - Ingress
+
   - kind: Secret
     apiVersion: v1
     metadata:
@@ -52,6 +54,7 @@ objects:
       vc-authn-pres-req-conf-id: ${VC_AUTHN_PRES_REQ_CONF_ID}
       oidc-claims-required: ${OIDC_CLAIMS_REQUIRED}
     type: Opaque
+
   - kind: Service
     apiVersion: v1
     metadata:
@@ -71,6 +74,7 @@ objects:
           targetPort: 8080
       selector:
         name: ${NAME}${SUFFIX}
+
   - apiVersion: v1
     kind: Route
     metadata:
@@ -93,6 +97,7 @@ objects:
         kind: Service
         name: ${NAME}${SUFFIX}
         weight: 100
+
   - kind: DeploymentConfig
     apiVersion: v1
     metadata:
@@ -134,9 +139,16 @@ objects:
             role: ${ROLE}
             env: ${TAG_NAME}
         spec:
+          volumes:
+            - name: ${NAME}${SUFFIX}-custom-files-volume
+              configMap:
+                name: ${APP_CONFIG_MAP_NAME}${SUFFIX}
+                items:
+                  - key: ${CUSTOM_HOME_FILE_NAME}
+                    path: ${CUSTOM_HOME_FILE_NAME}
           containers:
             - name: ${NAME}${SUFFIX}
-              image: ' '
+              image: " "
               ports:
                 - containerPort: 8080
                   protocol: TCP
@@ -206,10 +218,15 @@ objects:
                 limits:
                   cpu: ${CPU_LIMIT}
                   memory: ${MEMORY_LIMIT}
+              volumeMounts:
+                - name: ${NAME}${SUFFIX}-custom-files-volume
+                  mountPath: ${CUSTOM_FILES_MOUNT_PATH}${CUSTOM_HOME_FILE_NAME}
+                  subPath: ${CUSTOM_HOME_FILE_NAME}
 parameters:
   - name: NAME
     displayName: Name
-    description: The name assigned to all of the OpenShift resources associated to
+    description:
+      The name assigned to all of the OpenShift resources associated to
       the server instance.
     required: true
     value: visual-verifier
@@ -227,10 +244,11 @@ parameters:
     displayName: Suffix
     description: A name suffix used for all objects
     required: false
-    value: ''
+    value: ""
   - name: ROLE
     displayName: Role
-    description: The role of this service within the application - used for Network
+    description:
+      The role of this service within the application - used for Network
       Policies
     required: true
     value: visual-verifier
@@ -239,7 +257,8 @@ parameters:
     description: The name of the source image build from tools
     required: true
     value: visual-verifier
-  - description: The exposed hostname that will route to the service, e.g., myappname.apps.silver.devops.gov.bc.ca,
+  - description:
+      The exposed hostname that will route to the service, e.g., myappname.apps.silver.devops.gov.bc.ca,
       if left blank a value will be defaulted.
     displayName: Application Hostname
     name: APPLICATION_DOMAIN
@@ -247,7 +266,8 @@ parameters:
   - name: IMAGE_NAMESPACE
     displayName: Image Namespace
     required: true
-    description: The namespace of the OpenShift project containing the imagestream
+    description:
+      The namespace of the OpenShift project containing the imagestream
       for the application.
     value: bztwou-tools
   - name: TAG_NAME
@@ -257,21 +277,37 @@ parameters:
     required: true
   - name: APP_FILE
     displayName: Application File
-    description: Used to run the application from a Python script. This should be
+    description:
+      Used to run the application from a Python script. This should be
       a path to a Python file (defaults to app.py unless set to null) that will be
       passed to the Python interpreter to start the application (optional).
     required: false
-    value: ''
+    value: ""
   - name: APP_CONFIG
     displayName: Application Configuration File Path
     description: Relative path to Gunicorn configuration file (optional).
     required: false
-    value: ''
+    value: ""
   - name: APP_MODULE
     displayName: Application Module
     description: The python module for application startup.
     required: false
-    value: ''
+    value: ""
+  - name: APP_CONFIG_MAP_NAME
+    displayName: Application Configuration File Path
+    description: Relative path to Gunicorn configuration file (optional).
+    required: false
+    value: visual-verifier-config
+  - name: CUSTOM_FILES_MOUNT_PATH
+    displayName: Application Config Mount Path
+    description: The path to use to mount the configuration file(s).
+    required: true
+    value: /opt/app-root/src/static/
+  - name: CUSTOM_HOME_FILE_NAME
+    displayName: Application Config File Name
+    description: The name of the application configuration file.
+    required: true
+    value: custom_home.html
   - name: DJANGO_SECRET_KEY
     displayName: Django Secret Key
     description: Set this to a long random string.
@@ -281,7 +317,7 @@ parameters:
     displayName: Django Debug
     description: If Django is in debug mode
     required: true
-    value: 'False'
+    value: "False"
   - name: VERIFIER_NAME
     displayName: Verifier Name
     description: Verifier Name
@@ -291,17 +327,17 @@ parameters:
     displayName: OIDC RP Provider Endpoint
     description: OIDC RP Provider Endpoint
     required: true
-    value: ''
+    value: ""
   - name: OIDC_RP_CLIENT_ID
     displayName: OIDC RP Client Id
     description: OIDC RP Client Id
     required: true
-    value: ''
+    value: ""
   - name: OIDC_RP_CLIENT_SECRET
     displayName: OIDC RP Client Secret
     description: OIDC RP Client Secret
     required: true
-    value: ''
+    value: ""
   - name: OIDC_RP_SCOPES
     displayName: OIDC RP Scopes
     description: OIDC RP Scopes
@@ -311,12 +347,12 @@ parameters:
     displayName: VC Authentication Presentation Request Configuration Id
     description: VC Authentication Presentation Request Configuration Id
     required: true
-    value: ''
+    value: ""
   - name: OIDC_CLAIMS_REQUIRED
     displayName: OIDC Claims Required
     description: OIDC Claims Required
     required: true
-    value: ''
+    value: ""
   - name: CPU_REQUEST
     displayName: Resources CPU Request
     description: The resources CPU request (in cores) for this build.
