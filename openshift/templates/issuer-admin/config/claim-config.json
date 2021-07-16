@@ -1,7 +1,7 @@
 {
   "questions": [
     {
-      "name": "given_names",
+      "name": "Given Name",
       "type": "text",
       "title": "First Name:",
       "placeHolder": "",
@@ -9,7 +9,7 @@
       "requiredErrorText": "Required Field"
     },
     {
-      "name": "family_name",
+      "name": "Surname",
       "type": "text",
       "title": "Last Name:",
       "placeHolder": "",
