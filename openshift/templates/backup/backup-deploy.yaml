@@ -210,6 +210,16 @@ objects:
                     secretKeyRef:
                       name: ${PREFIX}${HEALTH_GATEWAY_WALLET_DB_HOST}
                       key: ${DB_PASSWORD_KEY_NAME}
+                - name: WALLET_BUYBC_USER
+                  valueFrom:
+                    secretKeyRef:
+                      name: ${PREFIX}${BUY_BC_WALLET_DB_HOST}
+                      key: ${DB_USER_KEY_NAME}
+                - name: WALLET_BUYBC_PASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      name: ${PREFIX}${BUY_BC_WALLET_DB_HOST}
+                      key: ${DB_PASSWORD_KEY_NAME}
                 - name: WEBHOOK_URL
                   valueFrom:
                     secretKeyRef:
@@ -321,6 +331,13 @@ parameters:
       particular, this is used to wire up the credentials associated to the database.
     required: true
     value: wallet-health-gateway
+  - name: BUY_BC_WALLET_DB_HOST
+    displayName: Wallet Database Hostname
+    description:
+      The name associated to the wallet database deployment resources.  In
+      particular, this is used to wire up the credentials associated to the database.
+    required: true
+    value: wallet-buybc
   - name: DB_USER_KEY_NAME
     displayName: Database User Key Name
     description:
@@ -440,7 +457,7 @@ parameters:
       'BC Gov NFS Storage' template.  nfs-backup storage CANNOT be automatically provisioned
       by this template.
     required: true
-    value: nfs-backup
+    value: netapp-file-backup
   - name: VERIFICATION_VOLUME_NAME
     displayName: Verification Volume Name
     description:

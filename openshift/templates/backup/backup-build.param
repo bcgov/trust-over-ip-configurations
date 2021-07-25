@@ -1,7 +1,7 @@
 #=========================================================
 # OpenShift template parameters for:
 # Component: .
-# Template File: ../openshift/templates/backup/backup-build.json
+# Template File: ../openshift/templates/backup/backup-build.yaml
 #=========================================================
 NAME=backup
 PREFIX=

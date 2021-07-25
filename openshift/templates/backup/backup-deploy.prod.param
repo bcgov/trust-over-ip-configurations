@@ -1,12 +1,13 @@
 #=========================================================
 # OpenShift template parameters for:
 # Component: .
-# Template File: ../openshift/templates/backup/backup-deploy.json
+# Template File: ../openshift/templates/backup/backup-deploy.yaml
 #=========================================================
 # NAME=backup-postgres
 # PREFIX=
 # APP_NAME=backup-container
 # APP_GROUP=backup-postgres
+# ROLE=backup-container
 # NAMESPACE_NAME=e79518
 # SOURCE_IMAGE_NAME=backup
 # IMAGE_NAMESPACE=e79518-tools
@@ -15,6 +16,8 @@ TAG_NAME=prod
 # VC_AUTHN_WALLET_DB_HOST=vc-authn-wallet
 # LSBC_WALLET_DB_HOST=wallet-lsbc
 # PRIME_WALLET_DB_HOST=wallet-prime
+# HEALTH_GATEWAY_WALLET_DB_HOST=wallet-health-gateway
+# BUY_BC_WALLET_DB_HOST=wallet-buybc
 # DB_USER_KEY_NAME=database-user
 # DB_PASSWORD_KEY_NAME=database-password
 # BACKUP_STRATEGY=rolling
@@ -30,8 +33,8 @@ ENVIRONMENT_NAME=e79518-prod
 # CONFIG_MAP_NAME=backup-conf
 # CONFIG_MOUNT_PATH=/
 # BACKUP_VOLUME_NAME=backup
-# BACKUP_VOLUME_SIZE=20Gi
-BACKUP_VOLUME_CLASS=netapp-file-standard
+# BACKUP_VOLUME_SIZE=5Gi
+# BACKUP_VOLUME_CLASS=netapp-file-backup
 # VERIFICATION_VOLUME_NAME=backup-verification
 # VERIFICATION_VOLUME_SIZE=5Gi
 # VERIFICATION_VOLUME_CLASS=netapp-file-standard
