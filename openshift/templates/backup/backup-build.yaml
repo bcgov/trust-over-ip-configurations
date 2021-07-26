@@ -1,8 +1,8 @@
+---
 kind: Template
 apiVersion: v1
 metadata:
   name: ${PREFIX}${NAME}-build-template
-  creationTimestamp: null
 objects:
   - kind: ImageStream
     apiVersion: v1
@@ -24,9 +24,8 @@ objects:
         app-group: ${APP_GROUP}
     spec:
       triggers:
-        - type: ImageChange
         - type: ConfigChange
-      runPolicy: Serial
+      runPolicy: SerialLatestOnly
       source:
         type: Git
         git:
@@ -38,7 +37,7 @@ objects:
         dockerStrategy:
           from:
             kind: ${SOURCE_IMAGE_KIND}
-            name: ${SOURCE_IMAGE_NAME}:${SOURCE_IMAGE_TAG}
+            name: ${SOURCE_IMAGE_REGISTRY}${SOURCE_IMAGE_NAME}:${SOURCE_IMAGE_TAG}
           dockerfilePath: ${DOCKER_FILE_PATH}
       output:
         to:
@@ -74,7 +73,7 @@ parameters:
     displayName: Git Reference
     description: The git reference or branch.
     required: true
-    value: master
+    value: "2.3.2"
   - name: SOURCE_CONTEXT_DIR
     displayName: Source Context Directory
     description: The source context directory.
@@ -82,20 +81,24 @@ parameters:
     value: /docker
   - name: SOURCE_IMAGE_KIND
     displayName: Source Image Kind
-    description: The 'kind' (type) of the  source image; typically ImageStreamTag,
-      or DockerImage.
+    description: The 'kind' (type) of the  source image; typically ImageStreamTag, or DockerImage.
     required: true
     value: DockerImage
+  - name: SOURCE_IMAGE_REGISTRY
+    displayName: Source Image Registry
+    description: The name of the Source Image Registry.
+    required: false
+    value: docker-remote.artifacts.developer.gov.bc.ca/
   - name: SOURCE_IMAGE_NAME
     displayName: Source Image Name
     description: The name of the source image.
     required: true
-    value: registry.access.redhat.com/rhscl/postgresql-10-rhel7
+    value: centos/postgresql-12-centos7
   - name: SOURCE_IMAGE_TAG
     displayName: Source Image Tag
     description: The tag of the source image.
     required: true
-    value: latest
+    value: 20200917-804ef01
   - name: DOCKER_FILE_PATH
     displayName: Docker File Path
     description: The path to the docker file defining the build.
