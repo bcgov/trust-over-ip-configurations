@@ -2,7 +2,8 @@
 // Import this file into the pipeline using 'load'.
 class config extends bc.baseConfig {
   // Build configuration
-  public static final String  APP_NAME = "tails-server"
+  public static final String IMAGE_NAME = "tails-server"
+  public static final String APP_NAME = "tails-server"
   public static final String[] BUILDS = ["${this.APP_NAME}"]
 
   // Override defaults

@@ -27,7 +27,8 @@ node {
 
   stage("Deploy ${config.DEPLOYMENT_ENVIRONMENT_TAGS[0]}") {
     script {
-      deploy("${config.APP_NAME}",
+      deploy("${config.IMAGE_NAME}",
+             "${config.APP_NAME}",
              "${config.PREFIX}",
              "${config.SUFFIX}",
              "${config.NAME_SPACE}",
