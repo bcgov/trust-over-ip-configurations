@@ -1,0 +1,32 @@
+{
+  "env": "test",
+  "issuer": {
+    "name": "A2A - Trust Over IP"
+  },
+  "inviteRequired": false,
+  "authentication": {
+    "enabled": true,
+    "autoSignOut": true,
+    "oidcSettings": {
+      "authority": "https://test.oidc.gov.bc.ca/auth/realms/sbtyffu4",
+      "clientId": "issuer",
+      "redirectUri": "https://a2a-nonrev-issuer-test.apps.silver.devops.gov.bc.ca/oidc-callback",
+      "redirect_uri": "https://a2a-nonrev-issuer-test.apps.silver.devops.gov.bc.ca/oidc-callback-error",
+      "responseType": "code",
+      "scope": "openid profile email",
+      "automaticSilentRenew": true,
+      "silentRedirectUri": "https://a2a-nonrev-issuer-test.apps.silver.devops.gov.bc.ca/silent-renew-oidc.html",
+      "post_logout_redirect_uri": "https://a2a-nonrev-issuer-test.apps.silver.devops.gov.bc.ca"
+    }
+  },
+  "apiServer": {
+    "url": "/api"
+  },
+  "issuedSuccess": {
+    "successText": "",
+    "links": []
+  },
+  "credentials" : {
+    "schema_id": "DZBaHghKsVHcJoiwkykG3r:2:Member Certificate:0.5.0"
+  }
+}

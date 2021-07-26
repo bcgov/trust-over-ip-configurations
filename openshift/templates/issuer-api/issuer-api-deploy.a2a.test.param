@@ -9,6 +9,9 @@
 # SUFFIX=-a2a
 # DB_SUFFIX=
 # ROLE=api
+# AGENT_ROLE=agent
+# PUBLIC_FRONTEND_ROLE=public-frontend
+# ADMIN_FRONTEND_ROLE=admin-frontend
 # IMAGE_NAMESPACE=a99fd4-tools
 # NAMESPACE_NAME=a99fd4
 # SERVICE_PORT=8080

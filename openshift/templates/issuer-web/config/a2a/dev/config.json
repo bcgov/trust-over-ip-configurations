@@ -3,7 +3,7 @@
   "issuer": {
     "name": "A2A - Trust Over IP"
   },
-  "inviteRequired": false,
+  "inviteRequired": true,
   "authentication": {
     "enabled": true,
     "autoSignOut": true,

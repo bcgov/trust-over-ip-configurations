@@ -40,6 +40,15 @@ objects:
                 matchLabels:
                   name: ${NAMESPACE_NAME}
                   environment: ${TAG_NAME}
+            - podSelector:
+                matchLabels:
+                  role: ${ADMIN_FRONTEND_ROLE}
+                  app: ${APP_NAME}${SUFFIX}
+                  env: ${TAG_NAME}
+              namespaceSelector:
+                matchLabels:
+                  name: ${NAMESPACE_NAME}
+                  environment: ${TAG_NAME}
           ports:
             - protocol: TCP
               port: ${{SERVICE_PORT}}
@@ -287,6 +296,13 @@ parameters:
       Policies
     required: true
     value: public-frontend
+  - name: ADMIN_FRONTEND_ROLE
+    displayName: Admin Frontend Role
+    description:
+      The role of the admin frontend service within the application - used for Network
+      Policies
+    required: true
+    value: admin-frontend
   - name: IMAGE_NAMESPACE
     displayName: Image Namespace
     required: true
