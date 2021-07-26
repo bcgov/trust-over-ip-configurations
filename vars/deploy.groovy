@@ -1,14 +1,14 @@
-void call(String appName, String appPrefix, String appSuffix, String namespace, String envTag) {
+void call(String imageName, String appName, String appPrefix, String appSuffix, String namespace, String envTag) {
   openshift.withCluster() {
     openshift.withProject() {
 
-      echo "Tagging ${appName} for deployment to ${envTag} ..."
+      echo "Tagging ${imageName} for deployment to ${envTag} ..."
 
       // Don't tag with BUILD_ID so the pruner can do it's job; it won't delete tagged images.
       // Tag the images for deployment based on the image's hash
-      def IMAGE_HASH = getImageTagHash(openshift, "${appName}")
+      def IMAGE_HASH = getImageTagHash(openshift, "${imageName}")
       echo "IMAGE_HASH: ${IMAGE_HASH}"
-      openshift.tag("${appName}@${IMAGE_HASH}", "${appName}:${envTag}")
+      openshift.tag("${imageName}@${IMAGE_HASH}", "${imageName}:${envTag}")
     }
 
     echo "Watching rollout of ${appPrefix}${appName}${appSuffix} in ${namespace}-${envTag} ..."
