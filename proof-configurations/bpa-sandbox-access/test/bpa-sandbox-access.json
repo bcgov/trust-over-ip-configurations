@@ -1,0 +1,23 @@
+{
+    "id": "bpa-sandbox-access-test",
+    "subject_identifier": "",
+    "configuration": {
+      "name": "bpa-sandbox-access",
+      "version": "0.1",
+      "requested_attributes": [
+        {
+          "names": [
+            "business_role"
+          ],
+          "restrictions": [
+            {
+              "issuer_did": "7o2YVzymVZEm6DUiLYa1hc",
+              "schema_name": "bpa-sandbox-access",
+              "schema_version": "0.1"
+            }
+          ]
+        }
+      ],
+      "requested_predicates": []
+    }
+  }
