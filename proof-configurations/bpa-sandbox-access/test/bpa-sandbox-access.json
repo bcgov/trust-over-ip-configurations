@@ -3,7 +3,7 @@
     "subject_identifier": "",
     "configuration": {
       "name": "bpa-sandbox-access",
-      "version": "0.1",
+      "version": "0.1.1",
       "requested_attributes": [
         {
           "names": [
@@ -11,7 +11,7 @@
           ],
           "restrictions": [
             {
-              "issuer_did": "7o2YVzymVZEm6DUiLYa1hc",
+              "schema_id": "7o2YVzymVZEm6DUiLYa1hc:2:bpa-sandbox-access:0.1",
               "schema_name": "bpa-sandbox-access",
               "schema_version": "0.1"
             }
