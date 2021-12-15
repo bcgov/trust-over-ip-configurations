@@ -15,8 +15,8 @@ function isInstalled () {
 function isCurlInstalled () {
   CURL_EXE=curl
   if ! isInstalled ${CURL_EXE}; then
-    echoRed "The ${CURL_EXE} executable is required and was not found on your path."
-    echoRed "If your shell of choice doesn't come with curl preinstalled, try installing it using either [Homebrew](https://brew.sh/) (MAC) or [Chocolatey](https://chocolatey.org/) (Windows)."
+    echoError "The ${CURL_EXE} executable is required and was not found on your path."
+    echoError "If your shell of choice doesn't come with curl preinstalled, try installing it using either [Homebrew](https://brew.sh/) (MAC) or [Chocolatey](https://chocolatey.org/) (Windows)."
     exit 1
   fi
 }
@@ -24,9 +24,9 @@ function isCurlInstalled () {
 function isJQInstalled () {
   JQ_EXE=jq
   if ! isInstalled ${JQ_EXE}; then
-    echoRed "The ${JQ_EXE} executable is required and was not found on your path."
-    echoRed "Installation instructions can be found here: https://stedolan.github.io/jq/download"
-    echoRed "Alternatively, a package manager such as Chocolatey (Windows) or Brew (Mac) can be used to install this dependecy."
+    echoError "The ${JQ_EXE} executable is required and was not found on your path."
+    echoError "Installation instructions can be found here: https://stedolan.github.io/jq/download"
+    echoError "Alternatively, a package manager such as Chocolatey (Windows) or Brew (Mac) can be used to install this dependecy."
     exit 1
   fi
 }

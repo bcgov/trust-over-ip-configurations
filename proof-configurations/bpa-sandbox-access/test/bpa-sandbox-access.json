@@ -11,7 +11,7 @@
           ],
           "restrictions": [
             {
-              "schema_id": "7o2YVzymVZEm6DUiLYa1hc:2:bpa-sandbox-access:0.1",
+              "schema_issuer_did": "7o2YVzymVZEm6DUiLYa1hc",
               "schema_name": "bpa-sandbox-access",
               "schema_version": "0.1"
             }
