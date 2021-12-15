@@ -1,0 +1,24 @@
+{
+  "id": "minespace-access-0.1-test",
+  "subject_identifier": "",
+  "configuration": {
+    "name": "bcgov-minespace-access",
+    "version": "0.1",
+    "requested_attributes": [
+      {
+        "names": [
+          "email",
+          "preferred_username"
+        ],
+        "restrictions": [
+          {
+            "issuer_did": "JoUtcxezYkTDydX5YMRmxd",
+            "schema_name": "bcgov-minespace-access",
+            "schema_version": "0.1"
+          }
+        ]
+      }
+    ],
+    "requested_predicates": []
+  }
+}
