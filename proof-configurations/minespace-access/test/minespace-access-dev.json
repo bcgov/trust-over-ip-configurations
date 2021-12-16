@@ -1,6 +1,6 @@
 {
   "id": "minespace-access-0.1-dev",
-  "subject_identifier": "",
+  "subject_identifier": "email",
   "configuration": {
     "name": "bcgov-minespace-access",
     "version": "0.1",
