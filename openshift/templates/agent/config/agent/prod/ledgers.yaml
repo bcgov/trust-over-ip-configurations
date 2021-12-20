@@ -1,0 +1,10 @@
+- id: BCorvinTest
+  is_production: true
+  genesis_url: 'http://test.bcovrin.vonx.io/genesis'
+- id: CANdyDev
+  is_production: true
+  genesis_url: 'https://raw.githubusercontent.com/ICCS-ISAC/dtrust-reconu/main/CANdy/dev/pool_transactions_genesis'
+  - name: GENESIS_FILE_URL
+- id: SOVRINSandbox
+  is_prodoction: true
+  genesis_url: https://raw.githubusercontent.com/sovrin-foundation/sovrin/stable/sovrin/pool_transactions_sandbox_genesis

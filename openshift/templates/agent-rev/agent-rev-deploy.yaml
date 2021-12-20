@@ -172,6 +172,13 @@ objects:
             role: ${PREFIX}${ROLE}
             env: ${TAG_NAME}
         spec:
+          volumes:
+            - name: ${NAME}${SUFFIX}-app-config-volume
+              configMap:
+                name: ${APP_CONFIG_MAP_NAME}${SUFFIX}
+                items:
+                  - key: ${GENESIS_TRANSACTIONS_LIST_FILE}
+                    path: ${GENESIS_TRANSACTIONS_LIST_FILE}
           containers:
             - name: ${PREFIX}${NAME}
               command:
@@ -198,8 +205,8 @@ objects:
                   --admin '0.0.0.0' ${ADMIN_INTERFACE_PORT}
                   $([ ! -z "${AGENT_ADMIN_API_KEY}" ] && echo "--admin-api-key ${AGENT_ADMIN_API_KEY}" || echo "--admin-insecure-mode"));
               env:
-                - name: ACAPY_GENESIS_URL
-                  value: ${GENESIS_FILE_URL}
+                - name: ACAPY_GENESIS_TRANSACTIONS_LIST
+                  value: ${GENESIS_TRANSACTIONS_LIST_FILE}
                 - name: AGENT_WALLET_NAME
                   value: ${PREFIX}${NAME}-wallet
                 - name: WALLET_TYPE
@@ -294,6 +301,10 @@ objects:
                 requests:
                   cpu: ${CPU_REQUEST}
                   memory: ${MEMORY_REQUEST}
+              volumeMounts:
+                - name: ${NAME}${SUFFIX}-app-config-volume
+                  mountPath: ${APP_CONFIG_MOUNT_PATH}${GENESIS_TRANSACTIONS_LIST_FILE}
+                  subPath: ${GENESIS_TRANSACTIONS_LIST_FILE}
               terminationMessagePath: /dev/termination-log
               terminationMessagePolicy: File
           dnsPolicy: ClusterFirst
@@ -394,11 +405,11 @@ parameters:
     description: The http port on which the service will listen.
     required: true
     value: "8021"
-  - name: GENESIS_FILE_URL
-    displayName: Genesis File URL
-    description: The URL from which the genesis file can be downloaded.
+  - name: GENESIS_TRANSACTIONS_LIST_FILE
+    displayName: Genesis Transactions List File
+    description: The filename containing the list of genesis transactions (ledgers) that this verifier can access.
     required: true
-    value: https://raw.githubusercontent.com/sovrin-foundation/sovrin/stable/sovrin/pool_transactions_sandbox_genesis
+    value: ledgers.yaml
   - name: LOG_LEVEL
     displayName: Log Level
     description: The logging level for the agent.
