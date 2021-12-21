@@ -379,6 +379,13 @@ parameters:
     description: The TAG name for this environment, e.g., dev, test, prod.
     required: true
     value: dev
+  - name: APP_CONFIG_MAP_NAME
+    displayName: Application Config Map Name
+    description:
+      The name of the configuration map holding the data to configure the
+      application.
+    required: true
+    value: agent-rev-config
   - name: AGENT_LABEL_NAME
     displayName: Agent Label/Name
     description: The label/name of the agent
