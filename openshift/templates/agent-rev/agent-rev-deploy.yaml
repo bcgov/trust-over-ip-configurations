@@ -173,9 +173,9 @@ objects:
             env: ${TAG_NAME}
         spec:
           volumes:
-            - name: ${NAME}${SUFFIX}-app-config-volume
+            - name: ${PREFIX}${NAME}-app-config-volume
               configMap:
-                name: ${APP_CONFIG_MAP_NAME}${SUFFIX}
+                name: ${PREFIX}${APP_CONFIG_MAP_NAME}
                 items:
                   - key: ${GENESIS_TRANSACTIONS_LIST_FILE}
                     path: ${GENESIS_TRANSACTIONS_LIST_FILE}
@@ -206,7 +206,7 @@ objects:
                   $([ ! -z "${AGENT_ADMIN_API_KEY}" ] && echo "--admin-api-key ${AGENT_ADMIN_API_KEY}" || echo "--admin-insecure-mode"));
               env:
                 - name: ACAPY_GENESIS_TRANSACTIONS_LIST
-                  value: ${GENESIS_TRANSACTIONS_LIST_FILE}
+                  value: ${APP_CONFIG_MOUNT_PATH}${GENESIS_TRANSACTIONS_LIST_FILE}
                 - name: AGENT_WALLET_NAME
                   value: ${PREFIX}${NAME}-wallet
                 - name: WALLET_TYPE
@@ -302,7 +302,7 @@ objects:
                   cpu: ${CPU_REQUEST}
                   memory: ${MEMORY_REQUEST}
               volumeMounts:
-                - name: ${NAME}${SUFFIX}-app-config-volume
+                - name: ${PREFIX}${NAME}-app-config-volume
                   mountPath: ${APP_CONFIG_MOUNT_PATH}${GENESIS_TRANSACTIONS_LIST_FILE}
                   subPath: ${GENESIS_TRANSACTIONS_LIST_FILE}
               terminationMessagePath: /dev/termination-log
@@ -344,12 +344,12 @@ parameters:
     displayName: App Name
     description: Used to group components together in the OpenShift console.
     required: true
-    value: vc-authn-oidc
+    value: vc-authn-oidc-rev
   - name: APP_GROUP
     displayName: App Group
     description: Used to group components together.
     required: true
-    value: vc-authn-oidc
+    value: vc-authn-oidc-rev
   - name: ROLE
     displayName: Role
     description: The role of this service within the application - used for Network Policies.
@@ -386,16 +386,21 @@ parameters:
       application.
     required: true
     value: agent-rev-config
+  - name: APP_CONFIG_MOUNT_PATH
+    displayName: Application Config Map Mount Path
+    description: The mount path for the application Config Map.
+    required: true
+    value: /home/indy/
   - name: AGENT_LABEL_NAME
     displayName: Agent Label/Name
     description: The label/name of the agent
     required: true
-    value: vc-authn-agent
+    value: toip-vc-authn-agent-rev
   - name: WEBHOOK_URL
     displayName: Controller Webhook URL
     description: The webhook endpoint for the controller.
     required: true
-    value: http://vc-authn-controller:5000
+    value: http://vc-authn-controller-rev:5000
   - name: AGENT_ADMIN_PORT
     displayName: Agent Admin Port
     description: The admin port on which the service will listen.
@@ -426,7 +431,7 @@ parameters:
     displayName: Collect agent timing information.
     description: Enable/Disable collection of agent timing information.  Controls the inclusion/exclusion of the agent '--timing' startup parameter.  Defaults to disabled.
     required: false
-    value: ""
+    value: "false"
   - name: AGENT_READ_ONLY_LEDGER
     displayName: Set read only ledger flag.
     description: Enable/Disable the read only ledger flag.  Controls the inclusion/exclusion of the agent '--read-only-ledger' startup parameter.  Defaults to disabled.
@@ -497,7 +502,7 @@ parameters:
     displayName: Resources CPU Limit
     description: The resources CPU limit (in cores) for this build.
     required: true
-    value: 750m
+    value: 300m
   - name: MEMORY_REQUEST
     displayName: Resources Memory Request
     description: The resources Memory request (in Mi, Gi, etc) for this build.

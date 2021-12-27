@@ -15,6 +15,7 @@ APPLICATION_DOMAIN=toip-vc-authn-agent-rev-test.apps.silver.devops.gov.bc.ca
 # IMAGE_NAMESPACE=e79518-tools
 TAG_NAME=test
 # APP_CONFIG_MAP_NAME=agent-rev-config
+# APP_CONFIG_MOUNT_PATH=/home/indy/
 # AGENT_LABEL_NAME=toip-vc-authn-agent-rev
 # WEBHOOK_URL=http://vc-authn-controller-rev:5000
 # AGENT_ADMIN_PORT=8024

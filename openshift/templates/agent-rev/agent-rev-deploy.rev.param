@@ -15,7 +15,8 @@ ROUTE_TIMEOUT=120s
 IMAGE_NAMESPACE=e79518-tools
 TAG_NAME=dev
 APP_CONFIG_MAP_NAME=agent-rev-config
-AGENT_LABEL_NAME=vc-authn-agent-rev
+APP_CONFIG_MOUNT_PATH=/home/indy/
+AGENT_LABEL_NAME=toip-vc-authn-agent-rev
 WEBHOOK_URL=http://vc-authn-controller-rev:5000
 AGENT_ADMIN_PORT=8024
 # ADMIN_API_KEY=[a-zA-Z0-9_~!@#$%^&*()-=<>,.?;:|]{16}
