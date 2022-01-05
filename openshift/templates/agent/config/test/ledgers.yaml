@@ -1,5 +1,6 @@
 - id: SOVRINSandbox
   is_prodoction: true
+  is_write: true
   genesis_url: 'https://raw.githubusercontent.com/sovrin-foundation/sovrin/stable/sovrin/pool_transactions_sandbox_genesis'
 - id: BCorvinTest
   is_production: true
