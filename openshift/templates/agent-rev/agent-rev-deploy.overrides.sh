@@ -1,3 +1,4 @@
+#!/bin/bash
 _includeFile=$(type -p overrides.inc)
 if [ ! -z ${_includeFile} ]; then
   . ${_includeFile}
@@ -15,7 +16,7 @@ OUTPUT_FORMAT=json
 # - To include all of the files in the application instance's profile directory.
 # Injected by genDepls.sh
 # - APP_CONFIG_MAP_NAME
-# - SUFFIX
+# - PREFIX
 # - DEPLOYMENT_ENV_NAME
 
 # Combine the profile's default config files with its environment specific config files before generating the config map ...
@@ -30,7 +31,7 @@ cp -f ${profileEnv}/* ${profileTmp} 2>/dev/null
 APPCONFIG_SOURCE_PATH=${profileTmp}
 APPCONFIG_OUTPUT_FILE=${APP_CONFIG_MAP_NAME}-configmap_DeploymentConfig.json
 printStatusMsg "Generating ConfigMap; ${APP_CONFIG_MAP_NAME} ..."
-generateConfigMap "${APP_CONFIG_MAP_NAME}${SUFFIX}" "${APPCONFIG_SOURCE_PATH}" "${OUTPUT_FORMAT}" "${APPCONFIG_OUTPUT_FILE}"
+generateConfigMap "${PREFIX}${APP_CONFIG_MAP_NAME}" "${APPCONFIG_SOURCE_PATH}" "${OUTPUT_FORMAT}" "${APPCONFIG_OUTPUT_FILE}"
 
 # Remove temporary configuration directory and files ....
 rm -rf ${profileTmp}

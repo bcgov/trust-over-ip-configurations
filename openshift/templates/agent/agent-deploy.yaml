@@ -173,9 +173,9 @@ objects:
             env: ${TAG_NAME}
         spec:
           volumes:
-            - name: ${NAME}${SUFFIX}-app-config-volume
+            - name: ${PREFIX}${NAME}-app-config-volume
               configMap:
-                name: ${APP_CONFIG_MAP_NAME}${SUFFIX}
+                name: ${PREFIX}${APP_CONFIG_MAP_NAME}
                 items:
                   - key: ${GENESIS_TRANSACTIONS_LIST_FILE}
                     path: ${GENESIS_TRANSACTIONS_LIST_FILE}
@@ -206,7 +206,7 @@ objects:
                   $([ ! -z "${AGENT_ADMIN_API_KEY}" ] && echo "--admin-api-key ${AGENT_ADMIN_API_KEY}" || echo "--admin-insecure-mode"));
               env:
                 - name: ACAPY_GENESIS_TRANSACTIONS_LIST
-                  value: ${GENESIS_TRANSACTIONS_LIST_FILE}
+                  value: ${APP_CONFIG_MOUNT_PATH}${GENESIS_TRANSACTIONS_LIST_FILE}
                 - name: AGENT_WALLET_NAME
                   value: ${PREFIX}${NAME}-wallet
                 - name: WALLET_TYPE
@@ -308,7 +308,7 @@ objects:
                   cpu: ${CPU_REQUEST}
                   memory: ${MEMORY_REQUEST}
               volumeMounts:
-                - name: ${NAME}${SUFFIX}-app-config-volume
+                - name: ${PREFIX}${NAME}-app-config-volume
                   mountPath: ${APP_CONFIG_MOUNT_PATH}${GENESIS_TRANSACTIONS_LIST_FILE}
                   subPath: ${GENESIS_TRANSACTIONS_LIST_FILE}
               terminationMessagePath: /dev/termination-log
@@ -392,11 +392,16 @@ parameters:
       application.
     required: true
     value: agent-config
+  - name: APP_CONFIG_MOUNT_PATH
+    displayName: Application Config Map Mount Path
+    description: The mount path for the application Config Map.
+    required: true
+    value: /home/indy/
   - name: AGENT_LABEL_NAME
     displayName: Agent Label/Name
     description: The label/name of the agent
     required: true
-    value: vc-authn-agent
+    value: ToIP VC-AuthN
   - name: WEBHOOK_URL
     displayName: Controller Webhook URL
     description: The webhook endpoint for the controller.
@@ -503,7 +508,7 @@ parameters:
     displayName: Resources CPU Limit
     description: The resources CPU limit (in cores) for this build.
     required: true
-    value: 750m
+    value: 300m
   - name: MEMORY_REQUEST
     displayName: Resources Memory Request
     description: The resources Memory request (in Mi, Gi, etc) for this build.

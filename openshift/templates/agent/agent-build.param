@@ -1,7 +1,7 @@
 #=========================================================
 # OpenShift template parameters for:
 # Component: .
-# Template File: ../openshift/templates/agent/agent-build.json
+# Template File: ../openshift/templates/agent/agent-build.yaml
 #=========================================================
 NAME=agent
 APP_NAME=vc-authn-oidc
