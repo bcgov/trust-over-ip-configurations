@@ -172,6 +172,13 @@ objects:
             role: ${PREFIX}${ROLE}
             env: ${TAG_NAME}
         spec:
+          volumes:
+            - name: ${PREFIX}${NAME}-app-config-volume
+              configMap:
+                name: ${PREFIX}${APP_CONFIG_MAP_NAME}
+                items:
+                  - key: ${GENESIS_TRANSACTIONS_LIST_FILE}
+                    path: ${GENESIS_TRANSACTIONS_LIST_FILE}
           containers:
             - name: ${PREFIX}${NAME}
               command:
@@ -198,8 +205,8 @@ objects:
                   --admin '0.0.0.0' ${ADMIN_INTERFACE_PORT}
                   $([ ! -z "${AGENT_ADMIN_API_KEY}" ] && echo "--admin-api-key ${AGENT_ADMIN_API_KEY}" || echo "--admin-insecure-mode"));
               env:
-                - name: ACAPY_GENESIS_URL
-                  value: ${GENESIS_FILE_URL}
+                - name: ACAPY_GENESIS_TRANSACTIONS_LIST
+                  value: ${APP_CONFIG_MOUNT_PATH}${GENESIS_TRANSACTIONS_LIST_FILE}
                 - name: AGENT_WALLET_NAME
                   value: ${PREFIX}${NAME}-wallet
                 - name: WALLET_TYPE
@@ -294,6 +301,10 @@ objects:
                 requests:
                   cpu: ${CPU_REQUEST}
                   memory: ${MEMORY_REQUEST}
+              volumeMounts:
+                - name: ${PREFIX}${NAME}-app-config-volume
+                  mountPath: ${APP_CONFIG_MOUNT_PATH}${GENESIS_TRANSACTIONS_LIST_FILE}
+                  subPath: ${GENESIS_TRANSACTIONS_LIST_FILE}
               terminationMessagePath: /dev/termination-log
               terminationMessagePolicy: File
           dnsPolicy: ClusterFirst
@@ -333,12 +344,12 @@ parameters:
     displayName: App Name
     description: Used to group components together in the OpenShift console.
     required: true
-    value: vc-authn-oidc
+    value: vc-authn-oidc-rev
   - name: APP_GROUP
     displayName: App Group
     description: Used to group components together.
     required: true
-    value: vc-authn-oidc
+    value: vc-authn-oidc-rev
   - name: ROLE
     displayName: Role
     description: The role of this service within the application - used for Network Policies.
@@ -368,16 +379,28 @@ parameters:
     description: The TAG name for this environment, e.g., dev, test, prod.
     required: true
     value: dev
+  - name: APP_CONFIG_MAP_NAME
+    displayName: Application Config Map Name
+    description:
+      The name of the configuration map holding the data to configure the
+      application.
+    required: true
+    value: agent-rev-config
+  - name: APP_CONFIG_MOUNT_PATH
+    displayName: Application Config Map Mount Path
+    description: The mount path for the application Config Map.
+    required: true
+    value: /home/indy/
   - name: AGENT_LABEL_NAME
     displayName: Agent Label/Name
     description: The label/name of the agent
     required: true
-    value: vc-authn-agent
+    value: toip-vc-authn-agent-rev
   - name: WEBHOOK_URL
     displayName: Controller Webhook URL
     description: The webhook endpoint for the controller.
     required: true
-    value: http://vc-authn-controller:5000
+    value: http://vc-authn-controller-rev:5000
   - name: AGENT_ADMIN_PORT
     displayName: Agent Admin Port
     description: The admin port on which the service will listen.
@@ -394,11 +417,11 @@ parameters:
     description: The http port on which the service will listen.
     required: true
     value: "8021"
-  - name: GENESIS_FILE_URL
-    displayName: Genesis File URL
-    description: The URL from which the genesis file can be downloaded.
+  - name: GENESIS_TRANSACTIONS_LIST_FILE
+    displayName: Genesis Transactions List File
+    description: The filename containing the list of genesis transactions (ledgers) that this verifier can access.
     required: true
-    value: https://raw.githubusercontent.com/sovrin-foundation/sovrin/stable/sovrin/pool_transactions_sandbox_genesis
+    value: ledgers.yaml
   - name: LOG_LEVEL
     displayName: Log Level
     description: The logging level for the agent.
@@ -408,7 +431,7 @@ parameters:
     displayName: Collect agent timing information.
     description: Enable/Disable collection of agent timing information.  Controls the inclusion/exclusion of the agent '--timing' startup parameter.  Defaults to disabled.
     required: false
-    value: ""
+    value: "false"
   - name: AGENT_READ_ONLY_LEDGER
     displayName: Set read only ledger flag.
     description: Enable/Disable the read only ledger flag.  Controls the inclusion/exclusion of the agent '--read-only-ledger' startup parameter.  Defaults to disabled.
@@ -479,7 +502,7 @@ parameters:
     displayName: Resources CPU Limit
     description: The resources CPU limit (in cores) for this build.
     required: true
-    value: 750m
+    value: 300m
   - name: MEMORY_REQUEST
     displayName: Resources Memory Request
     description: The resources Memory request (in Mi, Gi, etc) for this build.
