@@ -6,7 +6,7 @@ def APP_BASE_LABEL = 'issuer-kit-base'
 def APP_LABEL = 'issuer-kit'
 
 // Wait timeout in minutes
-def WAIT_TIMEOUT = 10
+def WAIT_TIMEOUT = 20
 
 // Assumes Builds, Images, and Deployments all have the same name(s)
 // Components will be deployed in the order they are listed.
