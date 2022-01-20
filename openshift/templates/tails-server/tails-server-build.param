@@ -12,3 +12,7 @@ SOURCE_CONTEXT_DIR=.
 DOCKER_FILE_PATH=docker/Dockerfile.tails-server
 SOURCE_IMAGE_NAME=docker-remote.artifacts.developer.gov.bc.ca/bcgovimages/von-image:next-1
 OUTPUT_IMAGE_TAG=latest
+CPU_LIMIT=1
+MEMORY_LIMIT=4Gi
+CPU_REQUEST=250m
+MEMORY_REQUEST=2Gi
