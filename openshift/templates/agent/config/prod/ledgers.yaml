@@ -1,8 +1,8 @@
 - id: SOVRINLive
-  is_prodoction: true
+  is_production: true
   is_write: true
   genesis_url: 'https://raw.githubusercontent.com/sovrin-foundation/sovrin/stable/sovrin/pool_transactions_live_genesis'
-- id: BCorvinTest
+- id: BCovrinTest
   is_production: true
   genesis_url: 'http://test.bcovrin.vonx.io/genesis'
 - id: CANdyDev
