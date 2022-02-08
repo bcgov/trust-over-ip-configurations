@@ -1,4 +1,4 @@
-# Description: The "main" build configuration and vc-authn-oidc deployment profile
+# Description: The "main" build configuration and vc-authn-oidc deployment profile - Digital Trust Services Trust Over IP Environment
 export PROJECT_NAMESPACE="e79518"
 export GIT_URI="https://github.com/bcgov/a2a-trust-over-ip-configurations.git"
 export GIT_REF="main"
