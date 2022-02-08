@@ -4,8 +4,8 @@
 # Template File: ../openshift/templates/controller/controller-build.json
 #=========================================================
 NAME=controller-rev
-APP_NAME=vc-authn-oidc-rev
-APP_GROUP=vc-authn-oidc-rev
+APP_NAME=vc-authn-oidc
+APP_GROUP=vc-authn-oidc
 PREFIX=vc-authn-
 NAMESPACE_NAME=e79518
 ENV_NAME=tools

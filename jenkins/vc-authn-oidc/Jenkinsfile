@@ -9,7 +9,7 @@ def WAIT_TIMEOUT = 20
 
 // Assumes Builds, Images, and Deployments all have the same name(s)
 // Components will be deployed in the order they are listed.
-def COMPONENTS = ['vc-authn-agent', 'vc-authn-controller']
+def COMPONENTS = ['vc-authn-database', 'vc-authn-agent', 'vc-authn-controller', 'vc-authn-controller-rev']
 
 // Edit your environment TAG names below
 def TAG_NAMES = ['dev', 'test', 'prod']
