@@ -63,7 +63,8 @@ objects:
         app.kubernetes.io/part-of: ${APP_NAME}
         app-group: ${APP_GROUP}
         role: ${PREFIX}${ROLE}
-        env: ${TAG_NAME}        
+        env: ${TAG_NAME}
+        backup: ${BACKUP}
     spec:
       strategy:
         type: Recreate
@@ -100,6 +101,7 @@ objects:
             app-group: ${APP_GROUP}
             role: ${PREFIX}${ROLE}
             env: ${TAG_NAME}
+            backup: ${BACKUP}
         spec:
           volumes:
             - name: ${PREFIX}${NAME}-data

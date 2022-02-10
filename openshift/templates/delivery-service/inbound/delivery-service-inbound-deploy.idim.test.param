@@ -1,0 +1,29 @@
+#=========================================================
+# OpenShift template parameters for:
+# Component: .
+# Template File: ../openshift/templates/delivery-service/inbound/delivery-service-inbound-deploy.yaml
+#=========================================================
+# NAME=delivery-service-inbound
+# APP_NAME=issuer
+# APP_GROUP=idim
+# SUFFIX=-idim
+# ROLE=inbound-delivery-service
+APPLICATION_DOMAIN=idim-agent-test.apps.silver.devops.gov.bc.ca
+# ROUTE_TIMEOUT=120s
+# IMAGE_NAMESPACE=e79518-tools
+# NAMESPACE_NAME=e79518
+# SOURCE_IMAGE_NAME=delivery-service-inbound
+TAG_NAME=test
+# DELIVERY_SERVICE_HTTP_PORT=8021
+# HEALTH_ENDPOINT_PORT=8080
+# HEALTH_ENDPOINT_KEY=[a-zA-Z0-9]{32}
+# ACAPY_LOG_LEVEL=WARNING
+# QUEUE_HOST=redis
+# QUEUE_SUFFIX=-shared
+# QUEUE_PORT=6379
+# QUEUE_ROLE=redis
+# ACAPY_INBOUND_TRANSPORT_QUEUE_PREFIX=agent-idim
+# CPU_REQUEST=100m
+# CPU_LIMIT=250m
+# MEMORY_REQUEST=128Mi
+# MEMORY_LIMIT=256Mi

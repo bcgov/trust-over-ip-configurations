@@ -62,6 +62,40 @@ objects:
           role: ${ROLE}
           app: ${APP_NAME}${SUFFIX}
           env: ${TAG_NAME}
+
+  - kind: NetworkPolicy
+    apiVersion: networking.k8s.io/v1
+    metadata:
+      name: ${NAME}${SUFFIX}-to-${QUEUE_HOST}${QUEUE_SUFFIX}
+      labels:
+        name: ${NAME}${SUFFIX}-to-${QUEUE_HOST}${QUEUE_SUFFIX}
+        app: ${APP_NAME}${SUFFIX}
+        app-group: ${APP_GROUP}
+        role: ${ROLE}
+        env: ${TAG_NAME}
+    spec:
+      description: |
+        Allow the agent to access the shared persistent queue services.
+      ingress:
+        - from:
+            - podSelector:
+                matchLabels:
+                  role: ${ROLE}
+                  app: ${APP_NAME}${SUFFIX}
+                  env: ${TAG_NAME}
+              namespaceSelector:
+                matchLabels:
+                  name: ${NAMESPACE_NAME}
+                  environment: ${TAG_NAME}
+          ports:
+            - port: ${{QUEUE_PORT}}
+              protocol: TCP
+      podSelector:
+        matchLabels:
+          app: ${QUEUE_HOST}${QUEUE_SUFFIX}
+          statefulset: ${QUEUE_HOST}${QUEUE_SUFFIX}
+          role: ${QUEUE_ROLE}
+
   - kind: Service
     apiVersion: v1
     metadata:
@@ -79,37 +113,8 @@ objects:
           port: ${{AGENT_ADMIN_PORT}}
           protocol: TCP
           targetPort: ${{AGENT_ADMIN_PORT}}
-        - name: ${NAME}-http
-          port: ${{AGENT_HTTP_PORT}}
-          protocol: TCP
-          targetPort: ${{AGENT_HTTP_PORT}}
       selector:
         name: ${NAME}${SUFFIX}
-
-  - kind: Route
-    apiVersion: v1
-    metadata:
-      name: ${NAME}${SUFFIX}
-      labels:
-        name: ${NAME}${SUFFIX}
-        app: ${APP_NAME}${SUFFIX}
-        app.kubernetes.io/part-of: ${APP_NAME}${SUFFIX}
-        app-group: ${APP_GROUP}
-        role: ${ROLE}
-        env: ${TAG_NAME}
-      annotations:
-        haproxy.router.openshift.io/timeout: ${ROUTE_TIMEOUT}
-    spec:
-      host: ${APPLICATION_DOMAIN}
-      port:
-        targetPort: ${NAME}-http
-      tls:
-        insecureEdgeTerminationPolicy: Redirect
-        termination: edge
-      to:
-        kind: Service
-        name: ${NAME}${SUFFIX}
-        weight: 100
 
   - kind: Route
     apiVersion: v1
@@ -237,47 +242,64 @@ objects:
                 - bash
                 - -c
                 - $(echo aca-py start
-                  --inbound-transport http '0.0.0.0' ${HTTP_INTERFACE_PORT}
-                  --outbound-transport http
-                  --endpoint ${AGENT_ENDPOINT}
-                  --wallet-name "$(echo ${AGENT_WALLET_NAME} | tr '[:upper:]' '[:lower:]' | sed "s~-~_~g")"
+                  --inbound-queue-transport http '0.0.0.0' ${HTTP_INTERFACE_PORT}
+                  --wallet-name "$(echo ${WALLET_NAME} | tr '[:upper:]' '[:lower:]' | sed "s~-~_~g")"
                   --wallet-key "${WALLET_ENCRYPTION_KEY}"
                   --wallet-storage-config "$(eval echo \"${WALLET_STORAGE_CONFIGURATION}\")"
                   --wallet-storage-creds "$(eval echo \"${WALLET_STORAGE_CREDENTIALS}\")"
                   --seed "${INDY_WALLET_SEED}"
                   --admin '0.0.0.0' ${ADMIN_INTERFACE_PORT}
                   $([ ! -z "${AGENT_ADMIN_API_KEY}" ] && echo "--admin-api-key ${AGENT_ADMIN_API_KEY}" || echo "--admin-insecure-mode"));
+
               env:
+                - name: ACAPY_INBOUND_TRANSPORT_QUEUE
+                  valueFrom:
+                    secretKeyRef:
+                      name: ${QUEUE_HOST}${QUEUE_SUFFIX}
+                      key: connection-string
+                - name: ACAPY_INBOUND_TRANSPORT_QUEUE_CLASS
+                  value: ${ACAPY_INBOUND_TRANSPORT_QUEUE_CLASS}
+                - name: ACAPY_INBOUND_TRANSPORT_QUEUE_PREFIX
+                  value: ${NAME}${SUFFIX}
+                - name: ACAPY_OUTBOUND_TRANSPORT_QUEUE
+                  valueFrom:
+                    secretKeyRef:
+                      name: ${QUEUE_HOST}${QUEUE_SUFFIX}
+                      key: connection-string
+                - name: ACAPY_OUTBOUND_TRANSPORT_QUEUE_CLASS
+                  value: ${ACAPY_OUTBOUND_TRANSPORT_QUEUE_CLASS}
+                - name: ACAPY_OUTBOUND_TRANSPORT_QUEUE_PREFIX
+                  value: ${NAME}${SUFFIX}
                 - name: ACAPY_LABEL
                   value: ${ACAPY_LABEL}
-                - name: AGENT_ENDPOINT
-                  value: ${AGENT_BASE_URL}
+                - name: ACAPY_ENDPOINT
+                  value: ${ACAPY_ENDPOINT}
                 - name: ACAPY_READ_ONLY_LEDGER
                   value: ${ACAPY_READ_ONLY_LEDGER}
                 - name: ACAPY_GENESIS_URL
                   value: ${ACAPY_GENESIS_URL}
 
                 - name: ACAPY_AUTO_ACCEPT_INVITES
-                  value: ${ACAPY_AUTO_ACCEPT_INVITES}
+                  value: 'false'
                 - name: ACAPY_AUTO_ACCEPT_REQUESTS
-                  value: ${ACAPY_AUTO_ACCEPT_REQUESTS}
+                  value: 'false'
                 - name: ACAPY_AUTO_PING_CONNECTION
-                  value: ${ACAPY_AUTO_PING_CONNECTION}
+                  value: 'true'
                 - name: ACAPY_AUTO_RESPOND_MESSAGES
-                  value: ${ACAPY_AUTO_RESPOND_MESSAGES}
+                  value: 'false'
                 - name: ACAPY_AUTO_RESPOND_CREDENTIAL_OFFER
-                  value: ${ACAPY_AUTO_RESPOND_CREDENTIAL_OFFER}
+                  value: 'false'
                 - name: ACAPY_AUTO_VERIFY_PRESENTATION
-                  value: ${ACAPY_AUTO_VERIFY_PRESENTATION}
+                  value: 'false'
                 - name: ACAPY_AUTO_PROVISION
-                  value: ${ACAPY_AUTO_PROVISION}
+                  value: 'true'
 
-                - name: AGENT_WALLET_NAME
-                  value: ${NAME}${SUFFIX}-wallet
                 - name: ACAPY_WALLET_TYPE
                   value: ${ACAPY_WALLET_TYPE}
                 - name: ACAPY_WALLET_STORAGE_TYPE
                   value: ${ACAPY_WALLET_STORAGE_TYPE}
+                - name: WALLET_NAME
+                  value: ${NAME}${SUFFIX}-wallet
                 - name: POSTGRESQL_WALLET_HOST
                   value: ${WALLET_HOST}${WALLET_SUFFIX}
                 - name: POSTGRESQL_WALLET_PORT
@@ -323,7 +345,7 @@ objects:
                       name: ${NAME}${SUFFIX}
                       key: webhook-url
                 - name: HTTP_INTERFACE_PORT
-                  value: ${AGENT_HTTP_PORT}
+                  value: ${DELIVERY_SERVICE_HTTP_PORT}
                 - name: ADMIN_INTERFACE_PORT
                   value: ${AGENT_ADMIN_PORT}
                 - name: AGENT_ADMIN_API_KEY
@@ -342,22 +364,23 @@ objects:
               ports:
                 - containerPort: ${{AGENT_ADMIN_PORT}}
                   protocol: TCP
-                - containerPort: ${{AGENT_HTTP_PORT}}
-                  protocol: TCP
               volumeMounts:
                 - name: ${NAME}${SUFFIX}-tails
                   mountPath: "${TAILS_FILES_DIR}"
+
               readinessProbe:
-                timeoutSeconds: 30
                 initialDelaySeconds: 3
+                timeoutSeconds: 30
+                periodSeconds: 30
                 exec:
                   command:
                     - bash
                     - "-c"
                     - 'curl --fail "http://localhost:${ADMIN_INTERFACE_PORT}/status/ready" -H "X-API-KEY: ${AGENT_ADMIN_API_KEY}"'
               livenessProbe:
-                timeoutSeconds: 30
                 initialDelaySeconds: 300
+                timeoutSeconds: 30
+                periodSeconds: 30
                 exec:
                   command:
                     - bash
@@ -388,7 +411,7 @@ objects:
               - ${NAME}${SUFFIX}
             from:
               kind: ImageStreamTag
-              name: ${SOURCE_IMAGE_NAME}:${TAG_NAME}
+              name: ${SOURCE_IMAGE_NAME}:pq-${TAG_NAME}
               namespace: ${IMAGE_NAMESPACE}
 
 parameters:
@@ -396,7 +419,7 @@ parameters:
     displayName: Name
     description: The name assigned to all the objects defined in this template.
     required: true
-    value: issuer-kit-agent
+    value: agent
   - name: APP_NAME
     displayName: App Name
     description: Used to group components together in the OpenShift console.
@@ -424,11 +447,6 @@ parameters:
       Policies
     required: true
     value: api
-  - name: APPLICATION_DOMAIN
-    displayName: Application Hostname
-    description: The exposed hostname that will route to the public service endpoint, if left blank a value will be defaulted.
-    required: false
-    value: issuer-kit-agent.apps.silver.devops.gov.bc.ca
   - name: ADMIN_APPLICATION_DOMAIN
     displayName: Admin Application Hostname
     description: The exposed hostname that will route to the admin service endpoint, if left blank a value will be defaulted.
@@ -467,7 +485,7 @@ parameters:
     description: Enable/Disable the read only ledger flag.  Controls the inclusion/exclusion of the agent '--read-only-ledger' startup parameter.  Defaults to disabled.
     required: true
     value: "true"
-  - name: AGENT_BASE_URL
+  - name: ACAPY_ENDPOINT
     displayName: Agent endpoint
     description: The endpoint of the agent
     required: true
@@ -493,7 +511,7 @@ parameters:
     description: The hostname of the api service.
     required: true
     value: api
-  - name: AGENT_HTTP_PORT
+  - name: DELIVERY_SERVICE_HTTP_PORT
     displayName: Agent Http Port
     description: The http port on which the service will listen.
     required: true
@@ -502,48 +520,12 @@ parameters:
     displayName: Genesis File URL
     description: The URL from which the genesis file can be downloaded.
     required: true
-    value: https://raw.githubusercontent.com/sovrin-foundation/sovrin/stable/sovrin/pool_transactions_sandbox_genesis
+    value: https://raw.githubusercontent.com/ICCS-ISAC/dtrust-reconu/main/CANdy/dev/pool_transactions_genesis
   - name: ACAPY_LOG_LEVEL
     displayName: Log Level
     description: The logging level for the agent.
     required: true
     value: WARNING
-
-  - name: ACAPY_AUTO_ACCEPT_INVITES
-    displayName: ACAPY_AUTO_ACCEPT_INVITES
-    description: ACAPY_AUTO_ACCEPT_INVITES
-    required: true
-    value: 'true'
-  - name: ACAPY_AUTO_ACCEPT_REQUESTS
-    displayName: ACAPY_AUTO_ACCEPT_REQUESTS
-    description: ACAPY_AUTO_ACCEPT_REQUESTS
-    required: true
-    value: 'true'
-  - name: ACAPY_AUTO_PING_CONNECTION
-    displayName: ACAPY_AUTO_PING_CONNECTION
-    description: ACAPY_AUTO_PING_CONNECTION
-    required: true
-    value: 'true'
-  - name: ACAPY_AUTO_RESPOND_MESSAGES
-    displayName: ACAPY_AUTO_RESPOND_MESSAGES
-    description: ACAPY_AUTO_RESPOND_MESSAGES
-    required: true
-    value: 'true'
-  - name: ACAPY_AUTO_RESPOND_CREDENTIAL_OFFER
-    displayName: ACAPY_AUTO_RESPOND_CREDENTIAL_OFFER
-    description: ACAPY_AUTO_RESPOND_CREDENTIAL_OFFER
-    required: true
-    value: 'true'
-  - name: ACAPY_AUTO_VERIFY_PRESENTATION
-    displayName: ACAPY_AUTO_VERIFY_PRESENTATION
-    description: ACAPY_AUTO_VERIFY_PRESENTATION
-    required: true
-    value: 'true'
-  - name: ACAPY_AUTO_PROVISION
-    displayName: ACAPY_AUTO_PROVISION
-    description: ACAPY_AUTO_PROVISION
-    required: true
-    value: 'true'
 
   # ===============================================================================
   # Wallet Configuration
@@ -553,7 +535,7 @@ parameters:
     description:
       The wallet type.  Supported internal storage types are 'basic' (memory), 'indy', and 'askar'.
     required: false
-    value: 'indy'
+    value: 'askar'
   - name: ACAPY_WALLET_STORAGE_TYPE
     displayName: Wallet Storage Type
     description:
@@ -561,17 +543,6 @@ parameters:
       If not defined, defaults to 'sqlite' for compatibility
     required: false
     value: postgres_storage
-
-
-  # - name: ACAPY_WALLET_STORAGE_TYPE
-  #   displayName: Wallet Storage Type
-  #   description:
-  #     The wallet storage type.  Your choice of 'postgres' or 'sqlite' at
-  #     the moment.  If not defined, defaults to 'sqlite' for compatibility
-  #   required: false
-  #   value: postgres_storage
-
-
   - name: WALLET_HOST
     displayName: PostgreSql Wallet Hostname
     required: true
@@ -648,23 +619,69 @@ parameters:
     required: true
     value: https://tails-dev.vonx.io
   # ===============================================================================
+
+  # ===============================================================================
+  # Persistent Queue Configuration
+  #--------------------------------------------------------------------------------
+  # When using persistent queues, specifically inbound, the agent's endpoint
+  # needs to be directed at the associated inbound delivery service and
+  # NOT directly at the aca-py instance itself.
+  #--------------------------------------------------------------------------------
+  - name: QUEUE_HOST
+    displayName: Queue Hostname
+    required: true
+    description: Hostname of the deployed queue instance.
+    value: redis
+  - name: QUEUE_SUFFIX
+    displayName: Queue Suffix
+    description: The suffix attached to the Queue instance.
+    required: false
+    value: -shared
+  - name: QUEUE_PORT
+    displayName: Queue Port
+    required: true
+    description: The port assigned to the queue instance.
+    value: "6379"
+  - name: QUEUE_ROLE
+    displayName: Queue Role
+    required: true
+    description: The role assigned to the queue instance.
+    value: redis
+
+  # Inbound
+  #--------------------------------------------------------------------------------
+  - name: ACAPY_INBOUND_TRANSPORT_QUEUE_CLASS
+    displayName: ACA-py Inbound Transport Queue Class
+    description: Defines the location of the Inbound Queue Engine. This must be a 'dotpath' to a Python module on the PYTHONPATH, followed by a colon, followed by the name of a Python class that implements BaseInboundQueue. This commandline option is the official entry point of ACA-py's pluggable queue interface. The default value is; 'aries_cloudagent.transport.inbound.queue.redis.RedisInboundQueue'.
+    required: true
+    value: aries_cloudagent.transport.inbound.queue.redis.RedisInboundQueue
+
+  # Outbound
+  #--------------------------------------------------------------------------------
+  - name: ACAPY_OUTBOUND_TRANSPORT_QUEUE_CLASS
+    displayName: ACA-py Outbound Transport Queue Class
+    description: Defines the location of the Outbound Queue Engine. This must be a 'dotpath' to a Python module on the PYTHONPATH, followed by a colon, followed by the name of a Python class that implements BaseOutboundQueue. This commandline option is the official entry point of ACA-py's pluggable queue interface. The default value is; 'aries_cloudagent.transport.outbound.queue.redis.RedisOutboundQueue'.
+    required: true
+    value: aries_cloudagent.transport.outbound.queue.redis.RedisOutboundQueue
+  # ===============================================================================
+
   - name: CPU_REQUEST
     displayName: Resources CPU Request
     description: The resources CPU request (in cores) for this build.
     required: true
-    value: 10m
+    value: 100m
   - name: CPU_LIMIT
     displayName: Resources CPU Limit
     description: The resources CPU limit (in cores) for this build.
     required: true
-    value: 1000m
+    value: 500m
   - name: MEMORY_REQUEST
     displayName: Resources Memory Request
     description: The resources Memory request (in Mi, Gi, etc) for this build.
     required: true
-    value: 10Mi
+    value: 128Mi
   - name: MEMORY_LIMIT
     displayName: Resources Memory Limit
     description: The resources Memory limit (in Mi, Gi, etc) for this build.
     required: true
-    value: 1Gi
+    value: 256Mi
