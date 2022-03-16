@@ -1,0 +1,29 @@
+#=========================================================
+# OpenShift template parameters for:
+# Component: .
+# Template File: ../openshift/templates/redis/redis-cluster-deploy.yaml
+#=========================================================
+# NAME=redis
+# INSTANCE_DELIMITER=-
+# INSTANCE=shared
+# APP_NAME=redis
+# ROLE=redis
+# APPEND_ONLY=no
+# CLUSTER_MODE=yes
+# USERNAME=User_[a-zA-Z0-9]{10}
+# PASSWORD=[a-zA-Z0-9]{32}
+# PROTOCOL=redis
+# REDIS_PORT=6379
+# GOSSIP_PORT=16379
+# REPLICAS=6
+# IMAGE_REGISTRY=docker.io
+# IMAGE_NAME=redis
+# IMAGE_TAG=6.2.6-alpine
+# PVC_SIZE=512Mi
+# STORAGE_CLASS=netapp-file-standard
+# CPU_REQUEST=25m
+# CPU_LIMIT=100m
+# MEMORY_REQUEST=64Mi
+# MEMORY_LIMIT=256Mi
+TAG_NAME=test
+# NAMESPACE_NAME=e79518

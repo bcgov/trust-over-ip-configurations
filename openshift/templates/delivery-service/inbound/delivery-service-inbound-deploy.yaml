@@ -1,0 +1,373 @@
+---
+kind: Template
+apiVersion: v1
+metadata:
+  name: ${NAME}${SUFFIX}
+objects:
+
+  - kind: NetworkPolicy
+    apiVersion: networking.k8s.io/v1
+    metadata:
+      name: ${NAME}${SUFFIX}-allow-ingress
+      labels:
+        name: ${NAME}${SUFFIX}-allow-ingress
+        app: ${APP_NAME}${SUFFIX}
+        app-group: ${APP_GROUP}
+        role: ${ROLE}
+        env: ${TAG_NAME}
+    spec:
+      description: |
+        Allow traffic from routes into the ${ROLE} container(s).
+      ingress:
+        - from:
+            - namespaceSelector:
+                matchLabels:
+                  network.openshift.io/policy-group: ingress
+      podSelector:
+        matchLabels:
+          role: ${ROLE}
+          app: ${APP_NAME}${SUFFIX}
+          env: ${TAG_NAME}
+      policyTypes:
+        - Ingress
+
+  - kind: NetworkPolicy
+    apiVersion: networking.k8s.io/v1
+    metadata:
+      name: ${NAME}${SUFFIX}-to-${QUEUE_HOST}${QUEUE_SUFFIX}
+      labels:
+        name: ${NAME}${SUFFIX}-to-${QUEUE_HOST}${QUEUE_SUFFIX}
+        app: ${APP_NAME}${SUFFIX}
+        app-group: ${APP_GROUP}
+        role: ${ROLE}
+        env: ${TAG_NAME}
+    spec:
+      description: |
+        Allow the delivery service to access the shared persistent queue services.
+      ingress:
+        - from:
+            - podSelector:
+                matchLabels:
+                  role: ${ROLE}
+                  app: ${APP_NAME}${SUFFIX}
+                  env: ${TAG_NAME}
+              namespaceSelector:
+                matchLabels:
+                  name: ${NAMESPACE_NAME}
+                  environment: ${TAG_NAME}
+          ports:
+            - port: ${{QUEUE_PORT}}
+              protocol: TCP
+      podSelector:
+        matchLabels:
+          app: ${QUEUE_HOST}${QUEUE_SUFFIX}
+          statefulset: ${QUEUE_HOST}${QUEUE_SUFFIX}
+          role: ${QUEUE_ROLE}
+
+  - kind: Secret
+    apiVersion: v1
+    metadata:
+      name: ${NAME}${SUFFIX}
+      labels:
+        name: ${NAME}${SUFFIX}
+        app: ${APP_NAME}${SUFFIX}
+        app.kubernetes.io/part-of: ${APP_NAME}${SUFFIX}
+        app-group: ${APP_GROUP}
+        role: ${ROLE}
+        env: ${TAG_NAME}
+    stringData:
+      x-api-key: ${HEALTH_ENDPOINT_KEY}
+    type: Opaque
+
+  - kind: Service
+    apiVersion: v1
+    metadata:
+      name: ${NAME}${SUFFIX}
+      labels:
+        name: ${NAME}${SUFFIX}
+        app: ${APP_NAME}${SUFFIX}
+        app.kubernetes.io/part-of: ${APP_NAME}${SUFFIX}
+        app-group: ${APP_GROUP}
+        role: ${ROLE}
+        env: ${TAG_NAME}
+    spec:
+      ports:
+        - name: ${NAME}-http
+          port: ${{DELIVERY_SERVICE_HTTP_PORT}}
+          protocol: TCP
+          targetPort: ${{DELIVERY_SERVICE_HTTP_PORT}}
+      selector:
+        name: ${NAME}${SUFFIX}
+
+  - kind: Route
+    apiVersion: v1
+    metadata:
+      name: ${NAME}${SUFFIX}
+      labels:
+        name: ${NAME}${SUFFIX}
+        app: ${APP_NAME}${SUFFIX}
+        app.kubernetes.io/part-of: ${APP_NAME}${SUFFIX}
+        app-group: ${APP_GROUP}
+        role: ${ROLE}
+        env: ${TAG_NAME}
+      annotations:
+        haproxy.router.openshift.io/timeout: ${ROUTE_TIMEOUT}
+    spec:
+      host: ${APPLICATION_DOMAIN}
+      port:
+        targetPort: ${NAME}-http
+      tls:
+        insecureEdgeTerminationPolicy: Redirect
+        termination: edge
+      to:
+        kind: Service
+        name: ${NAME}${SUFFIX}
+        weight: 100
+
+  - kind: DeploymentConfig
+    apiVersion: v1
+    metadata:
+      name: ${NAME}${SUFFIX}
+      labels:
+        name: ${NAME}${SUFFIX}
+        app: ${APP_NAME}${SUFFIX}
+        app.kubernetes.io/part-of: ${APP_NAME}${SUFFIX}
+        app-group: ${APP_GROUP}
+        role: ${ROLE}
+        env: ${TAG_NAME}
+      annotations:
+        description: Defines how to deploy the application server
+        app.openshift.io/connects-to: >-
+          [{"apiVersion":"apps.openshift.io/v1","kind":"DeploymentConfig","name":"${WALLET_HOST}${WALLET_SUFFIX}"},
+          {"apiVersion":"apps.openshift.io/v1","kind":"DeploymentConfig","name":"${API_HOST}${SUFFIX}"}]
+    spec:
+      replicas: 1
+      selector:
+        name: ${NAME}${SUFFIX}
+      strategy:
+        type: Rolling
+      template:
+        metadata:
+          name: ${NAME}${SUFFIX}
+          labels:
+            name: ${NAME}${SUFFIX}
+            app: ${APP_NAME}${SUFFIX}
+            app.kubernetes.io/part-of: ${APP_NAME}${SUFFIX}
+            app-group: ${APP_GROUP}
+            role: ${ROLE}
+            env: ${TAG_NAME}
+          annotations:
+            description: Defines how to deploy the ${NAME}${SUFFIX} server
+            app.openshift.io/connects-to: >-
+              [{"apiVersion":"apps.openshift.io/v1","kind":"DeploymentConfig","name":"wallet${SUFFIX}"}]
+        spec:
+          containers:
+            - name: ${NAME}${SUFFIX}
+              command:
+                - bash
+                - -c
+                - $(echo python ./service.py
+                  --inbound-queue-transports http '0.0.0.0' ${HTTP_INTERFACE_PORT}
+                  --endpoint-transport '0.0.0.0' ${HEALTH_INTERFACE_PORT});
+
+              env:
+                - name: ACAPY_INBOUND_TRANSPORT_QUEUE
+                  valueFrom:
+                    secretKeyRef:
+                      name: ${QUEUE_HOST}${QUEUE_SUFFIX}
+                      key: connection-string
+                - name: ACAPY_INBOUND_TRANSPORT_QUEUE_PREFIX
+                  value: ${ACAPY_INBOUND_TRANSPORT_QUEUE_PREFIX}
+                - name: HTTP_INTERFACE_PORT
+                  value: ${DELIVERY_SERVICE_HTTP_PORT}
+                - name: HEALTH_INTERFACE_PORT
+                  value: ${HEALTH_ENDPOINT_PORT}
+                - name: DELIVERY_SERVICE_ENDPOINT_KEY
+                  valueFrom:
+                    secretKeyRef:
+                      name: ${NAME}${SUFFIX}
+                      key: x-api-key
+                - name: ACAPY_LOG_LEVEL
+                  value: ${ACAPY_LOG_LEVEL}
+              image:
+              ports:
+                - containerPort: ${{DELIVERY_SERVICE_HTTP_PORT}}
+                  protocol: TCP
+
+              readinessProbe:
+                initialDelaySeconds: 3
+                timeoutSeconds: 30
+                periodSeconds: 30
+                exec:
+                  command:
+                    - bash
+                    - "-c"
+                    - 'curl --fail "http://localhost:${HEALTH_INTERFACE_PORT}/status/ready" -H "access_token: ${DELIVERY_SERVICE_ENDPOINT_KEY}"'
+              livenessProbe:
+                initialDelaySeconds: 3
+                timeoutSeconds: 30
+                periodSeconds: 30
+                exec:
+                  command:
+                    - bash
+                    - "-c"
+                    - 'curl --fail "http://localhost:${HEALTH_INTERFACE_PORT}/status/live" -H "access_token: ${DELIVERY_SERVICE_ENDPOINT_KEY}"'
+
+              imagePullPolicy: IfNotPresent
+              resources:
+                limits:
+                  cpu: ${CPU_LIMIT}
+                  memory: ${MEMORY_LIMIT}
+                requests:
+                  cpu: ${CPU_REQUEST}
+                  memory: ${MEMORY_REQUEST}
+              terminationMessagePath: /dev/termination-log
+              terminationMessagePolicy: File
+          dnsPolicy: ClusterFirst
+          restartPolicy: Always
+          schedulerName: default-scheduler
+          securityContext: {}
+          terminationGracePeriodSeconds: 30
+      triggers:
+        - type: ConfigChange
+        - type: ImageChange
+          imageChangeParams:
+            automatic: true
+            containerNames:
+              - ${NAME}${SUFFIX}
+            from:
+              kind: ImageStreamTag
+              name: ${SOURCE_IMAGE_NAME}:${TAG_NAME}
+              namespace: ${IMAGE_NAMESPACE}
+
+parameters:
+  - name: NAME
+    displayName: Name
+    description: The name assigned to all the objects defined in this template.
+    required: true
+    value: delivery-service-inbound
+  - name: APP_NAME
+    displayName: App Name
+    description: Used to group components together in the OpenShift console.
+    required: true
+    value: issuer
+  - name: APP_GROUP
+    displayName: App Group
+    description: Used to group components together.
+    required: true
+    value: issuer-kit-agent
+  - name: SUFFIX
+    displayName: Suffix
+    description: A suffix applied to all the objects in this template.
+    required: false
+    value:
+  - name: ROLE
+    displayName: Role
+    description: The role of this service within the application - used for Network Policies.
+    required: true
+    value: inbound-delivery-service
+
+  - name: APPLICATION_DOMAIN
+    displayName: Application Hostname
+    description: The exposed hostname that will route to the public service endpoint, if left blank a value will be defaulted.
+    required: false
+    value: issuer-kit-agent.apps.silver.devops.gov.bc.ca
+  - name: ROUTE_TIMEOUT
+    displayName: Route Timeout
+    description: The timeout for the application route.  When this timeout is exceeded the application's route will respond with a 504 Gateway Timeout error.
+    required: true
+    value: 120s
+  - name: IMAGE_NAMESPACE
+    displayName: Namespace containing application images.
+    required: true
+    value: e79518-tools
+  - name: NAMESPACE_NAME
+    displayName: Namespace Name
+    description: The name of the namespace being deployed to.
+    required: true
+    value: e79518
+  - name: SOURCE_IMAGE_NAME
+    displayName: Source Image Name
+    description: The name of the source image to use for the service.
+    required: true
+    value: delivery-service-inbound
+  - name: TAG_NAME
+    displayName: Environment TAG name
+    description: The TAG name for this environment, e.g., dev, test, prod.
+    required: true
+    value: dev
+
+  - name: DELIVERY_SERVICE_HTTP_PORT
+    displayName: Agent Http Port
+    description: The http port on which the service will listen.
+    required: true
+    value: "8021"
+  - name: HEALTH_ENDPOINT_PORT
+    displayName: Health Endpoint Port
+    description: The http port on which the health endpoints will listen.
+    required: true
+    value: "8080"
+  - name: HEALTH_ENDPOINT_KEY
+    displayName: Health Endpoint Key
+    description: The X-API-Key for the health endpoints.
+    required: true
+    generate: expression
+    from: "[a-zA-Z0-9]{32}"
+
+  - name: ACAPY_LOG_LEVEL
+    displayName: Log Level
+    description: The logging level for the agent.
+    required: true
+    value: WARNING
+
+  # ===============================================================================
+  # Persistent Queue Configuration
+  #--------------------------------------------------------------------------------
+  - name: QUEUE_HOST
+    displayName: Queue Hostname
+    required: true
+    description: Hostname of the deployed queue instance.
+    value: redis
+  - name: QUEUE_SUFFIX
+    displayName: Queue Suffix
+    description: The suffix attached to the Queue instance.
+    required: false
+    value: -shared
+  - name: QUEUE_PORT
+    displayName: Queue Port
+    required: true
+    description: The port assigned to the queue instance.
+    value: "6379"
+  - name: QUEUE_ROLE
+    displayName: Queue Role
+    required: true
+    description: The role assigned to the queue instance.
+    value: redis
+
+  - name: ACAPY_INBOUND_TRANSPORT_QUEUE_PREFIX
+    displayName: ACA-py Inbound Transport Queue Prefix
+    description: Specifies the queue topic prefix. The queue topic is generated in the following form; 'prefix.inbound_transport'. The default valueis the value `acapy`, so a queue key of 'acapy.inbound_transport' is generated in the case of the default settings. ACA-py will send messages to the queue using this generated key as the topic.
+    required: true
+    value: acapy
+  # ===============================================================================
+
+  - name: CPU_REQUEST
+    displayName: Resources CPU Request
+    description: The resources CPU request (in cores) for this build.
+    required: true
+    value: 100m
+  - name: CPU_LIMIT
+    displayName: Resources CPU Limit
+    description: The resources CPU limit (in cores) for this build.
+    required: true
+    value: 250m
+  - name: MEMORY_REQUEST
+    displayName: Resources Memory Request
+    description: The resources Memory request (in Mi, Gi, etc) for this build.
+    required: true
+    value: 128Mi
+  - name: MEMORY_LIMIT
+    displayName: Resources Memory Limit
+    description: The resources Memory limit (in Mi, Gi, etc) for this build.
+    required: true
+    value: 256Mi
