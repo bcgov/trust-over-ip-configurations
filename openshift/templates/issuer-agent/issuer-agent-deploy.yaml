@@ -388,7 +388,7 @@ objects:
               - ${NAME}${SUFFIX}
             from:
               kind: ImageStreamTag
-              name: ${SOURCE_IMAGE_NAME}:${TAG_NAME}
+              name: ${SOURCE_IMAGE_NAME}:${TAG_PREFIX}${TAG_NAME}
               namespace: ${IMAGE_NAMESPACE}
 
 parameters:
@@ -452,11 +452,18 @@ parameters:
     description: The name of the source image to use for the service.
     required: true
     value: agent
+
+  - name: TAG_PREFIX
+    displayName: Environment TAG prefix
+    description: The prefix for the TAG name for this environment.
+    required: false
+    value: 
   - name: TAG_NAME
     displayName: Environment TAG name
     description: The TAG name for this environment, e.g., dev, test, prod.
     required: true
     value: latest
+
   - name: ACAPY_LABEL
     displayName: Agent Label/Name
     description: The label/name of the agent
@@ -561,17 +568,6 @@ parameters:
       If not defined, defaults to 'sqlite' for compatibility
     required: false
     value: postgres_storage
-
-
-  # - name: ACAPY_WALLET_STORAGE_TYPE
-  #   displayName: Wallet Storage Type
-  #   description:
-  #     The wallet storage type.  Your choice of 'postgres' or 'sqlite' at
-  #     the moment.  If not defined, defaults to 'sqlite' for compatibility
-  #   required: false
-  #   value: postgres_storage
-
-
   - name: WALLET_HOST
     displayName: PostgreSql Wallet Hostname
     required: true
