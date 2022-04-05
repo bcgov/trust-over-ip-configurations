@@ -1,0 +1,30 @@
+{
+  "env": "prod",
+  "issuer": {
+    "name": "BCVCPilot - Trust Over IP"
+  },
+  "inviteRequired": true,
+  "authentication": {
+    "enabled": false,
+    "autoSignOut": true,
+    "oidcSettings": {
+      "authority": "https://oidc.gov.bc.ca/auth/realms/gzyg46lx",
+      "clientId": "bcvcpilot-web",
+      "redirectUri": "https://bcvcpilot.vonx.io/oidc-callback",
+      "redirect_uri": "https://bcvcpilot.vonx.io/oidc-callback-error",
+      "responseType": "code",
+      "scope": "openid profile email",
+      "automaticSilentRenew": true,
+      "silentRedirectUri": "https://bcvcpilot.vonx.io/silent-renew-oidc.html",
+      "post_logout_redirect_uri": "https://bcvcpilot.vonx.io"
+    }
+  },
+  "apiServer": {
+    "url": "/api"
+  },
+  "issuedSuccess": {
+    "successText": "Next steps:",
+    "links": [
+    ]
+  }
+}

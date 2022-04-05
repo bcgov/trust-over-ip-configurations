@@ -20,14 +20,14 @@
 # DB_NAME=issuer_db
 # SERVER_SELECTION_TIMEOUT=240
 # SOURCE_IMAGE_NAME=issuer-kit-api
-TAG_NAME=test
+TAG_NAME=prod
 # AGENT_HOST=agent
 # AGENT_ADMIN_PORT=8024
 # SMTP_SERVER_ADDRESS=
 # SMTP_SERVER_PORT=
 # ADMIN_EMAIL=
-EMAIL_SUBJECT=Invite from BC VC Pilot Issuer TEST
-PUBLIC_SITE_URL=https://bcvcpilot-issuer-test.apps.silver.devops.gov.bc.ca
+EMAIL_SUBJECT=Invite from BC VC Pilot Issuer
+PUBLIC_SITE_URL=https://bcvcpilot.vonx.io
 # APP_CONFIG_MAP_NAME=api-config
 # APP_CONFIG_MOUNT_PATH=/opt/app-root/src/config/
 # APP_CONFIG_FILE_NAME=default.json

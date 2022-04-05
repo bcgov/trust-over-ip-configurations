@@ -6,3 +6,4 @@ google.com:80
 issuer-db-bcvcpilot:27017
 agent-bcvcpilot:8024
 api-bcvcpilot:8080
+issuer-kit-wallet:5432

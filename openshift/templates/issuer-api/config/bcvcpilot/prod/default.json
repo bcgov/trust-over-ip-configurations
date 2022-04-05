@@ -34,8 +34,8 @@
     "url": "PUBLIC_SITE_URL"
   },
   "issuer": {
-    "name": "BC VC Pilot Issuer",
-    "offerComment": "Credential offer from BC VC Pilot Issuer",
+    "name": "BC VC Pilot Issuer DEV",
+    "offerComment": "Credential offer from BC VC Pilot Issuer DEV",
     "validityDays": -1,
     "multiUse": true
   },
