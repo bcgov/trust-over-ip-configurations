@@ -11,7 +11,7 @@
 # API_ROLE=api
 APPLICATION_DOMAIN=idim-sit-agent-test.apps.silver.devops.gov.bc.ca
 ADMIN_APPLICATION_DOMAIN=idim-sit-agent-admin-test.apps.silver.devops.gov.bc.ca
-# ROUTE_TIMEOUT=120s
+# ROUTE_TIMEOUT=240s
 # IMAGE_NAMESPACE=e79518-tools
 # NAMESPACE_NAME=e79518
 # SOURCE_IMAGE_NAME=issuer-kit-agent
