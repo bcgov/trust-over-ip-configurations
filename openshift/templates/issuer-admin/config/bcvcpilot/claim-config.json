@@ -1,0 +1,28 @@
+{
+  "questions": [
+    {
+      "name": "name",
+      "type": "text",
+      "title": "Name:",
+      "placeHolder": "",
+      "isRequired": true,
+      "requiredErrorText": "Required Field"
+    },
+    {
+      "name": "emailAddress",
+      "type": "text",
+      "title": "Email Address:",
+      "placeHolder": "",
+      "isRequired": true,
+      "requiredErrorText": "Required Field"
+    },
+    {
+      "name": "program",
+      "type": "text",
+      "title": "Program:",
+      "placeHolder": "",
+      "isRequired": true,
+      "requiredErrorText": "Required Field"
+    }
+  ]
+}
