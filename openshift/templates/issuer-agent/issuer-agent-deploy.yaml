@@ -252,6 +252,8 @@ objects:
                   value: ${ACAPY_LABEL}
                 - name: AGENT_ENDPOINT
                   value: ${AGENT_BASE_URL}
+                - name: ACAPY_IMAGE_URL
+                  value: ${ACAPY_IMAGE_URL}
                 - name: ACAPY_READ_ONLY_LEDGER
                   value: ${ACAPY_READ_ONLY_LEDGER}
                 - name: ACAPY_GENESIS_URL
@@ -479,6 +481,11 @@ parameters:
     description: The endpoint of the agent
     required: true
     value: https://issuer-kit-agent.apps.silver.devops.gov.bc.ca
+  - name: ACAPY_IMAGE_URL
+    displayName: Agent Image URL
+    description: The URL of the image for the agent
+    required: false
+    value:
   - name: WEBHOOK_URL
     displayName: Webhook URL
     description: The webhook endpoint

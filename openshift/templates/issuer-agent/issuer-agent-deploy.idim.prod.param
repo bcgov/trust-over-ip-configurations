@@ -20,6 +20,7 @@ TAG_NAME=prod
 ACAPY_LABEL=IDIM (prod)
 ACAPY_READ_ONLY_LEDGER=true
 AGENT_BASE_URL=https://idim-agent.apps.silver.devops.gov.bc.ca
+# ACAPY_IMAGE_URL=https://id.gov.bc.ca/static/Gov-2.0/images/favicon.ico
 # WEBHOOK_URL=to-be-defined
 # AGENT_ADMIN_PORT=8024
 # ADMIN_API_KEY=[a-zA-Z0-9]{16}
