@@ -37,7 +37,7 @@
     "name": "BC VC Pilot Issuer TEST",
     "offerComment": "Credential offer from BC VC Pilot Issuer TEST",
     "validityDays": -1,
-    "multiUse": true
+    "multiUse": false
   },
   "authentication": {
     "jwksUri": "https://test.oidc.gov.bc.ca/auth/realms/gzyg46lx/protocol/openid-connect/certs",
