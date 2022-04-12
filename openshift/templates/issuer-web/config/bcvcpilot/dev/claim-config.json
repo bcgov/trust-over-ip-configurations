@@ -4,6 +4,7 @@
       "type": "text",
       "name": "name",
       "title": "Name:",
+      "readOnly": true,
       "isRequired": true,
       "requiredErrorText": "Required Field"
     },
@@ -11,6 +12,7 @@
       "type": "text",
       "name": "emailAddress",
       "title": "Email Address:",
+      "readOnly": true,
       "isRequired": true,
       "requiredErrorText": "Required Field"
     },
@@ -18,6 +20,7 @@
       "type": "text",
       "name": "program",
       "title": "Program:",
+      "readOnly": true,
       "isRequired": true,
       "requiredErrorText": "Required Field"
     },

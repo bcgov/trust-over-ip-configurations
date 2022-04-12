@@ -17,12 +17,16 @@
       "requiredErrorText": "Required Field"
     },
     {
+      "type": "dropdown",
       "name": "program",
-      "type": "text",
       "title": "Program:",
-      "placeHolder": "",
       "isRequired": true,
-      "requiredErrorText": "Required Field"
+      "colCount": 0,
+      "choices": [
+        "LSBC",
+        "DIT Testing",
+        "IDIM Testing"
+      ]
     }
   ]
 }
