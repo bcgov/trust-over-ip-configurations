@@ -229,9 +229,9 @@ objects:
             - name: ${NAME}${SUFFIX}-tails
               persistentVolumeClaim:
                 claimName: ${NAME}${SUFFIX}-tails
-            - name: ${PREFIX}${NAME}-app-config-volume
+            - name: ${NAME}${SUFFIX}-app-config-volume
               configMap:
-                name: ${PREFIX}${APP_CONFIG_MAP_NAME}
+                name: ${APP_CONFIG_MAP_NAME}${SUFFIX}
                 items:
                   - key: ${GENESIS_TRANSACTIONS_LIST_FILE}
                     path: ${GENESIS_TRANSACTIONS_LIST_FILE}
@@ -355,7 +355,7 @@ objects:
               volumeMounts:
                 - name: ${NAME}${SUFFIX}-tails
                   mountPath: "${TAILS_FILES_DIR}"
-                - name: ${PREFIX}${NAME}-app-config-volume
+                - name: ${NAME}${SUFFIX}-app-config-volume
                   mountPath: ${APP_CONFIG_MOUNT_PATH}${GENESIS_TRANSACTIONS_LIST_FILE}
                   subPath: ${GENESIS_TRANSACTIONS_LIST_FILE}
               readinessProbe:
