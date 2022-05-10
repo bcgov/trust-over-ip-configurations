@@ -229,6 +229,12 @@ objects:
             - name: ${NAME}${SUFFIX}-tails
               persistentVolumeClaim:
                 claimName: ${NAME}${SUFFIX}-tails
+            - name: ${NAME}${SUFFIX}-app-config-volume
+              configMap:
+                name: ${APP_CONFIG_MAP_NAME}${SUFFIX}
+                items:
+                  - key: ${ACAPY_GENESIS_TRANSACTIONS_LIST}
+                    path: ${ACAPY_GENESIS_TRANSACTIONS_LIST}
           containers:
             - name: ${NAME}${SUFFIX}
               command:
@@ -256,8 +262,8 @@ objects:
                   value: ${ACAPY_IMAGE_URL}
                 - name: ACAPY_READ_ONLY_LEDGER
                   value: ${ACAPY_READ_ONLY_LEDGER}
-                - name: ACAPY_GENESIS_URL
-                  value: ${ACAPY_GENESIS_URL}
+                - name: ACAPY_GENESIS_TRANSACTIONS_LIST
+                  value: ${APP_CONFIG_MOUNT_PATH}${ACAPY_GENESIS_TRANSACTIONS_LIST}
 
                 - name: ACAPY_AUTO_ACCEPT_INVITES
                   value: ${ACAPY_AUTO_ACCEPT_INVITES}
@@ -349,6 +355,9 @@ objects:
               volumeMounts:
                 - name: ${NAME}${SUFFIX}-tails
                   mountPath: "${TAILS_FILES_DIR}"
+                - name: ${NAME}${SUFFIX}-app-config-volume
+                  mountPath: ${APP_CONFIG_MOUNT_PATH}${ACAPY_GENESIS_TRANSACTIONS_LIST}
+                  subPath: ${ACAPY_GENESIS_TRANSACTIONS_LIST}
               readinessProbe:
                 timeoutSeconds: 30
                 initialDelaySeconds: 3
@@ -465,6 +474,18 @@ parameters:
     description: The TAG name for this environment, e.g., dev, test, prod.
     required: true
     value: latest
+  - name: APP_CONFIG_MAP_NAME
+    displayName: Application Config Map Name
+    description:
+      The name of the configuration map holding the data to configure the
+      application.
+    required: true
+    value: agent-config
+  - name: APP_CONFIG_MOUNT_PATH
+    displayName: Application Config Map Mount Path
+    description: The mount path for the application Config Map.
+    required: true
+    value: /home/indy/
 
   - name: ACAPY_LABEL
     displayName: Agent Label/Name
@@ -512,11 +533,11 @@ parameters:
     description: The http port on which the service will listen.
     required: true
     value: "8021"
-  - name: ACAPY_GENESIS_URL
-    displayName: Genesis File URL
-    description: The URL from which the genesis file can be downloaded.
+  - name: ACAPY_GENESIS_TRANSACTIONS_LIST
+    displayName: Multi-ledger configuration file location
+    description: File location for the multi-ledger yaml config file
     required: true
-    value: https://raw.githubusercontent.com/sovrin-foundation/sovrin/stable/sovrin/pool_transactions_sandbox_genesis
+    value: ledgers.yaml
   - name: ACAPY_LOG_LEVEL
     displayName: Log Level
     description: The logging level for the agent.
