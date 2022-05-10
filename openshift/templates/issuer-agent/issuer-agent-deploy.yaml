@@ -233,8 +233,8 @@ objects:
               configMap:
                 name: ${APP_CONFIG_MAP_NAME}${SUFFIX}
                 items:
-                  - key: ${GENESIS_TRANSACTIONS_LIST_FILE}
-                    path: ${GENESIS_TRANSACTIONS_LIST_FILE}
+                  - key: ${ACAPY_GENESIS_TRANSACTIONS_LIST}
+                    path: ${ACAPY_GENESIS_TRANSACTIONS_LIST}
           containers:
             - name: ${NAME}${SUFFIX}
               command:
@@ -263,7 +263,7 @@ objects:
                 - name: ACAPY_READ_ONLY_LEDGER
                   value: ${ACAPY_READ_ONLY_LEDGER}
                 - name: ACAPY_GENESIS_TRANSACTIONS_LIST
-                  value: ${APP_CONFIG_MOUNT_PATH}${GENESIS_TRANSACTIONS_LIST_FILE}
+                  value: ${APP_CONFIG_MOUNT_PATH}${ACAPY_GENESIS_TRANSACTIONS_LIST}
 
                 - name: ACAPY_AUTO_ACCEPT_INVITES
                   value: ${ACAPY_AUTO_ACCEPT_INVITES}
@@ -356,8 +356,8 @@ objects:
                 - name: ${NAME}${SUFFIX}-tails
                   mountPath: "${TAILS_FILES_DIR}"
                 - name: ${NAME}${SUFFIX}-app-config-volume
-                  mountPath: ${APP_CONFIG_MOUNT_PATH}${GENESIS_TRANSACTIONS_LIST_FILE}
-                  subPath: ${GENESIS_TRANSACTIONS_LIST_FILE}
+                  mountPath: ${APP_CONFIG_MOUNT_PATH}${ACAPY_GENESIS_TRANSACTIONS_LIST}
+                  subPath: ${ACAPY_GENESIS_TRANSACTIONS_LIST}
               readinessProbe:
                 timeoutSeconds: 30
                 initialDelaySeconds: 3
