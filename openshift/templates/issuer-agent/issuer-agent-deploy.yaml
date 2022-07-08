@@ -265,6 +265,9 @@ objects:
                 - name: ACAPY_GENESIS_TRANSACTIONS_LIST
                   value: ${APP_CONFIG_MOUNT_PATH}${ACAPY_GENESIS_TRANSACTIONS_LIST}
 
+                - name: ACAPY_INVITE_PUBLIC
+                  value: ${ACAPY_INVITE_PUBLIC}
+
                 - name: ACAPY_AUTO_ACCEPT_INVITES
                   value: ${ACAPY_AUTO_ACCEPT_INVITES}
                 - name: ACAPY_AUTO_ACCEPT_REQUESTS
@@ -543,6 +546,12 @@ parameters:
     description: The logging level for the agent.
     required: true
     value: WARNING
+
+  - name: ACAPY_INVITE_PUBLIC
+    displayName: Public Invite
+    description: Flag specifying the generated invite should be public.
+    required: true
+    value: 'false'
 
   - name: ACAPY_AUTO_ACCEPT_INVITES
     displayName: ACAPY_AUTO_ACCEPT_INVITES
