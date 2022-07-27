@@ -538,6 +538,8 @@ putFixRevocationEntryState() {
   applyLedgerUpdate=${3}
   xApiKey=${4}
 
+  # ToDo:
+  #   - This is hard coded to the LSBC agent.  Parameterize it.
   apiUrl="https://lsbc-agent-admin${urlEnvSuffix}.apps.silver.devops.gov.bc.ca/revocation/registry/${revRegId}/fix-revocation-entry-state?apply_ledger_update=${applyLedgerUpdate}"
   response=$(${CURL_EXE} \
     -s -w "HTTPSTATUSCODE:%{http_code}" \
@@ -557,6 +559,18 @@ putFixRevocationEntryState() {
 }
 
 syncRevEntryState() {
+
+  # ToDo:
+  #   - Integrate this the following code.
+  #   - Set up the parameters like the accepttaa function
+  # apiKey=$(getSecret "${secretName}" "${secretKey}" "${namespace}")
+  # if [ -z "${apiKey}" ]; then
+  #   echoError "\nregisterSovrin; Unable to process request:\n - Unable to locate the API Key for ${baseUrl}.\n   Please ensure you are logged into OpenShift and have access to the following resources.\n   - Namespace: ${namespace}\n   - Secret Name: ${secretName}\n   - Secret Key: ${secretKey}"
+  #   exit 1
+  # fi
+
+
+
   xApiKey=${X_API_KEY}
   revRegId=${REV_REG_ID}
   applyLedgerUpdate="false"
