@@ -1,4 +1,4 @@
-- id: SOVRINSandbox
+- id: SovrinStagingNet
   is_production: true
   is_write: true
   genesis_url: 'https://raw.githubusercontent.com/sovrin-foundation/sovrin/stable/sovrin/pool_transactions_sandbox_genesis'
