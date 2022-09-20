@@ -1,6 +1,6 @@
 ---
 kind: Template
-apiVersion: v1
+apiVersion: template.openshift.io/v1
 metadata:
   name: ${NAME}${SUFFIX}
 objects:
@@ -278,6 +278,8 @@ objects:
                   value: ${ACAPY_AUTO_RESPOND_MESSAGES}
                 - name: ACAPY_AUTO_RESPOND_CREDENTIAL_OFFER
                   value: ${ACAPY_AUTO_RESPOND_CREDENTIAL_OFFER}
+                - name: ACAPY_AUTO_RESPOND_CREDENTIAL_REQUEST
+                  value: ${ACAPY_AUTO_RESPOND_CREDENTIAL_REQUEST}
                 - name: ACAPY_AUTO_VERIFY_PRESENTATION
                   value: ${ACAPY_AUTO_VERIFY_PRESENTATION}
                 - name: ACAPY_AUTO_PROVISION
@@ -578,6 +580,11 @@ parameters:
     description: ACAPY_AUTO_RESPOND_CREDENTIAL_OFFER
     required: true
     value: 'true'
+  - name: ACAPY_AUTO_RESPOND_CREDENTIAL_REQUEST
+    displayName: ACAPY_AUTO_RESPOND_CREDENTIAL_REQUEST
+    description: ACAPY_AUTO_RESPOND_CREDENTIAL_REQUEST
+    required: false
+    value: 'false'
   - name: ACAPY_AUTO_VERIFY_PRESENTATION
     displayName: ACAPY_AUTO_VERIFY_PRESENTATION
     description: ACAPY_AUTO_VERIFY_PRESENTATION
