@@ -240,6 +240,16 @@ objects:
                     secretKeyRef:
                       name: ${PREFIX}${IDIM_SIT_WALLET_DB_HOST}
                       key: ${DB_PASSWORD_KEY_NAME}
+                - name: WALLET_IDIM_QA_USER
+                  valueFrom:
+                    secretKeyRef:
+                      name: ${PREFIX}${IDIM_QA_WALLET_DB_HOST}
+                      key: ${DB_USER_KEY_NAME}
+                - name: WALLET_IDIM_QA_PASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      name: ${PREFIX}${IDIM_QA_WALLET_DB_HOST}
+                      key: ${DB_PASSWORD_KEY_NAME}
                 - name: WEBHOOK_URL
                   valueFrom:
                     secretKeyRef:
@@ -372,6 +382,13 @@ parameters:
       particular, this is used to wire up the credentials associated to the database.
     required: true
     value: wallet-idim-sit
+  - name: IDIM_QA_WALLET_DB_HOST
+    displayName: Wallet Database Hostname
+    description:
+      The name associated to the wallet database deployment resources.  In
+      particular, this is used to wire up the credentials associated to the database.
+    required: true
+    value: wallet-idim-qa
   - name: DB_USER_KEY_NAME
     displayName: Database User Key Name
     description:
