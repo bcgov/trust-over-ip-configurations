@@ -1,4 +1,4 @@
-# Description: IDIM-SIT (dev only environment) Issuer Profile - Using ephemeral queue
+# Description: IDIM-QA (test only environment) Issuer Profile - Using ephemeral queue
 export SKIP_PIPELINE_PROCESSING=1
 
 # Switched away from persistent queue implementation until it is more stable
@@ -7,5 +7,5 @@ export SKIP_PIPELINE_PROCESSING=1
 export include_templates="issuer-agent-deploy issuer-wallet-deploy"
 export ignore_templates=""
 
-# IDIM-SIT is a development environment.
-export DEPLOYMENT_ENV_NAME="dev"
+# IDIM-QA is a test environment.
+export DEPLOYMENT_ENV_NAME="test"

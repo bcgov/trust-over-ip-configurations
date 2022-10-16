@@ -531,6 +531,84 @@ getAuthClient() {
     ${_podName} \
     "psql -d \${POSTGRESQL_DATABASE} -ac '${selectStmt}'"
 }
+
+putFixRevocationEntryState() {
+  urlEnvSuffix=${1}
+  revRegId=${2}
+  applyLedgerUpdate=${3}
+  xApiKey=${4}
+
+  # ToDo:
+  #   - This is hard coded to the LSBC agent.  Parameterize it.
+  apiUrl="https://lsbc-agent-admin${urlEnvSuffix}.apps.silver.devops.gov.bc.ca/revocation/registry/${revRegId}/fix-revocation-entry-state?apply_ledger_update=${applyLedgerUpdate}"
+  response=$(${CURL_EXE} \
+    -s -w "HTTPSTATUSCODE:%{http_code}" \
+    -X 'PUT' \
+    "${apiUrl}" \
+    -H 'accept: application/json' \
+    -H "X-API-KEY: ${xApiKey}")
+
+  body=$(echo "${response}" | sed -E 's~HTTPSTATUSCODE\:[0-9]{3}$~~')
+  statusCode=$(echo "${response}" | tr -d '\n' | sed -E 's~.*HTTPSTATUSCODE:([0-9]{3})$~\1~')
+  if [[ "${statusCode}" == "200" ]]; then
+    echo "$(echo "${body}" | ${JQ_EXE} '.')"
+    return 0
+  else
+    return 1
+  fi
+}
+
+syncRevEntryState() {
+
+  # ToDo:
+  #   - Integrate this the following code.
+  #   - Set up the parameters like the accepttaa function
+  # apiKey=$(getSecret "${secretName}" "${secretKey}" "${namespace}")
+  # if [ -z "${apiKey}" ]; then
+  #   echoError "\nregisterSovrin; Unable to process request:\n - Unable to locate the API Key for ${baseUrl}.\n   Please ensure you are logged into OpenShift and have access to the following resources.\n   - Namespace: ${namespace}\n   - Secret Name: ${secretName}\n   - Secret Key: ${secretKey}"
+  #   exit 1
+  # fi
+
+
+
+  xApiKey=${X_API_KEY}
+  revRegId=${REV_REG_ID}
+  applyLedgerUpdate="false"
+  if [[ "${DEPLOYMENT_ENV_NAME}" != "prod" ]]; then
+    urlEnvSuffix="-${DEPLOYMENT_ENV_NAME}"
+  fi
+
+  response=$(putFixRevocationEntryState "${urlEnvSuffix}" "${revRegId}" "${applyLedgerUpdate}" "${xApiKey}")
+  rtnCd=${?}
+  if (( ${rtnCd} == 0 )); then
+    accum_calculated="$(echo "${response}" | ${JQ_EXE} --raw-output '.accum_calculated | .[]?')"
+
+    if [[ ! -z ${accum_calculated} ]]; then
+      applyLedgerUpdate="true"
+    fi
+
+    if [[ ${applyLedgerUpdate} == "true" ]]; then
+      echo
+      read -r -p "The accumulators are out of sync.  Would you like to synchronize them? [y/n] " response
+      # https://stackoverflow.com/a/3232082
+      if [[ "$response" =~ ^([yY][eE][sS]|[yY])$ ]]; then
+        response=$(putFixRevocationEntryState "${urlEnvSuffix}" "${revRegId}" "${applyLedgerUpdate}" "${xApiKey}")
+        rtnCd=${?}
+        if (( ${rtnCd} == 0 )); then
+          echo -e "\nAccumulators have been synchronized."
+        else
+          echo -e "\nThe call to fix-revocation-entry-state failed.  Please try again."
+        fi
+      else
+        echo -e "\nAccumulators have not been synchronized."
+      fi
+    else
+      echo -e "\nThe accumulators are already in sync."
+    fi
+  else
+    echo -e "\nThe call to fix-revocation-entry-state failed.  Please try again."
+  fi
+}
 # =================================================================================================================
 
 pushd ${SCRIPT_HOME} >/dev/null
@@ -616,6 +694,13 @@ case "${_cmd}" in
     clientName=${1}
     podName=${2}
     getAuthClient ${clientName} ${clientRedirectUri} ${clientCorsOrigin} ${podName}
+    ;;
+
+  syncreventrystate)
+    isCurlInstalled
+    isJQInstalled
+
+    syncRevEntryState
     ;;
 
   scaleup)
