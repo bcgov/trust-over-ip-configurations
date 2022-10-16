@@ -23,7 +23,6 @@ TAG_NAME=prod
 # ADMIN_API_KEY=[a-zA-Z0-9]{16}
 # API_HOST=api
 # DELIVERY_SERVICE_HTTP_PORT=8021
-# Note:- CANdy 'prod' does not not exist yet.
 # ACAPY_GENESIS_URL=https://raw.githubusercontent.com/ICCS-ISAC/dtrust-reconu/main/CANdy/prod/pool_transactions_genesis
 # ACAPY_LOG_LEVEL=WARNING
 # ACAPY_WALLET_TYPE=askar

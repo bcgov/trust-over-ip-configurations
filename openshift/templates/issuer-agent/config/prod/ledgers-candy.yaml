@@ -1,4 +1,3 @@
-# Note:- CANdy 'prod' does not not exist yet.
 - id: CANdyProd
   is_production: true
   is_write: true

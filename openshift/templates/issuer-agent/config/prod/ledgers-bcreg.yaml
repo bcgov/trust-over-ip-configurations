@@ -5,7 +5,6 @@
 - id: BCovrinTest
   is_production: true
   genesis_url: 'http://test.bcovrin.vonx.io/genesis'
-# Note:- CANdy 'prod' does not not exist yet.
 - id: CANdyProd
   is_production: true
   genesis_url: 'https://raw.githubusercontent.com/ICCS-ISAC/dtrust-reconu/main/CANdy/prod/pool_transactions_genesis'
