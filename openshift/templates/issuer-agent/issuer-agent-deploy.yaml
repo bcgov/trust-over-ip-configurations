@@ -267,6 +267,8 @@ objects:
 
                 - name: ACAPY_INVITE_PUBLIC
                   value: ${ACAPY_INVITE_PUBLIC}
+                - name: ACAPY_PUBLIC_INVITES
+                  value: ${ACAPY_PUBLIC_INVITES}
 
                 - name: ACAPY_AUTO_ACCEPT_INVITES
                   value: ${ACAPY_AUTO_ACCEPT_INVITES}
@@ -274,6 +276,8 @@ objects:
                   value: ${ACAPY_AUTO_ACCEPT_REQUESTS}
                 - name: ACAPY_AUTO_PING_CONNECTION
                   value: ${ACAPY_AUTO_PING_CONNECTION}
+                - name: ACAPY_MONITOR_PING
+                  value: ${ACAPY_MONITOR_PING}
                 - name: ACAPY_AUTO_RESPOND_MESSAGES
                   value: ${ACAPY_AUTO_RESPOND_MESSAGES}
                 - name: ACAPY_AUTO_RESPOND_CREDENTIAL_OFFER
@@ -284,6 +288,19 @@ objects:
                   value: ${ACAPY_AUTO_VERIFY_PRESENTATION}
                 - name: ACAPY_AUTO_PROVISION
                   value: ${ACAPY_AUTO_PROVISION}
+                - name: ACAPY_NOTIFY_REVOCATION
+                  value: ${ACAPY_NOTIFY_REVOCATION}
+
+                - name: ACAPY_ENDORSER_ALIAS
+                  value: ${ACAPY_ENDORSER_ALIAS}
+                - name: ACAPY_ENDORSER_ROLE
+                  value: ${ACAPY_ENDORSER_ROLE}
+                - name: ACAPY_AUTO_REQUEST_ENDORSEMENT
+                  value: ${ACAPY_AUTO_REQUEST_ENDORSEMENT}
+                - name: ACAPY_AUTO_WRITE_TRANSACTIONS
+                  value: ${ACAPY_AUTO_WRITE_TRANSACTIONS}
+                - name: ACAPY_CREATE_REVOCATION_TRANSACTIONS
+                  value: ${ACAPY_CREATE_REVOCATION_TRANSACTIONS}
 
                 - name: AGENT_WALLET_NAME
                   value: ${NAME}${SUFFIX}-wallet
@@ -550,36 +567,46 @@ parameters:
     value: WARNING
 
   - name: ACAPY_INVITE_PUBLIC
-    displayName: Public Invite
+    displayName: Invite Public
     description: Flag specifying the generated invite should be public.
     required: true
-    value: 'false'
+    value: 'true'
+  - name: ACAPY_PUBLIC_INVITES
+    displayName: Public Invite
+    description: Send invitations out, and receive connection requests, using the public DID for the agent.
+    required: true
+    value: 'true'
 
   - name: ACAPY_AUTO_ACCEPT_INVITES
     displayName: ACAPY_AUTO_ACCEPT_INVITES
     description: ACAPY_AUTO_ACCEPT_INVITES
     required: true
-    value: 'true'
+    value: 'false'
   - name: ACAPY_AUTO_ACCEPT_REQUESTS
     displayName: ACAPY_AUTO_ACCEPT_REQUESTS
     description: ACAPY_AUTO_ACCEPT_REQUESTS
     required: true
-    value: 'true'
+    value: 'false'
   - name: ACAPY_AUTO_PING_CONNECTION
-    displayName: ACAPY_AUTO_PING_CONNECTION
-    description: ACAPY_AUTO_PING_CONNECTION
+    displayName: Auto Ping Connection
+    description: Automatically send a trust ping immediately after a connection response is accepted. Some agents require this before marking a connection as 'active'.
     required: true
     value: 'true'
+  - name: ACAPY_MONITOR_PING
+    displayName: Monitor Ping
+    description: Send a webhook when a ping is sent or received.
+    required: true
+    value: 'false'
   - name: ACAPY_AUTO_RESPOND_MESSAGES
     displayName: ACAPY_AUTO_RESPOND_MESSAGES
     description: ACAPY_AUTO_RESPOND_MESSAGES
     required: true
-    value: 'true'
+    value: 'false'
   - name: ACAPY_AUTO_RESPOND_CREDENTIAL_OFFER
     displayName: ACAPY_AUTO_RESPOND_CREDENTIAL_OFFER
     description: ACAPY_AUTO_RESPOND_CREDENTIAL_OFFER
     required: true
-    value: 'true'
+    value: 'false'
   - name: ACAPY_AUTO_RESPOND_CREDENTIAL_REQUEST
     displayName: ACAPY_AUTO_RESPOND_CREDENTIAL_REQUEST
     description: ACAPY_AUTO_RESPOND_CREDENTIAL_REQUEST
@@ -591,10 +618,53 @@ parameters:
     required: true
     value: 'true'
   - name: ACAPY_AUTO_PROVISION
-    displayName: ACAPY_AUTO_PROVISION
-    description: ACAPY_AUTO_PROVISION
+    displayName: Auto Provision
+    description: If the requested profile does not exist, initialize it with the given parameters.
     required: true
     value: 'true'
+  - name: ACAPY_NOTIFY_REVOCATION
+    displayName: Notify Revocation
+    description: Specifies that aca-py will notify credential recipients when revoking a credential it issued.
+    required: true
+    value: 'false'
+
+  # ===============================================================================
+  # Author/Endorser Configuration
+  # Default: Endorser protocol is disabled (ACAPY_ENDORSER_ROLE=none)
+  #--------------------------------------------------------------------------------
+  - name: ACAPY_ENDORSER_ROLE
+    displayName: Endorser Role
+    description:
+      Specify the role ('author', 'endorser', or 'none') which this agent will participate. Authors will request transaction endorement from an Endorser. Endorsers will endorse transactions from Authors, and may write their own transactions to the ledger. If no role ('none') is specified then the endorsement protocol will not be used and this agent will write transactions to the ledger directly.
+    required: true
+    value: none
+  - name: ACAPY_ENDORSER_ALIAS
+    displayName: Endorser Alias
+    description:
+      For transaction Authors, specify the alias of the Endorser connection that will be used to endorse transactions.
+      This MUST match the setting used for the alias of the connection when establishing the connection with the Endorser.
+      Example; 'Endorser'
+    required: true
+    value:
+  - name: ACAPY_AUTO_REQUEST_ENDORSEMENT
+    displayName: Auto Request Endorsement
+    description:
+      For Authors, specify whether to automatically request endorsement for all transactions.  If not specified, the controller must invoke the request endorse operation for each transaction.
+    required: true
+    value: 'true'
+  - name: ACAPY_AUTO_WRITE_TRANSACTIONS
+    displayName: Auto Write Transactions
+    description:
+      For Authors, specify whether to automatically write any endorsed transactions.  If not specified, the controller must invoke the write transaction operation for each transaction.
+    required: true
+    value: 'true'
+  - name: ACAPY_CREATE_REVOCATION_TRANSACTIONS
+    displayName: Auto Create Revocation Transactions
+    description:
+      For Authors, specify whether to automatically create transactions for a cred def's revocation registry.  If not specified,the controller must invoke the endpoints required to create the revocation registry and assign to the cred def.
+    required: true
+    value: 'true'
+  # ===============================================================================
 
   # ===============================================================================
   # Wallet Configuration
@@ -604,7 +674,7 @@ parameters:
     description:
       The wallet type.  Supported internal storage types are 'basic' (memory), 'indy', and 'askar'.
     required: false
-    value: 'indy'
+    value: 'askar'
   - name: ACAPY_WALLET_STORAGE_TYPE
     displayName: Wallet Storage Type
     description:
@@ -692,19 +762,19 @@ parameters:
     displayName: Resources CPU Request
     description: The resources CPU request (in cores) for this build.
     required: true
-    value: 10m
+    value: 100m
   - name: CPU_LIMIT
     displayName: Resources CPU Limit
     description: The resources CPU limit (in cores) for this build.
     required: true
-    value: 1000m
+    value: 250m
   - name: MEMORY_REQUEST
     displayName: Resources Memory Request
     description: The resources Memory request (in Mi, Gi, etc) for this build.
     required: true
-    value: 10Mi
+    value: 128Mi
   - name: MEMORY_LIMIT
     displayName: Resources Memory Limit
     description: The resources Memory limit (in Mi, Gi, etc) for this build.
     required: true
-    value: 1Gi
+    value: 256Mi
