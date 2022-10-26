@@ -4,6 +4,7 @@
     "name": "BCVCPilot - Trust Over IP"
   },
   "inviteRequired": true,
+  "deepLinkPrefix":"bcwallet://aries_connection_invitation",
   "authentication": {
     "enabled": false,
     "autoSignOut": true,
