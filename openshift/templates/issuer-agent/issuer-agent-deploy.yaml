@@ -644,26 +644,26 @@ parameters:
       For transaction Authors, specify the alias of the Endorser connection that will be used to endorse transactions.
       This MUST match the setting used for the alias of the connection when establishing the connection with the Endorser.
       Example; 'Endorser'
-    required: true
+    required: false
     value:
   - name: ACAPY_AUTO_REQUEST_ENDORSEMENT
     displayName: Auto Request Endorsement
     description:
       For Authors, specify whether to automatically request endorsement for all transactions.  If not specified, the controller must invoke the request endorse operation for each transaction.
     required: true
-    value: 'true'
+    value: 'false'
   - name: ACAPY_AUTO_WRITE_TRANSACTIONS
     displayName: Auto Write Transactions
     description:
       For Authors, specify whether to automatically write any endorsed transactions.  If not specified, the controller must invoke the write transaction operation for each transaction.
     required: true
-    value: 'true'
+    value: 'false'
   - name: ACAPY_CREATE_REVOCATION_TRANSACTIONS
     displayName: Auto Create Revocation Transactions
     description:
       For Authors, specify whether to automatically create transactions for a cred def's revocation registry.  If not specified,the controller must invoke the endpoints required to create the revocation registry and assign to the cred def.
     required: true
-    value: 'true'
+    value: 'false'
   # ===============================================================================
 
   # ===============================================================================
