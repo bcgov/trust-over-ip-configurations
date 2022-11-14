@@ -28,6 +28,7 @@
 # API_HOST=api
 # API_PORT=8080
 APPLICATION_DOMAIN=bcvcpilot-admin.vonx.io
+CERTBOT_MANAGED_ROUTE=true
 # SOURCE_IMAGE_NAME=issuer-admin
 TAG_NAME=prod
 # CPU_REQUEST=10m
