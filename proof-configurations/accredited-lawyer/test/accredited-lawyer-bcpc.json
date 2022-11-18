@@ -1,0 +1,50 @@
+{
+  "id": "accredited-lawyer-bcpc-test",
+  "subject_identifier": "PPID",
+  "configuration": {
+    "name": "Accredited Lawyer with BC Person Credential",
+    "version": "1.0.0",
+    "requested_attributes": [
+      {
+        "names": [
+          "PPID",
+          "Given Name",
+          "Surname",
+          "Member Status",
+          "Member Status Code"
+        ],
+        "restrictions": [
+          {
+            "issuer_did": "DZBaHghKsVHcJoiwkykG3r",
+            "schema_name": "Member Certificate",
+            "schema_version": "0.5.0"
+          },
+          {
+            "issuer_did": "DZBaHghKsVHcJoiwkykG3r",
+            "schema_name": "Member Certificate",
+            "schema_version": "1.0.1"
+          },
+          {
+            "issuer_did": "AuJrigKQGRLJajKAebTgWu",
+            "schema_name": "Member Card",
+            "schema_version": "1.5.1"
+          }
+        ]
+      },
+      {
+        "names": [
+          "family_name",
+          "given_names"
+        ],
+        "restrictions": [
+          {
+            "issuer_did": "RGjWbW1eycP7FrMf4QJvX8",
+            "schema_name": "Person",
+            "schema_version": "1.0"
+          }
+        ]
+      }
+    ],
+    "requested_predicates": []
+  }
+}
