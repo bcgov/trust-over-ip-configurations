@@ -11,6 +11,7 @@ ROLE=agent
 API_ROLE=api
 APPLICATION_DOMAIN=bcvcpilot-agent-dev.apps.silver.devops.gov.bc.ca
 ADMIN_APPLICATION_DOMAIN=bcvcpilot-agent-admin-dev.apps.silver.devops.gov.bc.ca
+CERTBOT_MANAGED_ROUTE=false
 ROUTE_TIMEOUT=120s
 IMAGE_NAMESPACE=a99fd4-tools
 NAMESPACE_NAME=a99fd4
