@@ -46,6 +46,11 @@
             "issuer_did": "7xjfawcnyTUcduWVysLww5",
             "schema_name": "Person",
             "schema_version": "1.0"
+          },
+          {
+            "issuer_did": "Ui6HA36FvN83cEtmYYHxrn",
+            "schema_name": "unverified_person",
+            "schema_version": "0.1.0"
           }
         ]
       }
