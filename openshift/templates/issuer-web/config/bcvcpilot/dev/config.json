@@ -1,7 +1,7 @@
 {
   "env": "development",
   "issuer": {
-    "name": "BCVCPilot - Trust Over IP"
+    "name": "Digital Identity and Trust"
   },
   "inviteRequired": true,
   "deepLinkPrefix":"bcwallet://aries_connection_invitation",
