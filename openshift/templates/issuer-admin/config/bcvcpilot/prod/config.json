@@ -2,12 +2,12 @@
   "env": "docker-prod-like",
   "issuer": {
     "name": "Issuer Admin",
-    "publicUrl": "https://bcvcpilot-admin.vonx.io"
+    "publicUrl": "https://bcvcpilot.vonx.io"
   },
   "authentication": {
     "enabled": true,
     "oidcSettings": {
-      "authority": "https://oidc.gov.bc.ca/auth/realms/gzyg46lx",
+      "authority": "https://loginproxy.gov.bc.ca/auth/realms/digitaltrust-citz",
       "clientId": "bcvcpilot-admin",
       "redirectUri": "https://bcvcpilot-admin.vonx.io/oidc-callback",
       "redirect_uri": "https://bcvcpilot-admin.vonx.io/oidc-callback-error",
