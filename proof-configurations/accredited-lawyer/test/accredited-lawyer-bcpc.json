@@ -48,6 +48,11 @@
             "schema_version": "0.1.0"
           },
           {
+            "issuer_did": "HTkhhCW1bAXWnxC1u3YVoa",
+            "schema_name": "unverified_person",
+            "schema_version": "0.1.0"
+          },
+          {
             "issuer_did": "8Yq7EhKBMujh25NkLGGb2t",
             "schema_name": "unverified_person",
             "schema_version": "0.4.0"
