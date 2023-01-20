@@ -1,0 +1,472 @@
+---
+kind: Template
+apiVersion: v1
+metadata:
+  name: ${NAME}-deployment-template
+  annotations:
+    description: Deployment template for a ${NAME} instance.
+objects:
+  - kind: NetworkPolicy
+    apiVersion: networking.k8s.io/v1
+    metadata:
+      name: ${NAME}${SUFFIX}-allow-ingress
+      labels:
+        name: ${NAME}${SUFFIX}-allow-ingress
+        app: ${APP_NAME}${SUFFIX}
+        app-group: ${APP_GROUP}
+        role: ${ROLE}
+        env: ${TAG_NAME}
+    spec:
+      description: |
+        Allow traffic from routes into the lcrb ${ROLE} container(s).
+      ingress:
+        - from:
+            - namespaceSelector:
+                matchLabels:
+                  network.openshift.io/policy-group: ingress
+      podSelector:
+        matchLabels:
+          role: ${ROLE}
+          app: ${APP_NAME}${SUFFIX}
+          env: ${TAG_NAME}
+      policyTypes:
+        - Ingress
+
+  - kind: NetworkPolicy
+    apiVersion: networking.k8s.io/v1
+    metadata:
+      name: ${NAME}${SUFFIX}
+      labels:
+        name: ${NAME}${SUFFIX}
+        app: ${APP_NAME}${SUFFIX}
+        app-group: ${APP_GROUP}
+        role: ${ROLE}
+        env: ${TAG_NAME}
+    spec:
+      description: |
+        Allow the lcrb agent to access the controller.
+      ingress:
+        - from:
+            - podSelector:
+                matchLabels:
+                  role: ${AGENT_ROLE}
+                  app: ${APP_NAME}${SUFFIX}
+                  env: ${TAG_NAME}
+              namespaceSelector:
+                matchLabels:
+                  name: ${NAMESPACE_NAME}
+                  environment: ${TAG_NAME}
+          ports:
+            - protocol: TCP
+              port: ${{HOST_PORT}}
+      podSelector:
+        matchLabels:
+          name: ${NAME}${SUFFIX}
+          app: ${APP_NAME}${SUFFIX}
+          app-group: ${APP_GROUP}
+          role: ${ROLE}
+          env: ${TAG_NAME}
+
+  - kind: Secret
+    apiVersion: v1
+    metadata:
+      name: ${NAME}${SUFFIX}
+      labels:
+        name: ${NAME}${SUFFIX}
+        app: ${APP_NAME}${SUFFIX}
+        app.kubernetes.io/part-of: ${APP_NAME}${SUFFIX}
+        app-group: ${APP_GROUP}
+        role: ${ROLE}
+        env: ${TAG_NAME}
+    stringData:
+      cr-agent-admin-api-url: ${CR_AGENT_ADMIN_URL}
+      cr-agent-admin-api-key: ${CR_ADMIN_API_KEY}
+    type: Opaque
+
+  - kind: Service
+    apiVersion: v1
+    metadata:
+      name: ${NAME}${SUFFIX}
+      labels:
+        name: ${NAME}${SUFFIX}
+        app: ${APP_NAME}${SUFFIX}
+        app.kubernetes.io/part-of: ${APP_NAME}${SUFFIX}
+        app-group: ${APP_GROUP}
+        role: ${ROLE}
+        env: ${TAG_NAME}
+    spec:
+      ports:
+        - name: ${NAME}-http
+          protocol: TCP
+          port: ${{HOST_PORT}}
+          targetPort: ${{HOST_PORT}}
+      selector:
+        name: ${NAME}${SUFFIX}
+
+  - kind: Route
+    apiVersion: v1
+    metadata:
+      name: ${NAME}${SUFFIX}
+      labels:
+        name: ${NAME}${SUFFIX}
+        app: ${APP_NAME}${SUFFIX}
+        app.kubernetes.io/part-of: ${APP_NAME}${SUFFIX}
+        app-group: ${APP_GROUP}
+        role: ${ROLE}
+        env: ${TAG_NAME}
+      annotations:
+        haproxy.router.openshift.io/timeout: ${ROUTE_TIMEOUT}
+    spec:
+      host: ${APPLICATION_DOMAIN}
+      port:
+        targetPort: ${NAME}-http
+      tls:
+        insecureEdgeTerminationPolicy: Redirect
+        termination: edge
+      to:
+        kind: Service
+        name: ${NAME}${SUFFIX}
+        weight: 100
+
+  - kind: DeploymentConfig
+    apiVersion: v1
+    metadata:
+      name: ${NAME}${SUFFIX}
+      labels:
+        name: ${NAME}${SUFFIX}
+        app: ${APP_NAME}${SUFFIX}
+        app.kubernetes.io/part-of: ${APP_NAME}${SUFFIX}
+        app-group: ${APP_GROUP}
+        role: ${ROLE}
+        env: ${TAG_NAME}
+      annotations:
+        description: Defines how to deploy the container.
+    spec:
+      strategy:
+        type: Rolling
+        rollingParams:
+          updatePeriodSeconds: 1
+          intervalSeconds: 1
+          timeoutSeconds: 600
+          maxUnavailable: 25%
+          maxSurge: 25%
+      triggers:
+        - type: ConfigChange
+        - type: ImageChange
+          imageChangeParams:
+            automatic: true
+            containerNames:
+              - ${NAME}${SUFFIX}
+            from:
+              kind: ImageStreamTag
+              namespace: ${IMAGE_NAMESPACE}
+              name: ${NAME}${SUFFIX}:${TAG_NAME}
+      replicas: 1
+      selector:
+        name: ${NAME}${SUFFIX}
+      template:
+        metadata:
+          name: ${NAME}${SUFFIX}
+          labels:
+            name: ${NAME}${SUFFIX}
+            app: ${APP_NAME}${SUFFIX}
+            app.kubernetes.io/part-of: ${APP_NAME}${SUFFIX}
+            app-group: ${APP_GROUP}
+            role: ${ROLE}
+            env: ${TAG_NAME}
+        spec:
+          volumes:
+          - name: ${NAME}${SUFFIX}-routes-volume
+            configMap:
+              name: ${CONFIG_MAP_NAME}${SUFFIX}
+              items:
+                - key: ${ROUTES_FILE_NAME}
+                  path: ${ROUTES_FILE_NAME}
+          - name: ${NAME}${SUFFIX}-schemas-volume
+            configMap:
+              name: ${CONFIG_MAP_NAME}${SUFFIX}
+              items:
+                - key: ${SCHEMAS_FILE_NAME}
+                  path: ${SCHEMAS_FILE_NAME}
+          - name: ${NAME}${SUFFIX}-services-volume
+            configMap:
+              name: ${CONFIG_MAP_NAME}${SUFFIX}
+              items:
+                - key: ${SERVICES_FILE_NAME}
+                  path: ${SERVICES_FILE_NAME}
+          - name: ${NAME}${SUFFIX}-settings-volume
+            configMap:
+              name: ${CONFIG_MAP_NAME}${SUFFIX}
+              items:
+                - key: ${SETTINGS_FILE_NAME}
+                  path: ${SETTINGS_FILE_NAME}
+          containers:
+            - name: ${NAME}${SUFFIX}
+              image:
+              ports:
+                - containerPort: ${{HOST_PORT}}
+                  protocol: TCP
+              env:
+                - name: CONFIG_ROOT
+                  value: ${CONFIG_ROOT}
+                - name: HOST_PORT
+                  value: ${HOST_PORT}
+                - name: ENVIRONMENT
+                  value: ${ENVIRONMENT}
+                - name: AGENT_ADMIN_URL
+                  value: http://${AGENT_SERVICE_NAME}${SUFFIX}:${AGENT_ADMIN_PORT}
+                - name: AGENT_ADMIN_API_KEY
+                  valueFrom:
+                    secretKeyRef:
+                      name: ${AGENT_SERVICE_NAME}${SUFFIX}
+                      key: admin-api-key
+                - name: TOB_AGENT_ADMIN_URL
+                  valueFrom:
+                    secretKeyRef:
+                      name: ${NAME}${SUFFIX}
+                      key: cr-agent-admin-api-url
+                - name: TOB_ADMIN_API_KEY
+                  valueFrom:
+                    secretKeyRef:
+                      name: ${NAME}${SUFFIX}
+                      key: cr-agent-admin-api-key
+                - name: WEB_CONCURRENCY
+                  value: ${WEB_CONCURRENCY}
+                - name: WORKER_THREADS
+                  value: ${WORKER_THREADS}
+                - name: MAX_CRED_RESPONSE_TIMEOUT
+                  value: ${MAX_CRED_RESPONSE_TIMEOUT}
+                - name: CONTROLLER_API_KEY
+                  value: ${CONTROLLER_API_KEY}
+                - name: OIDC_JWKS_URI
+                  value: ${OIDC_JWKS_URI}
+              volumeMounts:
+                - name: ${NAME}${SUFFIX}-routes-volume
+                  mountPath: ${CONFIG_MOUNT_PATH}${ROUTES_FILE_NAME}
+                  subPath: ${ROUTES_FILE_NAME}
+                - name: ${NAME}${SUFFIX}-schemas-volume
+                  mountPath: ${CONFIG_MOUNT_PATH}${SCHEMAS_FILE_NAME}
+                  subPath: ${SCHEMAS_FILE_NAME}
+                - name: ${NAME}${SUFFIX}-services-volume
+                  mountPath: ${CONFIG_MOUNT_PATH}${SERVICES_FILE_NAME}
+                  subPath: ${SERVICES_FILE_NAME}
+                - name: ${NAME}${SUFFIX}-settings-volume
+                  mountPath: ${CONFIG_MOUNT_PATH}${SETTINGS_FILE_NAME}
+                  subPath: ${SETTINGS_FILE_NAME}
+              readinessProbe:
+                timeoutSeconds: 30
+                initialDelaySeconds: 3
+                httpGet:
+                  path: /health
+                  port: ${{HOST_PORT}}
+              livenessProbe:
+                timeoutSeconds: 30
+                initialDelaySeconds: 300
+                httpGet:
+                  path: /health
+                  port: ${{HOST_PORT}}
+              resources:
+                requests:
+                  cpu: ${CPU_REQUEST}
+                  memory: ${MEMORY_REQUEST}
+                limits:
+                  cpu: ${CPU_LIMIT}
+                  memory: ${MEMORY_LIMIT}
+
+  - kind: HorizontalPodAutoscaler
+    apiVersion: autoscaling/v1
+    metadata:
+      name: ${NAME}${SUFFIX}
+      labels:
+        name: ${NAME}${SUFFIX}
+        app: ${APP_NAME}${SUFFIX}
+        app.kubernetes.io/part-of: ${APP_NAME}${SUFFIX}
+        app-group: ${APP_GROUP}
+        role: ${ROLE}
+        env: ${TAG_NAME}
+    spec:
+      scaleTargetRef:
+        kind: DeploymentConfig
+        name: ${NAME}${SUFFIX}
+      minReplicas: ${{MIN_REPLICAS}}
+      maxReplicas: ${{MAX_REPLICAS}}
+
+parameters:
+  - name: NAME
+    displayName: Name
+    description: The name assigned to all of the objects defined in this template.
+    required: true
+    value: controller
+  - name: ROLE
+    displayName: Role
+    description: Role
+    required: true
+    value: controller
+  - name: AGENT_ROLE
+    displayName: Agent role
+    description: The name given to the agent role.
+    required: true
+    value: agent
+  - name: NAMESPACE
+    displayName: The target namespace for the resources.
+    required: true
+    value: e79518
+  - name: SUFFIX
+    displayName: Suffix
+    description: A name suffix used for all objects
+    required: false
+    value: -lcrb
+  - name: APP_NAME
+    displayName: App Name
+    description: Used to group components together in the OpenShift console.
+    required: true
+    value: issuer
+  - name: APP_GROUP
+    displayName: App Group
+    description: The name assigned to all of the deployments in this project.
+    required: true
+    value: lcrb-orgbook-issuer
+  - name: APPLICATION_DOMAIN
+    displayName: Application Hostname
+    description: The exposed hostname that will route to the service, if left blank a value will be defaulted.
+    required: false
+    value: lcrb-controller-dev.apps.silver.devops.gov.bc.ca
+  - name: IMAGE_NAMESPACE
+    displayName: Image Namespace
+    required: true
+    description:
+      The namespace of the OpenShift project containing the imagestream for
+      the application.
+    value: e79518-tools
+  - name: NAMESPACE_NAME
+    displayName: Namespace Name
+    description: The name of the namespace being deployed to.
+    required: true
+    value: e79518
+  - name: TAG_NAME
+    displayName: Environment TAG name
+    description: The TAG name for this environment, e.g., dev, test, prod
+    required: true
+    value: dev
+  - name: CONFIG_ROOT
+    displayName: Config Root
+    description: The root directory containing the application configuration.
+    required: true
+    value: /home/indy/config
+  - name: HOST_PORT
+    displayName: Host Port
+    description: The port on which the agent service will listen.
+    required: true
+    value: "8080"
+  - name: ENVIRONMENT
+    displayName: Environment
+    description: The application environment.
+    required: true
+    value: default
+  - name: AGENT_SERVICE_NAME
+    displayName: Agent Service name
+    description: Agent service name
+    required: true
+    value: agent
+  - name: AGENT_ADMIN_PORT
+    displayName: Agent Admin Port
+    description: Agent admin port
+    required: true
+    value: "8024"
+  - name: CR_AGENT_ADMIN_URL
+    displayName: Credential Registry Admin API Url
+    description: Credential registry admin api url
+    required: true
+    value:
+  - name: CR_ADMIN_API_KEY
+    displayName: Credential Registry Admin API Key
+    description: Credential registry admin api key
+    required: true
+    value:
+  - name: WEB_CONCURRENCY
+    displayName: Web Concurrency
+    description: Sets the number of worker processes.
+    required: true
+    value: "1"
+  - name: WORKER_THREADS
+    displayName: Worker Threads
+    description: Sets the maximum number of worker threads.
+    required: true
+    value: "160"
+  - name: MAX_CRED_RESPONSE_TIMEOUT
+    displayName: Maximum Credential Response Timeout
+    description:
+      Sets the maximum time (in seconds) to wait for a credential response
+      message before giving up.
+    required: true
+    value: "90"
+  - name: CONFIG_MAP_NAME
+    displayName: Config Map Name
+    description: The name of the configmap holding the application configuration files.
+    required: true
+    value: "controller"
+  - name: CONFIG_MOUNT_PATH
+    displayName: Application Config Mount Path
+    description: The path to use to mount the configuration file(s).
+    required: true
+    value: /home/indy/config/
+  - name: ROUTES_FILE_NAME
+    displayName: Routes File Name
+    description: The name of the routes.yml file.
+    required: true
+    value: "routes.yml"
+  - name: SCHEMAS_FILE_NAME
+    displayName: Schemas File Name
+    description: The name of the schemas.yml file.
+    required: true
+    value: "schemas.yml"
+  - name: SERVICES_FILE_NAME
+    displayName: Services File Name
+    description: The name of the services.yml file.
+    required: true
+    value: "services.yml"
+  - name: SETTINGS_FILE_NAME
+    displayName: Settings FIle Name
+    description: The name of the settings.yml file.
+    required: true
+    value: "settings.yml"  
+  - name: CONTROLLER_API_KEY
+    displayName: Controller API Key
+    description: Defines teh API key that will be required by the controller to accept requests from the agent and on /issue-credential.
+    required: false
+    value: ""
+  - name: OIDC_JWKS_URI
+    displayName: OIDC JWKS URI
+    description: The URI pointing to a JWKS to be used for token validation. It is used to protect the /issue-credential endpoint.
+    required: false
+    value: ""
+  - name: MIN_REPLICAS
+    displayName: Minimum Replicas
+    description: The minimum number of pods to have running.
+    required: true
+    value: "1"
+  - name: MAX_REPLICAS
+    displayName: Maximum Replicas
+    description: The maximum number of pods to have running.
+    required: true
+    value: "1"
+  - name: CPU_REQUEST
+    displayName: Resources CPU Request
+    description: The resources CPU request (in cores) for this build.
+    required: true
+    value: 10m
+  - name: CPU_LIMIT
+    displayName: Resources CPU Limit
+    description: The resources CPU limit (in cores) for this build.
+    required: true
+    value: 250m
+  - name: MEMORY_REQUEST
+    displayName: Resources Memory Request
+    description: The resources Memory request (in Mi, Gi, etc) for this build.
+    required: true
+    value: 10Mi
+  - name: MEMORY_LIMIT
+    displayName: Resources Memory Limit
+    description: The resources Memory limit (in Mi, Gi, etc) for this build.
+    required: true
+    value: 128Mi
