@@ -3,7 +3,7 @@
 # Component: .
 # Template File: ../openshift/templates/controller/controller-deploy.yaml
 #=========================================================
-NAME=controller
+NAME=orgbook-issuer-controller
 ROLE=controller
 AGENT_ROLE=agent
 NAMESPACE=e79518
