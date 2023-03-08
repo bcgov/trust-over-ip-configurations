@@ -81,6 +81,7 @@ objects:
     stringData:
       cr-agent-admin-api-url: ${CR_AGENT_ADMIN_URL}
       cr-agent-admin-api-key: ${CR_ADMIN_API_KEY}
+      controller-api-key: ${CONTROLLER_API_KEY}
     type: Opaque
 
   - kind: Service
@@ -230,14 +231,17 @@ objects:
                     secretKeyRef:
                       name: ${NAME}${SUFFIX}
                       key: cr-agent-admin-api-key
+                - name: CONTROLLER_API_KEY
+                  valueFrom:
+                    secretKeyRef:
+                      name: ${NAME}${SUFFIX}
+                      key: controller-api-key
                 - name: WEB_CONCURRENCY
                   value: ${WEB_CONCURRENCY}
                 - name: WORKER_THREADS
                   value: ${WORKER_THREADS}
                 - name: MAX_CRED_RESPONSE_TIMEOUT
                   value: ${MAX_CRED_RESPONSE_TIMEOUT}
-                - name: CONTROLLER_API_KEY
-                  value: ${CONTROLLER_API_KEY}
                 - name: OIDC_JWKS_URI
                   value: ${OIDC_JWKS_URI}
               volumeMounts:
@@ -432,8 +436,8 @@ parameters:
     value: "settings.yml"  
   - name: CONTROLLER_API_KEY
     displayName: Controller API Key
-    description: Defines teh API key that will be required by the controller to accept requests from the agent and on /issue-credential.
-    required: false
+    description: Defines the API key that will be required by the controller to accept requests from the agent and on /issue-credential.
+    required: true
     value: ""
   - name: OIDC_JWKS_URI
     displayName: OIDC JWKS URI
