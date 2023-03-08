@@ -18,6 +18,7 @@ TAG_NAME=dev
 # PRIME_WALLET_DB_HOST=wallet-prime
 # HEALTH_GATEWAY_WALLET_DB_HOST=wallet-health-gateway
 # BUY_BC_WALLET_DB_HOST=wallet-buybc
+# LCRB_WALLET_DB_HOST=wallet-lcrb
 # DB_USER_KEY_NAME=database-user
 # DB_PASSWORD_KEY_NAME=database-password
 # BACKUP_STRATEGY=rolling
