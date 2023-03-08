@@ -231,6 +231,8 @@ objects:
                     secretKeyRef:
                       name: ${NAME}${SUFFIX}
                       key: cr-agent-admin-api-key
+                - name: TOB_CONNECTION_NAME
+                  value: ${CR_CONNECTION_NAME}
                 - name: CONTROLLER_API_KEY
                   valueFrom:
                     secretKeyRef:
@@ -387,6 +389,11 @@ parameters:
     description: Credential registry admin api key
     required: true
     value:
+  - name: CR_CONNECTION_NAME
+    displayName: Credential Registry Connection name
+    description: The label to look-up the connection to the Credential registry in the Agent
+    required: true
+    value: orgbook-bc
   - name: WEB_CONCURRENCY
     displayName: Web Concurrency
     description: Sets the number of worker processes.
