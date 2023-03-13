@@ -6,7 +6,7 @@
 NAME=orgbook-issuer-controller
 SUFFIX=
 APP_NAME=orgbook-issuer-controller
-APP_GROUP=orgbook-issuer-controller
+APP_GROUP=orgbook-issuer
 GIT_REPO_URL=https://github.com/bcgov/aries-vcr-issuer-controller.git
 GIT_REF=main
 SOURCE_CONTEXT_DIR=issuer_controller
