@@ -217,7 +217,7 @@ issuers:
 verifiers:
   bctob:
     name: BC OrgBook
-    alias: aries-vcr
+    alias: orgbook-bc
     connection:
       type: TheOrgBook
       api_url: $TOB_API_URL
