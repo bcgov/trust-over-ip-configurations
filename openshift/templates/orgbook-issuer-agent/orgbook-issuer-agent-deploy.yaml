@@ -554,7 +554,7 @@ parameters:
     displayName: ACAPY_AUTO_ACCEPT_INVITES
     description: ACAPY_AUTO_ACCEPT_INVITES
     required: true
-    value: 'false'
+    value: 'true'
   - name: ACAPY_AUTO_ACCEPT_REQUESTS
     displayName: ACAPY_AUTO_ACCEPT_REQUESTS
     description: ACAPY_AUTO_ACCEPT_REQUESTS
