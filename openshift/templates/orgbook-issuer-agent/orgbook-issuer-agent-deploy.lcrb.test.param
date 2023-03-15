@@ -1,0 +1,62 @@
+#=========================================================
+# OpenShift template parameters for:
+# Component: .
+# Template File: ../openshift/templates/orgbook-issuer-agent/orgbook-issuer-agent-deploy.yaml
+#=========================================================
+# NAME=agent
+# SUFFIX=-lcrb
+# APP_NAME=issuer
+# APP_GROUP=lcrb-orgbook-issuer
+# ROLE=agent
+# CONTROLLER_ROLE=controller
+APPLICATION_DOMAIN=lcrb-agent-test.apps.silver.devops.gov.bc.ca
+ADMIN_APPLICATION_DOMAIN=lcrb-agent-admin-test.apps.silver.devops.gov.bc.ca
+# ROUTE_TIMEOUT=120s
+# SOURCE_IMAGE_NAME=orgbook-issuer-agent
+# IMAGE_NAMESPACE=e79518-tools
+# NAMESPACE_NAME=e79518
+TAG_NAME=test
+# APP_CONFIG_MAP_NAME=agent-config
+# APP_CONFIG_MOUNT_PATH=/home/indy/
+ACAPY_LABEL=Liquor and Cannabis Regulation Branch of British Columbia (TEST)
+AGENT_BASE_URL=https://lcrb-agent-test.apps.silver.devops.gov.bc.ca
+# WEBHOOK_URL=http://orgbook-issuer-controller-lcrb:8080/api/agentcb
+# AGENT_ADMIN_PORT=8024
+# ADMIN_API_KEY=[a-zA-Z0-9]{16}
+# AGENT_HTTP_PORT=8021
+# ACAPY_GENESIS_TRANSACTIONS_LIST=ledgers-bcreg.yaml
+ACAPY_READ_ONLY_LEDGER=false
+# ACAPY_AUTO_ACCEPT_INVITES=true
+# ACAPY_AUTO_ACCEPT_REQUESTS=false
+# ACAPY_AUTO_PING_CONNECTION=true
+# ACAPY_LOG_LEVEL=WARNING
+# ACAPY_TIMING=false
+# ACAPY_TRACE=false
+# ACAPY_TRACE_TARGET=log
+# ACAPY_TRACE_TAG=
+# ACAPY_TRACE_LABEL='${HOSTNAME}'
+# ACAPY_ENDORSER_ROLE=none
+# ACAPY_ENDORSER_ALIAS=
+# ACAPY_AUTO_REQUEST_ENDORSEMENT=false
+# ACAPY_AUTO_WRITE_TRANSACTIONS=false
+# ACAPY_CREATE_REVOCATION_TRANSACTIONS=false
+# ACAPY_WALLET_TYPE=indy
+# ACAPY_WALLET_STORAGE_TYPE=postgres_storage
+# WALLET_HOST=wallet
+# WALLET_HOST_PORT=5432
+# WALLET_STORAGE_CONFIG={\"url\":\"${POSTGRESQL_WALLET_HOST}:${POSTGRESQL_WALLET_PORT}\",\"max_connections\":5}
+# WALLET_STORAGE_CREDS={\"account\":\"${POSTGRESQL_WALLET_USER}\",\"password\":\"${POSTGRESQL_WALLET_PASSWORD}\",\"admin_account\":\"postgres\",\"admin_password\":\"${POSTGRESQL_WALLET_ADMIN_PASSWORD}\"}
+# WALLET_CREDENTIAL_STORE_NAME=agent-wallet-credentials
+# WALLET_KEY=[a-zA-Z0-9]{10}
+# WALLET_SEED=[a-zA-Z0-9]{32}
+# WALLET_DID=[a-zA-Z0-9]{16}
+# TAILS_FILES_DIR=/home/indy/.indy_client/tails
+# TAILS_FILES_VOLUME_CLASS=netapp-file-standard
+# TAILS_FILES_VOLUME_SIZE=1Gi
+ACAPY_TAILS_SERVER_BASE_URL=https://tails-test.vonx.io
+# MIN_REPLICAS=1
+# MAX_REPLICAS=1
+# CPU_REQUEST=10m
+# CPU_LIMIT=750m
+# MEMORY_REQUEST=10Mi
+# MEMORY_LIMIT=256Mi

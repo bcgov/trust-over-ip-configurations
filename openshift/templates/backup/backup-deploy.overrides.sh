@@ -11,15 +11,19 @@ fi
 # ------------------------------------------------------------------------
 # The generated config map is used to update the Backup configuration.
 # ========================================================================
-CONFIG_MAP_NAME=${CONFIG_MAP_NAME:-backup-conf}
-SOURCE_FILE=$( dirname "$0" )/config/backup.conf
 
+# Pick the environment specific config files to generate the config map ...
+profileRoot=$( dirname "$0" )/config
+profileEnv=${profileRoot}/${DEPLOYMENT_ENV_NAME}
+CONFIG_MAP_NAME=${CONFIG_MAP_NAME:-backup-conf}
+SOURCE_FILE=${profileEnv}
 OUTPUT_FORMAT=json
 OUTPUT_FILE=${CONFIG_MAP_NAME}-configmap_DeploymentConfig.json
 
 printStatusMsg "Generating ConfigMap; ${CONFIG_MAP_NAME} ..."
 generateConfigMap "${CONFIG_MAP_NAME}" "${SOURCE_FILE}" "${OUTPUT_FORMAT}" "${OUTPUT_FILE}"
 
+unset SPECIALDEPLOYPARMS
 
 if createOperation; then
   # Get the webhook URL
@@ -28,6 +32,8 @@ else
   printStatusMsg "Update operation detected ...\nSkipping the prompts for the WEBHOOK_URL secret ...\n"
   writeParameter "WEBHOOK_URL" "prompt_skipped" "false"
 fi
+
+printStatusMsg "IMPORTANT!!! Remember to comment-out environemnt variables that are not relevant for the targeted environment!\n"
 
 SPECIALDEPLOYPARMS="--param-file=${_overrideParamFile}"
 echo ${SPECIALDEPLOYPARMS}

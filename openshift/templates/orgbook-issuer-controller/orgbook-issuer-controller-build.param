@@ -1,0 +1,19 @@
+#=========================================================
+# OpenShift template parameters for:
+# Component: .
+# Template File: ../openshift/templates/controller/controller-build.yaml
+#=========================================================
+NAME=orgbook-issuer-controller
+SUFFIX=
+APP_NAME=orgbook-issuer-controller
+APP_GROUP=orgbook-issuer
+GIT_REPO_URL=https://github.com/bcgov/aries-vcr-issuer-controller.git
+GIT_REF=main
+SOURCE_CONTEXT_DIR=issuer_controller
+OUTPUT_IMAGE_TAG=latest
+DOCKER_FILE_PATH=Dockerfile
+SOURCE_IMAGE_NAME=artifacts.developer.gov.bc.ca/docker-remote/python:3.9-slim
+CPU_LIMIT=0
+MEMORY_LIMIT=0Mi
+CPU_REQUEST=0
+MEMORY_REQUEST=0Mi
