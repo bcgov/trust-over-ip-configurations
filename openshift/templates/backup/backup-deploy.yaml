@@ -101,8 +101,7 @@ objects:
         app.openshift.io/connects-to: >-
           [{"apiVersion":"apps.openshift.io/v1","kind":"DeploymentConfig","name":"${VC_AUTHN_DB_HOST}"},
           {"apiVersion":"apps.openshift.io/v1","kind":"DeploymentConfig","name":"${VC_AUTHN_WALLET_DB_HOST}"},
-          {"apiVersion":"apps.openshift.io/v1","kind":"DeploymentConfig","name":"${LSBC_WALLET_DB_HOST}"},
-          {"apiVersion":"apps.openshift.io/v1","kind":"DeploymentConfig","name":"${PRIME_WALLET_DB_HOST}"}]
+          {"apiVersion":"apps.openshift.io/v1","kind":"DeploymentConfig","name":"${LSBC_WALLET_DB_HOST}"}]
     spec:
       strategy:
         type: Recreate
@@ -189,26 +188,6 @@ objects:
                   valueFrom:
                     secretKeyRef:
                       name: ${PREFIX}${LSBC_WALLET_DB_HOST}
-                      key: ${DB_PASSWORD_KEY_NAME}
-                - name: WALLET_PRIME_USER
-                  valueFrom:
-                    secretKeyRef:
-                      name: ${PREFIX}${PRIME_WALLET_DB_HOST}
-                      key: ${DB_USER_KEY_NAME}
-                - name: WALLET_PRIME_PASSWORD
-                  valueFrom:
-                    secretKeyRef:
-                      name: ${PREFIX}${PRIME_WALLET_DB_HOST}
-                      key: ${DB_PASSWORD_KEY_NAME}
-                - name: WALLET_HEALTH_GATEWAY_USER
-                  valueFrom:
-                    secretKeyRef:
-                      name: ${PREFIX}${HEALTH_GATEWAY_WALLET_DB_HOST}
-                      key: ${DB_USER_KEY_NAME}
-                - name: WALLET_HEALTH_GATEWAY_PASSWORD
-                  valueFrom:
-                    secretKeyRef:
-                      name: ${PREFIX}${HEALTH_GATEWAY_WALLET_DB_HOST}
                       key: ${DB_PASSWORD_KEY_NAME}
                 - name: WALLET_BUYBC_USER
                   valueFrom:
@@ -357,20 +336,6 @@ parameters:
       particular, this is used to wire up the credentials associated to the database.
     required: true
     value: wallet-lsbc
-  - name: PRIME_WALLET_DB_HOST
-    displayName: Wallet Database Hostname
-    description:
-      The name associated to the wallet database deployment resources.  In
-      particular, this is used to wire up the credentials associated to the database.
-    required: true
-    value: wallet-prime
-  - name: HEALTH_GATEWAY_WALLET_DB_HOST
-    displayName: Wallet Database Hostname
-    description:
-      The name associated to the wallet database deployment resources.  In
-      particular, this is used to wire up the credentials associated to the database.
-    required: true
-    value: wallet-health-gateway
   - name: BUY_BC_WALLET_DB_HOST
     displayName: Wallet Database Hostname
     description:
