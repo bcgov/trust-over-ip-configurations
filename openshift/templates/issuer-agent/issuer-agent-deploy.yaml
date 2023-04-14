@@ -497,7 +497,7 @@ parameters:
     displayName: Environment TAG prefix
     description: The prefix for the TAG name for this environment.
     required: false
-    value: 
+    value:
   - name: TAG_NAME
     displayName: Environment TAG name
     description: The TAG name for this environment, e.g., dev, test, prod.
