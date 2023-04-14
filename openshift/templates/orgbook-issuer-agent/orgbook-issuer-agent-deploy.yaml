@@ -1,0 +1,752 @@
+---
+kind: Template
+apiVersion: v1
+metadata:
+  name: ${NAME}${SUFFIX}
+objects:
+  - kind: NetworkPolicy
+    apiVersion: networking.k8s.io/v1
+    metadata:
+      name: ${NAME}${SUFFIX}-allow-ingress
+      labels:
+        name: ${NAME}${SUFFIX}-allow-ingress
+        app: ${APP_NAME}${SUFFIX}
+        app-group: ${APP_GROUP}
+        role: ${ROLE}
+        env: ${TAG_NAME}
+    spec:
+      description: |
+        Allow traffic from routes into the ${ROLE} container(s).
+      ingress:
+        - from:
+            - namespaceSelector:
+                matchLabels:
+                  network.openshift.io/policy-group: ingress
+      podSelector:
+        matchLabels:
+          role: ${ROLE}
+          app: ${APP_NAME}${SUFFIX}
+          env: ${TAG_NAME}
+      policyTypes:
+        - Ingress
+
+  - kind: NetworkPolicy
+    apiVersion: networking.k8s.io/v1
+    metadata:
+      name: ${NAME}${SUFFIX}
+      labels:
+        name: ${NAME}${SUFFIX}
+        app: ${APP_NAME}${SUFFIX}
+        app-group: ${APP_GROUP}
+        role: ${ROLE}
+        env: ${TAG_NAME}
+    spec:
+      description: |
+        Allow the API to access the agent admin interface.
+      ingress:
+        - from:
+            - podSelector:
+                matchLabels:
+                  role: ${CONTROLLER_ROLE}
+                  app: ${APP_NAME}${SUFFIX}
+                  env: ${TAG_NAME}
+              namespaceSelector:
+                matchLabels:
+                  name: ${NAMESPACE_NAME}
+                  environment: ${TAG_NAME}
+          ports:
+            - protocol: TCP
+              port: ${{AGENT_ADMIN_PORT}}
+      podSelector:
+        matchLabels:
+          role: ${ROLE}
+          app: ${APP_NAME}${SUFFIX}
+          env: ${TAG_NAME}
+
+  - kind: Service
+    apiVersion: v1
+    metadata:
+      name: ${NAME}${SUFFIX}
+      labels:
+        name: ${NAME}${SUFFIX}
+        app: ${APP_NAME}${SUFFIX}
+        app.kubernetes.io/part-of: ${APP_NAME}${SUFFIX}
+        app-group: ${APP_GROUP}
+        role: ${ROLE}
+        env: ${TAG_NAME}
+    spec:
+      ports:
+        - name: ${NAME}-admin
+          port: ${{AGENT_ADMIN_PORT}}
+          protocol: TCP
+          targetPort: ${{AGENT_ADMIN_PORT}}
+        - name: ${NAME}-http
+          port: ${{AGENT_HTTP_PORT}}
+          protocol: TCP
+          targetPort: ${{AGENT_HTTP_PORT}}
+      selector:
+        name: ${NAME}${SUFFIX}
+
+  - kind: Route
+    apiVersion: v1
+    metadata:
+      name: ${NAME}${SUFFIX}
+      labels:
+        name: ${NAME}${SUFFIX}
+        app: ${APP_NAME}${SUFFIX}
+        app.kubernetes.io/part-of: ${APP_NAME}${SUFFIX}
+        app-group: ${APP_GROUP}
+        role: ${ROLE}
+        env: ${TAG_NAME}
+      annotations:
+        haproxy.router.openshift.io/timeout: ${ROUTE_TIMEOUT}
+    spec:
+      host: ${APPLICATION_DOMAIN}
+      port:
+        targetPort: ${NAME}-http
+      tls:
+        insecureEdgeTerminationPolicy: Redirect
+        termination: edge
+      to:
+        kind: Service
+        name: ${NAME}${SUFFIX}
+        weight: 100
+
+  - kind: Route
+    apiVersion: v1
+    metadata:
+      name: ${NAME}-admin${SUFFIX}
+      labels:
+        name: ${NAME}${SUFFIX}
+        app: ${APP_NAME}${SUFFIX}
+        app.kubernetes.io/part-of: ${APP_NAME}${SUFFIX}
+        app-group: ${APP_GROUP}
+        role: ${ROLE}
+        env: ${TAG_NAME}
+      annotations:
+        haproxy.router.openshift.io/timeout: ${ROUTE_TIMEOUT}
+    spec:
+      host: ${ADMIN_APPLICATION_DOMAIN}
+      port:
+        targetPort: ${NAME}-admin
+      tls:
+        insecureEdgeTerminationPolicy: Redirect
+        termination: edge
+      to:
+        kind: Service
+        name: ${NAME}${SUFFIX}
+        weight: 100
+
+  - kind: PersistentVolumeClaim
+    apiVersion: v1
+    metadata:
+      name: ${NAME}${SUFFIX}-tails
+      labels:
+        name: ${NAME}${SUFFIX}
+        app: ${APP_NAME}${SUFFIX}
+        app.kubernetes.io/part-of: ${APP_NAME}${SUFFIX}
+        app-group: ${APP_GROUP}
+        role: ${ROLE}
+        env: ${TAG_NAME}
+    spec:
+      storageClassName: "${TAILS_FILES_VOLUME_CLASS}"
+      accessModes:
+        - ReadWriteMany
+      resources:
+        requests:
+          storage: "${TAILS_FILES_VOLUME_SIZE}"
+
+  - kind: Secret
+    apiVersion: v1
+    metadata:
+      name: ${WALLET_CREDENTIAL_STORE_NAME}${SUFFIX}
+      labels:
+        name: ${NAME}${SUFFIX}
+        app: ${APP_NAME}${SUFFIX}
+        app.kubernetes.io/part-of: ${APP_NAME}${SUFFIX}
+        app-group: ${APP_GROUP}
+        role: ${ROLE}
+        env: ${TAG_NAME}
+    stringData:
+      key: ${WALLET_KEY}
+      seed: ${WALLET_SEED}
+      did: ${WALLET_DID}
+    type: Opaque
+
+  - kind: Secret
+    apiVersion: v1
+    metadata:
+      name: ${NAME}${SUFFIX}
+      labels:
+        name: ${NAME}${SUFFIX}
+        app: ${APP_NAME}${SUFFIX}
+        app.kubernetes.io/part-of: ${APP_NAME}${SUFFIX}
+        app-group: ${APP_GROUP}
+        role: ${ROLE}
+        env: ${TAG_NAME}
+    stringData:
+      admin-api-key: ${ADMIN_API_KEY}
+      webhook-url: ${WEBHOOK_URL}
+    type: Opaque
+
+  - kind: DeploymentConfig
+    apiVersion: v1
+    metadata:
+      name: ${NAME}${SUFFIX}
+      labels:
+        name: ${NAME}${SUFFIX}
+        app: ${APP_NAME}${SUFFIX}
+        app.kubernetes.io/part-of: ${APP_NAME}${SUFFIX}
+        app-group: ${APP_GROUP}
+        role: ${ROLE}
+        env: ${TAG_NAME}
+    spec:
+      replicas: 1
+      selector:
+        name: ${NAME}${SUFFIX}
+      strategy:
+        type: Rolling
+      template:
+        metadata:
+          name: ${NAME}${SUFFIX}
+          labels:
+            name: ${NAME}${SUFFIX}
+            app: ${APP_NAME}${SUFFIX}
+            app.kubernetes.io/part-of: ${APP_NAME}${SUFFIX}
+            app-group: ${APP_GROUP}
+            role: ${ROLE}
+            env: ${TAG_NAME}
+          annotations:
+            description: Defines how to deploy the ${NAME}${SUFFIX} server
+            app.openshift.io/connects-to: >-
+              [{"apiVersion":"apps.openshift.io/v1","kind":"DeploymentConfig","name":"wallet${SUFFIX}"}]
+        spec:
+          volumes:
+            - name: ${NAME}${SUFFIX}-tails
+              persistentVolumeClaim:
+                claimName: ${NAME}${SUFFIX}-tails
+            - name: ${NAME}${SUFFIX}-app-config-volume
+              configMap:
+                name: ${APP_CONFIG_MAP_NAME}${SUFFIX}
+                items:
+                  - key: ${ACAPY_GENESIS_TRANSACTIONS_LIST}
+                    path: ${ACAPY_GENESIS_TRANSACTIONS_LIST}
+          containers:
+            - name: ${NAME}${SUFFIX}
+              command:
+                # Note:
+                #  - The wallet-name cannot contain '-'s.
+                - bash
+                - -c
+                - $(echo aca-py start
+                  --inbound-transport http '0.0.0.0' ${HTTP_INTERFACE_PORT}
+                  --outbound-transport http
+                  --wallet-name "$(echo ${AGENT_WALLET_NAME} | tr '[:upper:]' '[:lower:]' | sed "s~-~_~g")"
+                  --wallet-storage-config "$(eval echo \"${WALLET_STORAGE_CONFIGURATION}\")"
+                  --wallet-storage-creds "$(eval echo \"${WALLET_STORAGE_CREDENTIALS}\")"
+                  --admin '0.0.0.0' ${ADMIN_INTERFACE_PORT}
+                  $([ ! -z "${AGENT_ADMIN_API_KEY}" ] && echo "--admin-api-key ${AGENT_ADMIN_API_KEY}" || echo "--admin-insecure-mode")
+                  --plugin indy_catalyst_issuer_registration);
+              env:
+                - name: ACAPY_LABEL
+                  value: ${ACAPY_LABEL}
+                - name: ACAPY_ENDPOINT
+                  value: ${AGENT_BASE_URL}
+                - name: ACAPY_READ_ONLY_LEDGER
+                  value: ${ACAPY_READ_ONLY_LEDGER}
+                - name: ACAPY_GENESIS_TRANSACTIONS_LIST
+                  value: ${APP_CONFIG_MOUNT_PATH}${ACAPY_GENESIS_TRANSACTIONS_LIST}
+
+                - name: ACAPY_AUTO_ACCEPT_INVITES
+                  value: ${ACAPY_AUTO_ACCEPT_INVITES}
+                - name: ACAPY_AUTO_ACCEPT_REQUESTS
+                  value: ${ACAPY_AUTO_ACCEPT_REQUESTS}
+                - name: ACAPY_AUTO_PING_CONNECTION
+                  value: ${ACAPY_AUTO_PING_CONNECTION}
+
+                - name: ACAPY_ENDORSER_ALIAS
+                  value: ${ACAPY_ENDORSER_ALIAS}
+                - name: ACAPY_ENDORSER_ROLE
+                  value: ${ACAPY_ENDORSER_ROLE}
+                - name: ACAPY_AUTO_REQUEST_ENDORSEMENT
+                  value: ${ACAPY_AUTO_REQUEST_ENDORSEMENT}
+                - name: ACAPY_AUTO_WRITE_TRANSACTIONS
+                  value: ${ACAPY_AUTO_WRITE_TRANSACTIONS}
+                - name: ACAPY_CREATE_REVOCATION_TRANSACTIONS
+                  value: ${ACAPY_CREATE_REVOCATION_TRANSACTIONS}
+
+                - name: ACAPY_AUTO_PROVISION
+                  value: ${ACAPY_AUTO_PROVISION}
+                - name: AGENT_WALLET_NAME
+                  value: ${NAME}${SUFFIX}-wallet
+                - name: ACAPY_WALLET_TYPE
+                  value: ${ACAPY_WALLET_TYPE}
+                - name: ACAPY_WALLET_STORAGE_TYPE
+                  value: ${ACAPY_WALLET_STORAGE_TYPE}
+                - name: POSTGRESQL_WALLET_HOST
+                  value: ${WALLET_HOST}${SUFFIX}
+                - name: POSTGRESQL_WALLET_PORT
+                  value: ${WALLET_HOST_PORT}
+                - name: WALLET_STORAGE_CONFIGURATION
+                  value: ${WALLET_STORAGE_CONFIG}
+                - name: WALLET_STORAGE_CREDENTIALS
+                  value: ${WALLET_STORAGE_CREDS}
+                - name: POSTGRESQL_WALLET_USER
+                  valueFrom:
+                    secretKeyRef:
+                      name: ${WALLET_HOST}${SUFFIX}
+                      key: database-user
+                - name: POSTGRESQL_WALLET_PASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      name: ${WALLET_HOST}${SUFFIX}
+                      key: database-password
+                - name: POSTGRESQL_WALLET_ADMIN_PASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      name: ${WALLET_HOST}${SUFFIX}
+                      key: admin-password
+                - name: ACAPY_WALLET_KEY
+                  valueFrom:
+                    secretKeyRef:
+                      name: ${WALLET_CREDENTIAL_STORE_NAME}${SUFFIX}
+                      key: key
+                - name: ACAPY_WALLET_SEED
+                  valueFrom:
+                    secretKeyRef:
+                      name: ${WALLET_CREDENTIAL_STORE_NAME}${SUFFIX}
+                      key: seed
+                - name: WALLET_DID
+                  valueFrom:
+                    secretKeyRef:
+                      name: ${WALLET_CREDENTIAL_STORE_NAME}${SUFFIX}
+                      key: did
+
+                - name: WEBHOOK_URL
+                  valueFrom:
+                    secretKeyRef:
+                      name: ${NAME}${SUFFIX}
+                      key: webhook-url
+                - name: HTTP_INTERFACE_PORT
+                  value: ${AGENT_HTTP_PORT}
+                - name: ADMIN_INTERFACE_PORT
+                  value: ${AGENT_ADMIN_PORT}
+                - name: AGENT_ADMIN_API_KEY
+                  valueFrom:
+                    secretKeyRef:
+                      name: ${NAME}${SUFFIX}
+                      key: admin-api-key
+
+                - name: ACAPY_LOG_LEVEL
+                  value: ${ACAPY_LOG_LEVEL}
+                - name: ACAPY_TIMING
+                  value: ${ACAPY_TIMING}
+                - name: ACAPY_TRACE
+                  value: ${ACAPY_TRACE}
+                - name: ACAPY_TRACE_TARGET
+                  value: ${ACAPY_TRACE_TARGET}
+                - name: ACAPY_TRACE_TAG
+                  value: ${ACAPY_TRACE_TAG}
+                - name: ACAPY_TRACE_LABEL
+                  value: ${ACAPY_TRACE_LABEL}
+                
+                - name: ACAPY_TAILS_SERVER_BASE_URL
+                  value: ${ACAPY_TAILS_SERVER_BASE_URL}
+                - name: TAILS_FILES_DIR
+                  value: ${TAILS_FILES_DIR}
+              image:
+              ports:
+                - containerPort: ${{AGENT_ADMIN_PORT}}
+                  protocol: TCP
+                - containerPort: ${{AGENT_HTTP_PORT}}
+                  protocol: TCP
+              volumeMounts:
+                - name: ${NAME}${SUFFIX}-tails
+                  mountPath: "${TAILS_FILES_DIR}"
+                - name: ${NAME}${SUFFIX}-app-config-volume
+                  mountPath: ${APP_CONFIG_MOUNT_PATH}${ACAPY_GENESIS_TRANSACTIONS_LIST}
+                  subPath: ${ACAPY_GENESIS_TRANSACTIONS_LIST}
+              readinessProbe:
+                timeoutSeconds: 30
+                initialDelaySeconds: 3
+                exec:
+                  command:
+                    - bash
+                    - "-c"
+                    - 'curl --fail "http://localhost:${ADMIN_INTERFACE_PORT}/status/ready" -H "X-API-KEY: ${AGENT_ADMIN_API_KEY}"'
+              livenessProbe:
+                timeoutSeconds: 30
+                initialDelaySeconds: 300
+                exec:
+                  command:
+                    - bash
+                    - "-c"
+                    - 'curl --fail "http://localhost:${ADMIN_INTERFACE_PORT}/status/live" -H "X-API-KEY: ${AGENT_ADMIN_API_KEY}"'
+
+              imagePullPolicy: IfNotPresent
+              resources:
+                limits:
+                  cpu: ${CPU_LIMIT}
+                  memory: ${MEMORY_LIMIT}
+                requests:
+                  cpu: ${CPU_REQUEST}
+                  memory: ${MEMORY_REQUEST}
+              terminationMessagePath: /dev/termination-log
+              terminationMessagePolicy: File
+          dnsPolicy: ClusterFirst
+          restartPolicy: Always
+          schedulerName: default-scheduler
+          securityContext: {}
+          terminationGracePeriodSeconds: 30
+      triggers:
+        - type: ConfigChange
+        - type: ImageChange
+          imageChangeParams:
+            automatic: true
+            containerNames:
+              - ${NAME}${SUFFIX}
+            from:
+              kind: ImageStreamTag
+              name: ${SOURCE_IMAGE_NAME}:${TAG_NAME}
+              namespace: ${IMAGE_NAMESPACE}
+
+  - kind: HorizontalPodAutoscaler
+    apiVersion: autoscaling/v1
+    metadata:
+      name: ${NAME}${SUFFIX}
+      labels:
+        name: ${NAME}${SUFFIX}
+        app: ${APP_NAME}${SUFFIX}
+        app.kubernetes.io/part-of: ${APP_NAME}${SUFFIX}
+        app-group: ${APP_GROUP}
+        role: ${ROLE}
+        env: ${TAG_NAME}
+    spec:
+      scaleTargetRef:
+        kind: DeploymentConfig
+        name: ${NAME}${SUFFIX}
+      minReplicas: ${{MIN_REPLICAS}}
+      maxReplicas: ${{MAX_REPLICAS}}
+
+parameters:
+  - name: NAME
+    displayName: Name
+    description: The name assigned to all the objects defined in this template.
+    required: true
+    value: orgbook-issuer-agent
+  - name: SUFFIX
+    displayName: Suffix
+    description: A name suffix used for all objects.
+    required: false
+    value:
+  - name: APP_NAME
+    displayName: App Name
+    description: Used to group components together in the OpenShift console.
+    required: true
+    value: orgbook-issuer
+  - name: APP_GROUP
+    displayName: App Group
+    description: Used to group components together.
+    required: true
+    value: orgbook-issuer
+  - name: ROLE
+    displayName: Role
+    description: Role
+    required: true
+    value: agent
+  - name: CONTROLLER_ROLE
+    displayName: Controller Role
+    description: The name given to the controller role.
+    required: true
+    value: controller
+  - name: APPLICATION_DOMAIN
+    displayName: Application Hostname
+    description: The exposed hostname that will route to the service, if left blank a value will be defaulted.
+    required: false
+    value: orgbook-issuer-agent-dev.apps.silver.devops.gov.bc.ca
+  - name: ADMIN_APPLICATION_DOMAIN
+    displayName: Admin Application Hostname
+    description: The exposed hostname that will route to the admin API for this service, if left blank a value will be defaulted.
+    required: false
+    value: orgbook-issuer-agent-admin-dev.apps.silver.devops.gov.bc.ca
+  - name: ROUTE_TIMEOUT
+    displayName: Route Timeout
+    description: The timeout for the application route.  When this timeout is exceeded the application's route will respond with a 504 Gateway Timeout error.
+    required: true
+    value: 120s
+  - name: SOURCE_IMAGE_NAME
+    displayName: Image name
+    description: The image name to be used for this deployment.
+    required: true
+    value: orgbook-issuer-agent
+  - name: IMAGE_NAMESPACE
+    displayName: Namespace containing application images.
+    required: true
+    value: e79518-tools
+  - name: NAMESPACE_NAME
+    displayName: Namespace Name
+    description: The name of the namespace being deployed to.
+    required: true
+    value: e79518
+  - name: TAG_NAME
+    displayName: Environment TAG name
+    description: The TAG name for this environment, e.g., dev, test, prod.
+    required: true
+    value: dev
+  - name: APP_CONFIG_MAP_NAME
+    displayName: Application Config Map Name
+    description:
+      The name of the configuration map holding the data to configure the
+      application.
+    required: true
+    value: agent-config
+  - name: APP_CONFIG_MOUNT_PATH
+    displayName: Application Config Map Mount Path
+    description: The mount path for the application Config Map.
+    required: true
+    value: /home/indy/
+  
+  #  Agent Global Settings
+  - name: ACAPY_LABEL
+    displayName: Agent Label/Name
+    description: The label/name of the agent
+    required: true
+    value: OrgBook Issuer Agent
+  - name: AGENT_BASE_URL
+    displayName: Agent endpoint
+    description: The endpoint of the agent
+    required: true
+    value: https://orgbook-issuer-agent-dev.apps.silver.devops.gov.bc.ca
+  - name: WEBHOOK_URL
+    displayName: Webhook URL
+    description: The webhook endpoint
+    required: true
+    value: http://orgbook-issuer-controller:8080/api/agentcb
+  - name: AGENT_ADMIN_PORT
+    displayName: Agent Admin Port
+    description: The admin port on which the service will listen.
+    required: true
+    value: "8024"
+  - name: ADMIN_API_KEY
+    displayName: Agent Admin API Key
+    description: The key used to authenticate client requests to the admin api.
+    required: true
+    generate: expression
+    from: "[a-zA-Z0-9_~!@#$%^&*()-=<>,.?;:|]{16}"
+  - name: AGENT_HTTP_PORT
+    displayName: Agent Http Port
+    description: The http port on which the service will listen.
+    required: true
+    value: "8021"
+  
+  - name: ACAPY_GENESIS_TRANSACTIONS_LIST
+    displayName: Multi-ledger configuration file location
+    description: File location for the multi-ledger yaml config file
+    required: true
+    value: ledgers.yaml
+  - name: ACAPY_READ_ONLY_LEDGER
+    displayName: Set read only ledger flag.
+    description: Enable/Disable the read only ledger flag.  Controls the inclusion/exclusion of the agent '--read-only-ledger' startup parameter.  Defaults to disabled.
+    required: false
+    value: "true"
+
+  - name: ACAPY_AUTO_ACCEPT_INVITES
+    displayName: ACAPY_AUTO_ACCEPT_INVITES
+    description: ACAPY_AUTO_ACCEPT_INVITES
+    required: true
+    value: 'true'
+  - name: ACAPY_AUTO_ACCEPT_REQUESTS
+    displayName: ACAPY_AUTO_ACCEPT_REQUESTS
+    description: ACAPY_AUTO_ACCEPT_REQUESTS
+    required: true
+    value: 'false'
+  - name: ACAPY_AUTO_PING_CONNECTION
+    displayName: Auto Ping Connection
+    description: Automatically send a trust ping immediately after a connection response is accepted. Some agents require this before marking a connection as 'active'.
+    required: true
+    value: 'true'
+
+  # Logging/Tracing Settings
+  - name: ACAPY_LOG_LEVEL
+    displayName: Log Level
+    description: The logging level for the agent, one of 'debug', 'info', 'warning', 'error', 'critical'
+    required: true
+    value: WARNING
+  - name: ACAPY_TIMING
+    displayName: Collect agent timing information.
+    description: Enable/Disable collection of agent timing information.  Controls the inclusion/exclusion of the agent '--timing' startup parameter.  Defaults to disabled.
+    required: false
+    value: "false"
+  - name: ACAPY_TRACE
+    displayName: Enable agent tracing
+    description: Enable/Disable tracing.
+    required: false
+    value: "false"
+  - name: ACAPY_TRACE_TARGET
+    displayName: Set the agent's trace target.
+    description: Set the tracing target.  Target for trace events ("log", "message", or http endpoint).
+    required: false
+    value: "log"
+  - name: ACAPY_TRACE_TAG
+    displayName: Tag to be included when logging events.
+    description: Tag to be included when logging events.
+    required: false
+    value: ""
+  - name: ACAPY_TRACE_LABEL
+    displayName: Label (agent name) used logging events.
+    description: Label (agent name) used logging events.  Supports environment variables, '${HOSTNAME}' for example.
+    required: false
+    value: "'${HOSTNAME}'"
+  
+  # Endorser Settings
+  - name: ACAPY_ENDORSER_ROLE
+    displayName: Endorser Role
+    description:
+      Specify the role ('author', 'endorser', or 'none') which this agent will participate. Authors will request transaction endorement from an Endorser. Endorsers will endorse transactions from Authors, and may write their own transactions to the ledger. If no role ('none') is specified then the endorsement protocol will not be used and this agent will write transactions to the ledger directly.
+    required: true
+    value: none
+  - name: ACAPY_ENDORSER_ALIAS
+    displayName: Endorser Alias
+    description:
+      For transaction Authors, specify the alias of the Endorser connection that will be used to endorse transactions.
+      This MUST match the setting used for the alias of the connection when establishing the connection with the Endorser.
+      Example; 'Endorser'
+    required: false
+    value:
+  - name: ACAPY_AUTO_REQUEST_ENDORSEMENT
+    displayName: Auto Request Endorsement
+    description:
+      For Authors, specify whether to automatically request endorsement for all transactions.  If not specified, the controller must invoke the request endorse operation for each transaction.
+    required: true
+    value: 'false'
+  - name: ACAPY_AUTO_WRITE_TRANSACTIONS
+    displayName: Auto Write Transactions
+    description:
+      For Authors, specify whether to automatically write any endorsed transactions.  If not specified, the controller must invoke the write transaction operation for each transaction.
+    required: true
+    value: 'false'
+  - name: ACAPY_CREATE_REVOCATION_TRANSACTIONS
+    displayName: Auto Create Revocation Transactions
+    description:
+      For Authors, specify whether to automatically create transactions for a cred def's revocation registry.  If not specified,the controller must invoke the endpoints required to create the revocation registry and assign to the cred def.
+    required: true
+    value: 'false'
+  
+  # Wallet Settings  
+  - name: ACAPY_AUTO_PROVISION
+    displayName: Auto Provision
+    description: If the requested profile does not exist, initialize it with the given parameters.
+    required: true
+    value: 'true'
+  - name: ACAPY_WALLET_TYPE
+    displayName: Wallet Type
+    description:
+      The wallet type.  Supported internal storage types are 'basic' (memory), 'indy', and 'askar'.
+    required: false
+    value: 'indy'
+  - name: ACAPY_WALLET_STORAGE_TYPE
+    displayName: Wallet Storage Type
+    description:
+      The wallet storage type.  Your choice of 'postgres' or 'sqlite' at
+      the moment.  If not defined, defaults to 'sqlite' for compatibility
+    required: false
+    value: postgres_storage
+  - name: WALLET_HOST
+    displayName: PostgreSql Wallet Hostname
+    required: true
+    description: Hostname of the deployed database hosting the wallet.  Only used when ACAPY_WALLET_STORAGE_TYPE = postgres_storage.
+    value: wallet
+  - name: WALLET_HOST_PORT
+    displayName: PostgreSql Wallet Port
+    required: true
+    description: The port number of the deployed database hosting the wallet.  Only used when ACAPY_WALLET_STORAGE_TYPE = postgres_storage.
+    value: "5432"
+  - name: WALLET_STORAGE_CONFIG
+    displayName: Wallet Storage Configuration
+    required: true
+    description: Wallet storage configuration
+    value: '{\"url\":\"${POSTGRESQL_WALLET_HOST}:${POSTGRESQL_WALLET_PORT}\",\"max_connections\":5}'
+  - name: WALLET_STORAGE_CREDS
+    displayName: Wallet Storage Credential Configuration
+    required: true
+    description: Wallet storage credential configuration
+    value: '{\"account\":\"${POSTGRESQL_WALLET_USER}\",\"password\":\"${POSTGRESQL_WALLET_PASSWORD}\",\"admin_account\":\"postgres\",\"admin_password\":\"${POSTGRESQL_WALLET_ADMIN_PASSWORD}\"}'
+  - name: WALLET_CREDENTIAL_STORE_NAME
+    displayName: Wallet Credential Store Name
+    description:
+      The name of the wallet credential store (aka The name of the secret
+      that contains the wallet credentials).
+    required: true
+    value: agent-wallet-credentials
+  - name: WALLET_KEY
+    displayName: Wallet Encryption Key
+    description: The encryption key to be used for the wallets.  Needs to be basee64 encoded.
+    required: true
+    generate: expression
+    from: "[a-zA-Z0-9_~!@#$%^&*()-=<>,.?;:|]{16}"
+  - name: WALLET_SEED
+    displayName: Wallet Seed
+    description: The Seed used for the agent's wallet.  Needs to be basee64 encoded.
+    required: true
+    generate: expression
+    from: "[a-zA-Z0-9_~!@#$%^&*()-=<>,.?;:|]{16}"
+  - name: WALLET_DID
+    displayName: Indy Wallet DID
+    description: The DID associated to the indy wallet.  Needs to be basee64 encoded.
+    required: false
+    generate: expression
+    from: "[a-zA-Z0-9_~!@#$%^&*()-=<>,.?;:|]{16}"
+  
+  # Tails Files Settings
+  - name: TAILS_FILES_DIR
+    displayName: Tails File Storage Dir
+    description: The directory where the local copies of the tails files will be stored.
+    required: true
+    value: /home/indy/.indy_client/tails
+  - name: TAILS_FILES_VOLUME_CLASS
+    displayName: Tails File Storage Volume Class
+    description: The class of the volume; gluster-file, gluster-block, gluster-file-db, netapp-file-standard, netapp-block-standard.
+    required: true
+    value: netapp-file-standard
+  - name: TAILS_FILES_VOLUME_SIZE
+    displayName: Tails File Storage Dir
+    description: The size of the persistent volume , e.g. 512Mi, 1Gi, 2Gi.
+    required: true
+    value: 1Gi
+  - name: ACAPY_TAILS_SERVER_BASE_URL
+    displayName: Tails Server Base Url
+    description: The base URL for the Tails Server.
+    required: true
+    value: https://tails-dev.vonx.io
+  
+  # Cluster Resources
+  - name: MIN_REPLICAS
+    displayName: Minimum Replicas
+    description: The minimum number of pods to have running.
+    required: true
+    value: "1"
+  - name: MAX_REPLICAS
+    displayName: Maximum Replicas
+    description: The maximum number of pods to have running.
+    required: true
+    value: "1"
+  - name: CPU_REQUEST
+    displayName: Resources CPU Request
+    description: The resources CPU request (in cores) for this build.
+    required: true
+    value: 10m
+  - name: CPU_LIMIT
+    displayName: Resources CPU Limit
+    description: The resources CPU limit (in cores) for this build.
+    required: true
+    value: 750m
+  - name: MEMORY_REQUEST
+    displayName: Resources Memory Request
+    description: The resources Memory request (in Mi, Gi, etc) for this build.
+    required: true
+    value: 10Mi
+  - name: MEMORY_LIMIT
+    displayName: Resources Memory Limit
+    description: The resources Memory limit (in Mi, Gi, etc) for this build.
+    required: true
+    value: 256Mi

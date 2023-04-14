@@ -1,0 +1,41 @@
+#=========================================================
+# OpenShift template parameters for:
+# Component: .
+# Template File: ../openshift/templates/controller/controller-deploy.yaml
+#=========================================================
+NAME=orgbook-issuer-controller
+ROLE=controller
+AGENT_ROLE=agent
+NAMESPACE=e79518
+SUFFIX=-lcrb
+APP_NAME=issuer
+APP_GROUP=lcrb-orgbook-issuer
+APPLICATION_DOMAIN=lcrb-orgbook-issuer-dev.apps.silver.devops.gov.bc.ca
+IMAGE_NAMESPACE=e79518-tools
+NAMESPACE_NAME=e79518
+TAG_NAME=dev
+CONFIG_ROOT=/home/indy/config
+HOST_PORT=8080
+ENVIRONMENT=default
+AGENT_SERVICE_NAME=agent
+AGENT_ADMIN_PORT=8024
+CR_AGENT_ADMIN_URL=
+CR_ADMIN_API_KEY=
+CR_CONNECTION_NAME=orgbook-bc
+WEB_CONCURRENCY=1
+WORKER_THREADS=160
+MAX_CRED_RESPONSE_TIMEOUT=90
+CONFIG_MAP_NAME=controller
+CONFIG_MOUNT_PATH=/home/indy/config/
+ROUTES_FILE_NAME=routes.yml
+SCHEMAS_FILE_NAME=schemas.yml
+SERVICES_FILE_NAME=services.yml
+SETTINGS_FILE_NAME=settings.yml
+CONTROLLER_API_KEY=
+OIDC_JWKS_URI=
+MIN_REPLICAS=1
+MAX_REPLICAS=1
+CPU_REQUEST=10m
+CPU_LIMIT=250m
+MEMORY_REQUEST=10Mi
+MEMORY_LIMIT=128Mi
