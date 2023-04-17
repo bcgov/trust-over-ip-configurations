@@ -332,13 +332,6 @@ parameters:
       this is used to wire up the credentials associated to the database.
     required: true
     value: traction-dts-db
-  - name: TRACTION_DTS_DB_HOST
-    displayName: Database Deployment Name
-    description:
-      The name associated to the database deployment resources.  In particular,
-      this is used to wire up the credentials associated to the database.
-    required: true
-    value: traction-dts
   - name: VC_AUTHN_DB_HOST
     displayName: Database Deployment Name
     description:
