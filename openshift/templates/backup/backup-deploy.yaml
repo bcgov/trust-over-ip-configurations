@@ -159,6 +159,16 @@ objects:
                   value: ${WEEKLY_BACKUPS}
                 - name: MONTHLY_BACKUPS
                   value: ${MONTHLY_BACKUPS}
+                - name: TRACTION_DTS_DATABASE_USER
+                  valueFrom:
+                    secretKeyRef:
+                      name: ${PREFIX}${TRACTION_DTS_DB_HOST}
+                      key: ${DB_USER_KEY_NAME}
+                - name: TRACTION_DTS_DATABASE_PASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      name: ${PREFIX}${TRACTION_DTS_DB_HOST}
+                      key: ${DB_PASSWORD_KEY_NAME}
                 - name: VC_AUTHN_DATABASE_USER
                   valueFrom:
                     secretKeyRef:
@@ -315,6 +325,13 @@ parameters:
     description: The TAG name for this environment, e.g., dev, test, prod
     required: true
     value: dev
+  - name: TRACTION_DTS_DB_HOST
+    displayName: Database Deployment Name
+    description:
+      The name associated to the database deployment resources.  In particular,
+      this is used to wire up the credentials associated to the database.
+    required: true
+    value: traction-dts
   - name: VC_AUTHN_DB_HOST
     displayName: Database Deployment Name
     description:
