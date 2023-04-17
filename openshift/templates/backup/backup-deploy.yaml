@@ -159,12 +159,12 @@ objects:
                   value: ${WEEKLY_BACKUPS}
                 - name: MONTHLY_BACKUPS
                   value: ${MONTHLY_BACKUPS}
-                - name: TRACTION_DTS_DATABASE_USER
+                - name: TRACTION_DTS_USER
                   valueFrom:
                     secretKeyRef:
                       name: ${PREFIX}${TRACTION_DTS_DB_SECRET}
                       key: ${DB_USER_KEY_NAME}
-                - name: TRACTION_DTS_DATABASE_PASSWORD
+                - name: TRACTION_DTS_PASSWORD
                   valueFrom:
                     secretKeyRef:
                       name: ${PREFIX}${TRACTION_DTS_DB_SECRET}
