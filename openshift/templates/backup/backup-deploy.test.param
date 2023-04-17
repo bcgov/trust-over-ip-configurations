@@ -12,6 +12,7 @@
 # SOURCE_IMAGE_NAME=backup
 # IMAGE_NAMESPACE=e79518-tools
 TAG_NAME=test
+# TRACTION_DTS_DB_HOST=traction-dts
 # VC_AUTHN_DB_HOST=vc-authn-database
 # VC_AUTHN_WALLET_DB_HOST=vc-authn-wallet
 # LSBC_WALLET_DB_HOST=wallet-lsbc
