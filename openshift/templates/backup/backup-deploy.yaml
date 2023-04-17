@@ -164,7 +164,7 @@ objects:
                     secretKeyRef:
                       name: ${PREFIX}${TRACTION_DTS_DB_SECRET}
                       key: ${DB_USER_KEY_NAME}
-                - name: TRACTION_DTS_DATABASE_PASSWORD
+                - name: TRACTION_DTS_PASSWORD
                   valueFrom:
                     secretKeyRef:
                       name: ${PREFIX}${TRACTION_DTS_DB_SECRET}
