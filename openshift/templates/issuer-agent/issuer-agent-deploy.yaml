@@ -271,6 +271,8 @@ objects:
                   value: ${ACAPY_INVITE_PUBLIC}
                 - name: ACAPY_PUBLIC_INVITES
                   value: ${ACAPY_PUBLIC_INVITES}
+                - name: ACAPY_REQUESTS_THROUGH_PUBLIC_DID
+                  value: ${ACAPY_REQUESTS_THROUGH_PUBLIC_DID}
 
                 - name: ACAPY_AUTO_ACCEPT_INVITES
                   value: ${ACAPY_AUTO_ACCEPT_INVITES}
@@ -583,6 +585,11 @@ parameters:
     description: Send invitations out, and receive connection requests, using the public DID for the agent.
     required: true
     value: 'true'
+  - name: ACAPY_REQUESTS_THROUGH_PUBLIC_DID
+    displayName: Requests Through Public DID
+    description: Allow agent to receive unsolicited connection requests, using the public DID for the agent. Defaults to false in aca-py.
+    required: true
+    value: 'false'
 
   - name: ACAPY_AUTO_ACCEPT_INVITES
     displayName: ACAPY_AUTO_ACCEPT_INVITES
