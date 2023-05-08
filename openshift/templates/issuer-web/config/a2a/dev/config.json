@@ -8,7 +8,7 @@
     "enabled": true,
     "autoSignOut": true,
     "oidcSettings": {
-      "authority": "https://dev.oidc.gov.bc.ca/auth/realms/sbtyffu4",
+      "authority": "https://dev.loginproxy.gov.bc.ca/auth/realms/access-to-court-materials-jag",
       "clientId": "issuer",
       "redirectUri": "https://a2a-issuer-dev.apps.silver.devops.gov.bc.ca/oidc-callback",
       "redirect_uri": "https://a2a-issuer-dev.apps.silver.devops.gov.bc.ca/oidc-callback-error",
