@@ -13,6 +13,7 @@
 # IMAGE_NAMESPACE=e79518-tools
 # NAMESPACE_NAME=e79518
 # SOURCE_IMAGE_NAME=issuer-kit-wallet
+TAG_PREFIX=idim-
 TAG_NAME=dev
 # POSTGRESQL_DATABASE_NAME=identity_kit_wallet
 # POSTGRESQL_USER=[a-zA-Z_][a-zA-Z0-9_]{10}

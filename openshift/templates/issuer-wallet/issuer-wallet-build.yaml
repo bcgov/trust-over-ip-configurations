@@ -38,7 +38,7 @@ objects:
         sourceStrategy:
           from:
             kind: ${SOURCE_IMAGE_KIND}
-            name: ${SOURCE_IMAGE_NAME}:${SOURCE_IMAGE_TAG}
+            name: ${SOURCE_IMAGE_REGISTRY}${SOURCE_IMAGE_NAME}:${SOURCE_IMAGE_TAG}
       output:
         to:
           kind: ImageStreamTag
@@ -76,20 +76,24 @@ parameters:
     value: wallet/config
   - name: SOURCE_IMAGE_KIND
     displayName: Source Image Kind
-    description: The 'kind' (type) of the  source image; typically ImageStreamTag,
-      or DockerImage.
     required: true
+    description: The 'kind' (type) of the  source image; typically ImageStreamTag, or DockerImage.
     value: DockerImage
+  - name: SOURCE_IMAGE_REGISTRY
+    displayName: Source Image Registry
+    description: The name of the Source Image Registry.
+    required: false
+    value: quay.io/
   - name: SOURCE_IMAGE_NAME
     displayName: Source Image Name
     required: true
     description: The name of the source image.
-    value: registry.access.redhat.com/rhscl/postgresql-10-rhel7
+    value: fedora/postgresql-14
   - name: SOURCE_IMAGE_TAG
     displayName: Source Image Tag
     required: true
     description: The tag of the source image.
-    value: latest
+    value: '14'
   - name: OUTPUT_IMAGE_TAG
     displayName: Output Image Tag
     description: The tag given to the built image.
