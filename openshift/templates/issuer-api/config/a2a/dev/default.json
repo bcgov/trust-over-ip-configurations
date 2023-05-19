@@ -40,7 +40,7 @@
     "multiUse": true
   },
   "authentication": {
-    "jwksUri": "https://dev.oidc.gov.bc.ca/auth/realms/sbtyffu4/protocol/openid-connect/certs",
+    "jwksUri": "https://dev.loginproxy.gov.bc.ca/auth/realms/access-to-court-materials-jag/protocol/openid-connect/certs",
     "algorithms": ["RS256"]
   }
 }
