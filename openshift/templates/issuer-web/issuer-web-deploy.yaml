@@ -9,9 +9,9 @@ objects:
   - kind: NetworkPolicy
     apiVersion: networking.k8s.io/v1
     metadata:
-      name: ${NAME}-allow-ingress
+      name: ${NAME}${SUFFIX}-allow-ingress
       labels:
-        name: ${NAME}-allow-ingress
+        name: ${NAME}${SUFFIX}-allow-ingress
         app: ${APP_NAME}${SUFFIX}
         app-group: ${APP_GROUP}${SUFFIX}
         role: ${ROLE}
