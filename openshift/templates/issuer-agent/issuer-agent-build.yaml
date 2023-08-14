@@ -35,9 +35,9 @@ objects:
       strategy:
         type: Docker
         dockerStrategy:
-          from:
-            kind: ${SOURCE_IMAGE_KIND}
-            name: ${SOURCE_IMAGE_REGISTRY}${SOURCE_IMAGE_NAME}:${SOURCE_IMAGE_TAG}
+          # from:
+          #   kind: ${SOURCE_IMAGE_KIND}
+          #   name: ${SOURCE_IMAGE_REGISTRY}${SOURCE_IMAGE_NAME}:${SOURCE_IMAGE_TAG}
           dockerfilePath: ${DOCKER_FILE_PATH}
       output:
         to:
@@ -77,26 +77,26 @@ parameters:
     description: The source context directory.
     required: true
     value: .
-  - name: SOURCE_IMAGE_KIND
-    displayName: Source Image Kind
-    description: The 'kind' (type) of the  source image; typically ImageStreamTag, or DockerImage.
-    required: true
-    value: DockerImage
-  - name: SOURCE_IMAGE_REGISTRY
-    displayName: Source Image Registry
-    description: The name of the Source Image Registry.
-    required: false
-    value: artifacts.developer.gov.bc.ca/github-docker-remote/
-  - name: SOURCE_IMAGE_NAME
-    displayName: Source Image Name
-    description: The name of the source image.
-    required: true
-    value: hyperledger/aries-cloudagent-python
-  - name: SOURCE_IMAGE_TAG
-    displayName: Source Image Tag
-    description: The tag of the source image.
-    required: true
-    value: py3.9-indy-1.16.0-0.8.1
+  # - name: SOURCE_IMAGE_KIND
+  #   displayName: Source Image Kind
+  #   description: The 'kind' (type) of the  source image; typically ImageStreamTag, or DockerImage.
+  #   required: true
+  #   value: DockerImage
+  # - name: SOURCE_IMAGE_REGISTRY
+  #   displayName: Source Image Registry
+  #   description: The name of the Source Image Registry.
+  #   required: false
+  #   value: artifacts.developer.gov.bc.ca/github-docker-remote/
+  # - name: SOURCE_IMAGE_NAME
+  #   displayName: Source Image Name
+  #   description: The name of the source image.
+  #   required: true
+  #   value: hyperledger/aries-cloudagent-python
+  # - name: SOURCE_IMAGE_TAG
+  #   displayName: Source Image Tag
+  #   description: The tag of the source image.
+  #   required: true
+  #   value: py3.9-indy-1.16.0-0.8.1
   - name: DOCKER_FILE_PATH
     displayName: Docker File Path
     description: The path to the docker file defining the build.

@@ -3,14 +3,21 @@ def PIPELINE_NAME = "backup"
 def LIB_NAME= "custom-lib"
 def LIB_REPO = "https://github.com/bcgov/trust-over-ip-configurations.git"
 def LIB_BRANCH = "main"
-library identifier: "${LIB_NAME}@${LIB_BRANCH}", 
+library identifier: "${LIB_NAME}@${LIB_BRANCH}",
         retriever: modernSCM(
           [$class: 'GitSCMSource',
           remote: "${LIB_REPO}",
-          branches: [[name: "*/${LIB_BRANCH}"]]])  
+          branches: [[name: "*/${LIB_BRANCH}"]]])
 
 node {
-  def config = load "../workspace@script/jenkins/${PIPELINE_NAME}/config.groovy"
+  stage("Init") {
+    script {
+      dir(''){
+        checkout scm
+        config = load "jenkins/${PIPELINE_NAME}/config.groovy"
+      }
+    }
+  }
 
   config.BUILDS.each {
     stage("Build ${it}") {
