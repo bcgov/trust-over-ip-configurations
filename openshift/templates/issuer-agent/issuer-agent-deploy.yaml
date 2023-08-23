@@ -516,7 +516,7 @@ parameters:
     displayName: Application Config Map Mount Path
     description: The mount path for the application Config Map.
     required: true
-    value: /home/indy/
+    value: /home/aries/
 
   - name: ACAPY_LABEL
     displayName: Agent Label/Name
@@ -755,7 +755,7 @@ parameters:
     displayName: Tails File Storage Dir
     description: The directory where the local copies of the tails files will be stored.
     required: true
-    value: /home/indy/.indy_client/tails
+    value: /home/aries/.indy_client/tails
   - name: TAILS_FILES_VOLUME_CLASS
     displayName: Tails File Storage Volume Class
     description: The class of the volume; gluster-file, gluster-block, gluster-file-db, netapp-file-standard, netapp-block-standard.
