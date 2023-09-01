@@ -1,0 +1,56 @@
+ingressSuffix: .apps.silver.devops.gov.bc.ca
+image:
+  tag: "0.2.14"
+  pullPolicy: Always
+traction:
+  pluginInnkeeper:
+    existingSecret: traction-acapy-plugin-innkeeper
+    generated: true
+  apiEndpoint: https://traction-sandbox-tenant-proxy.apps.silver.devops.gov.bc.ca 
+  tenantProxyEndpoint: https://traction-sandbox-tenant-proxy.apps.silver.devops.gov.bc.ca
+  reservation:
+    expiry_minutes: 2880
+    auto_approve:  true
+    auto_issuer: true
+  resources:
+    limits:
+      cpu: 200m
+      memory: 820Mi
+    requests:
+      cpu: 120m
+      memory: 400Mi
+  networkPolicy:
+    enabled: true
+    ingress:
+      enabled: true
+      namespaceSelector:
+        network.openshift.io/policy-group: ingress
+oidc:
+  active: false
+  showInnkeeperAdminLogin: false
+  showWritableComponents: false
+  authority: https://dev.loginproxy.gov.bc.ca/auth/realms/digitaltrust-nrm
+  jwksUri: https://dev.loginproxy.gov.bc.ca/auth/realms/digitaltrust-nrm/protocol/openid-connect/certs
+ariesDetails:
+  ledgerDescription: "bcovrin-test"
+smtp:
+  server: apps.smtp.gov.bc.ca
+  port: 25
+  senderAddress: DoNotReplyTractionSandbox@gov.bc.ca
+  innkeeperInbox: "lucas.o'neil@gov.bc.ca,emiliano.sune@quartech.com"
+resources:
+  limits:
+    cpu: 400m
+    memory: 1600Mi
+  requests:
+    cpu: 200m
+    memory: 820Mi
+ingress:
+  annotations:
+    route.openshift.io/termination: edge
+networkPolicy:
+  enabled: true
+  ingress:
+    enabled: true
+    namespaceSelector:
+      network.openshift.io/policy-group: ingress
