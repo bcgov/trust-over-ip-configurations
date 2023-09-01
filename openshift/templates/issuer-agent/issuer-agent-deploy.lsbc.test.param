@@ -14,6 +14,7 @@ ADMIN_APPLICATION_DOMAIN=lsbc-agent-admin-test.apps.silver.devops.gov.bc.ca
 # IMAGE_NAMESPACE=e79518-tools
 # NAMESPACE_NAME=e79518
 # SOURCE_IMAGE_NAME=issuer-kit-agent
+TAG_PREFIX=lsbc-
 TAG_NAME=test
 # APP_CONFIG_MAP_NAME=agent-config
 # APP_CONFIG_MOUNT_PATH=/home/aries/
