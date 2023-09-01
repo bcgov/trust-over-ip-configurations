@@ -368,6 +368,8 @@ objects:
 
                 - name: ACAPY_LOG_LEVEL
                   value: ${ACAPY_LOG_LEVEL}
+                - name: RUST_LOG
+                  value: ${RUST_LOG}
                 - name: ACAPY_TAILS_SERVER_BASE_URL
                   value: ${ACAPY_TAILS_SERVER_BASE_URL}
                 - name: TAILS_FILES_DIR
@@ -574,17 +576,22 @@ parameters:
     description: The logging level for the agent.
     required: true
     value: WARNING
+  - name: RUST_LOG
+    displayName: Rust Log Level
+    description: The Rust logging level for the agent.
+    required: true
+    value: warn
 
   - name: ACAPY_INVITE_PUBLIC
     displayName: Invite Public
     description: Flag specifying the generated invite should be public.
     required: true
-    value: 'true'
+    value: 'false'
   - name: ACAPY_PUBLIC_INVITES
     displayName: Public Invite
     description: Send invitations out, and receive connection requests, using the public DID for the agent.
     required: true
-    value: 'true'
+    value: 'false'
   - name: ACAPY_REQUESTS_THROUGH_PUBLIC_DID
     displayName: Requests Through Public DID
     description: Allow agent to receive unsolicited connection requests, using the public DID for the agent. Defaults to false in aca-py.
@@ -595,12 +602,12 @@ parameters:
     displayName: ACAPY_AUTO_ACCEPT_INVITES
     description: ACAPY_AUTO_ACCEPT_INVITES
     required: true
-    value: 'false'
+    value: 'true'
   - name: ACAPY_AUTO_ACCEPT_REQUESTS
     displayName: ACAPY_AUTO_ACCEPT_REQUESTS
     description: ACAPY_AUTO_ACCEPT_REQUESTS
     required: true
-    value: 'false'
+    value: 'true'
   - name: ACAPY_AUTO_PING_CONNECTION
     displayName: Auto Ping Connection
     description: Automatically send a trust ping immediately after a connection response is accepted. Some agents require this before marking a connection as 'active'.
@@ -615,12 +622,12 @@ parameters:
     displayName: ACAPY_AUTO_RESPOND_MESSAGES
     description: ACAPY_AUTO_RESPOND_MESSAGES
     required: true
-    value: 'false'
+    value: 'true'
   - name: ACAPY_AUTO_RESPOND_CREDENTIAL_OFFER
     displayName: ACAPY_AUTO_RESPOND_CREDENTIAL_OFFER
     description: ACAPY_AUTO_RESPOND_CREDENTIAL_OFFER
     required: true
-    value: 'false'
+    value: 'true'
   - name: ACAPY_AUTO_RESPOND_CREDENTIAL_REQUEST
     displayName: ACAPY_AUTO_RESPOND_CREDENTIAL_REQUEST
     description: ACAPY_AUTO_RESPOND_CREDENTIAL_REQUEST
@@ -630,7 +637,7 @@ parameters:
     displayName: ACAPY_AUTO_VERIFY_PRESENTATION
     description: ACAPY_AUTO_VERIFY_PRESENTATION
     required: true
-    value: 'true'
+    value: 'false'
   - name: ACAPY_AUTO_PROVISION
     displayName: Auto Provision
     description: If the requested profile does not exist, initialize it with the given parameters.
