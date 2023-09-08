@@ -33,8 +33,8 @@ traction:
         network.openshift.io/policy-group: ingress
 oidc:
   active: false
-  showInnkeeperAdminLogin: false
-  showWritableComponents: false
+  showInnkeeperAdminLogin: true
+  showWritableComponents: true
   authority: ""
   jwksUri: ""
 ariesDetails:

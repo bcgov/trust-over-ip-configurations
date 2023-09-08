@@ -55,8 +55,8 @@ ui:
     pullPolicy: Always
   oidc:
     active: false
-    showInnkeeperAdminLogin: false
-    showWritableComponents: false
+    showInnkeeperAdminLogin: true
+    showWritableComponents: true
     authority: ""
     jwksUri: ""
   ariesDetails:
