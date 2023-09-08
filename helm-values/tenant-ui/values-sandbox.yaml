@@ -31,6 +31,9 @@ traction:
       enabled: true
       namespaceSelector:
         network.openshift.io/policy-group: ingress
+ui:
+  image:
+    pullPolicy: Always
 oidc:
   active: false
   showInnkeeperAdminLogin: true
@@ -44,6 +47,12 @@ smtp:
   port: 25
   senderAddress: DoNotReplyTractionSandbox@gov.bc.ca
   innkeeperInbox: ""
+networkPolicy:
+  enabled: true
+  ingress:
+    enabled: true
+    namespaceSelector:
+      network.openshift.io/policy-group: ingress
 resources:
   limits:
     cpu: 400m
