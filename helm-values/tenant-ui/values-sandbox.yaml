@@ -19,6 +19,12 @@ traction:
     requests:
       cpu: 120m
       memory: 400Mi
+  autoscaling:
+    enabled: false
+    minReplicas: 1
+    maxReplicas: 10
+    targetCPUUtilizationPercentage: 80
+    targetMemoryUtilizationPercentage: 80
   networkPolicy:
     enabled: true
     ingress:
@@ -29,15 +35,15 @@ oidc:
   active: false
   showInnkeeperAdminLogin: false
   showWritableComponents: false
-  authority: https://dev.loginproxy.gov.bc.ca/auth/realms/digitaltrust-nrm
-  jwksUri: https://dev.loginproxy.gov.bc.ca/auth/realms/digitaltrust-nrm/protocol/openid-connect/certs
+  authority: ""
+  jwksUri: ""
 ariesDetails:
   ledgerDescription: "bcovrin-test"
 smtp:
   server: apps.smtp.gov.bc.ca
   port: 25
   senderAddress: DoNotReplyTractionSandbox@gov.bc.ca
-  innkeeperInbox: "lucas.o'neil@gov.bc.ca,emiliano.sune@quartech.com"
+  innkeeperInbox: ""
 resources:
   limits:
     cpu: 400m
