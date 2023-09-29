@@ -18,7 +18,7 @@ jobs:
 
       - name: Run Your Job
         run: |
-          echo "This job runs every day at 2:00 AM PST"
+          echo "This job runs biweekly on 1st and 15th of every month at 2:00 AM PST"
 
       - name: Authenticate and set context
         uses: redhat-actions/oc-login@v1
@@ -28,12 +28,12 @@ jobs:
           namespace: ${{ secrets.OPENSHIFT_NAMESPACE }}
       
       - name: Uninstall Traction via Helm
-        continue-on-error: true
+        continue-on-error: false
         run: |
           helm uninstall traction-sandbox -n ${{ secrets.OPENSHIFT_NAMESPACE }} --wait --timeout=20m
 
       - name: Remove Traction Openshift Objects
-        continue-on-error: true 
+        continue-on-error: false 
         run: |
           oc delete -n ${{ secrets.OPENSHIFT_NAMESPACE }} all,secret,pod,networkpolicy,configmap,pvc --selector "app.kubernetes.io/instance"=traction-sandbox
 
@@ -48,7 +48,7 @@ jobs:
 
       - name: Run Your Job
         run: |
-          echo "This job runs every day at 2:00 AM PST"
+          echo "This job runs biweekly on 1st and 15th of every month at 2:00 AM PST"
 
       - name: Authenticate and set context
         uses: redhat-actions/oc-login@v1
@@ -58,7 +58,7 @@ jobs:
           namespace: ${{ secrets.OPENSHIFT_NAMESPACE }}
 
       - name: Install Traction via Helm
-        continue-on-error: true
+        continue-on-error: false
         run: |
           helm repo add traction https://bcgov.github.io/traction 
           helm upgrade --install traction-sandbox traction/traction \
