@@ -1,0 +1,39 @@
+{
+  "id": "verified-person-bcpc-dev",
+  "subject_identifier": "family_name",
+  "configuration": {
+    "name": "BC Person Credential",
+    "version": "1.0.0",
+    "requested_attributes": [
+      {
+        "names": [
+          "family_name",
+          "given_names"
+        ],
+        "restrictions": [
+          {
+            "issuer_did": "XpgeQa93eZvGSZBZef3PHn",
+            "schema_name": "Person",
+            "schema_version": "1.0"
+          },
+          {
+            "issuer_did": "7xjfawcnyTUcduWVysLww5",
+            "schema_name": "Person",
+            "schema_version": "1.0"
+          },
+          {
+            "issuer_did": "Ui6HA36FvN83cEtmYYHxrn",
+            "schema_name": "unverified_person",
+            "schema_version": "0.1.0"
+          },
+          {
+            "issuer_did": "NCwGwDrzbZEqesYQummzWW",
+            "schema_name": "unverified_person",
+            "schema_version": "0.4.0"
+          }
+        ]
+      }
+    ],
+    "requested_predicates": []
+  }
+}
