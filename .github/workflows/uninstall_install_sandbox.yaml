@@ -1,0 +1,89 @@
+name: Uninstall and then re-install Traction Sandbox Instance
+
+on:
+  schedule:
+    - cron: '0 9 1,15 * *'
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+    paths:                                               
+      - 'helm-values/traction/**'
+
+jobs:
+  uninstall_sandbox:
+    runs-on: ubuntu-20.04
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Run Your Job
+        run: |
+          echo "This job runs biweekly on 1st and 15th of every month at 2:00 AM PST timezone"
+
+      - name: Authenticate and set context
+        uses: redhat-actions/oc-login@v1
+        with:
+          openshift_server_url: ${{ secrets.OPENSHIFT_SERVER }}
+          openshift_token: ${{ secrets.OPENSHIFT_TOKEN }}
+          namespace: ${{ secrets.OPENSHIFT_NAMESPACE }}
+      
+      - name: Uninstall Traction via Helm
+        run: |
+          helm uninstall traction-sandbox -n ${{ secrets.OPENSHIFT_NAMESPACE }} --wait --timeout=20m
+
+      - name: Remove Traction Openshift Objects
+        run: |
+          oc delete -n ${{ secrets.OPENSHIFT_NAMESPACE }} all,secret,pod,networkpolicy,configmap,pvc --selector "app.kubernetes.io/instance"=traction-sandbox
+
+      - name: Rocket.Chat Notification
+        uses: RocketChat/Rocket.Chat.GitHub.Action.Notification@1.1.1
+        if: always()
+        with:
+          type:  ${{ job.status }}
+          job_name: '*Uninstall Traction Sandbox*'
+          mention: 'here'
+          mention_if: 'failure'
+          channel: '#ditp-gha-notifications'
+          url: ${{ secrets.ROCKETCHAT_WEBHOOK }}
+          commit: true
+
+  install_sandbox:
+    name: Install Sandbox
+    needs: uninstall_sandbox
+    runs-on: ubuntu-20.04
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Run Your Job
+        run: |
+          echo "This job runs biweekly on 1st and 15th of every month at 2:00 AM PST timezone"
+
+      - name: Authenticate and set context
+        uses: redhat-actions/oc-login@v1
+        with:
+          openshift_server_url: ${{ secrets.OPENSHIFT_SERVER }}
+          openshift_token: ${{ secrets.OPENSHIFT_TOKEN }}
+          namespace: ${{ secrets.OPENSHIFT_NAMESPACE }}
+
+      - name: Install Traction via Helm
+        run: |
+          helm repo add traction https://bcgov.github.io/traction 
+          helm upgrade --install traction-sandbox traction/traction \
+          -f ./helm-values/traction/values-sandbox.yaml \
+          -n ${{ secrets.OPENSHIFT_NAMESPACE }} --wait --timeout=7m
+
+      - name: Rocket.Chat Notification
+        uses: RocketChat/Rocket.Chat.GitHub.Action.Notification@1.1.1
+        if: always()
+        with:
+          type:  ${{ job.status }}
+          job_name: '*Install Traction Sandbox*'
+          mention: 'here'
+          mention_if: 'failure'
+          channel: '#ditp-gha-notifications'
+          url: ${{ secrets.ROCKETCHAT_WEBHOOK }}
+          commit: true
