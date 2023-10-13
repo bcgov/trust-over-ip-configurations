@@ -7,9 +7,12 @@ on:
   push:
     branches:
       - main
+    paths:                                               
+      - 'helm-values/traction/**'
 
 jobs:
   uninstall_sandbox:
+    if: (github.repository == 'bcgov/trust-over-ip-configurations') || (github.event_name == 'workflow_dispatch')
     runs-on: ubuntu-20.04
 
     steps:
@@ -28,17 +31,28 @@ jobs:
           namespace: ${{ secrets.OPENSHIFT_NAMESPACE }}
       
       - name: Uninstall Traction via Helm
-        continue-on-error: false
         run: |
           helm uninstall traction-sandbox -n ${{ secrets.OPENSHIFT_NAMESPACE }} --wait --timeout=20m
 
       - name: Remove Traction Openshift Objects
-        continue-on-error: false 
         run: |
           oc delete -n ${{ secrets.OPENSHIFT_NAMESPACE }} all,secret,pod,networkpolicy,configmap,pvc --selector "app.kubernetes.io/instance"=traction-sandbox
 
+      - name: Rocket.Chat Notification
+        uses: RocketChat/Rocket.Chat.GitHub.Action.Notification@1.1.1
+        if: always()
+        with:
+          type:  ${{ job.status }}
+          job_name: '*Uninstall Traction Sandbox*'
+          mention: 'here'
+          mention_if: 'failure'
+          channel: '#ditp-gha-notifications'
+          url: ${{ secrets.ROCKETCHAT_WEBHOOK }}
+          commit: true
+
   install_sandbox:
     name: Install Sandbox
+    if: (github.repository == 'bcgov/trust-over-ip-configurations') || (github.event_name == 'workflow_dispatch')
     needs: uninstall_sandbox
     runs-on: ubuntu-20.04
 
@@ -58,9 +72,20 @@ jobs:
           namespace: ${{ secrets.OPENSHIFT_NAMESPACE }}
 
       - name: Install Traction via Helm
-        continue-on-error: false
         run: |
           helm repo add traction https://bcgov.github.io/traction 
           helm upgrade --install traction-sandbox traction/traction \
           -f ./helm-values/traction/values-sandbox.yaml \
           -n ${{ secrets.OPENSHIFT_NAMESPACE }} --wait --timeout=7m
+
+      - name: Rocket.Chat Notification
+        uses: RocketChat/Rocket.Chat.GitHub.Action.Notification@1.1.1
+        if: always()
+        with:
+          type:  ${{ job.status }}
+          job_name: '*Install Traction Sandbox*'
+          mention: 'here'
+          mention_if: 'failure'
+          channel: '#ditp-gha-notifications'
+          url: ${{ secrets.ROCKETCHAT_WEBHOOK }}
+          commit: true
