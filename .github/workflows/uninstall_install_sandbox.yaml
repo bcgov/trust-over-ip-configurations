@@ -20,7 +20,7 @@ jobs:
 
       - name: Run Your Job
         run: |
-          echo "This job runs biweekly on 1st and 15th of every month at 2:00 AM PST timezone"
+          echo "This job runs biweekly on 1st and 15th of every month at 2:00 AM PST time"
 
       - name: Authenticate and set context
         uses: redhat-actions/oc-login@v1
@@ -60,7 +60,7 @@ jobs:
 
       - name: Run Your Job
         run: |
-          echo "This job runs biweekly on 1st and 15th of every month at 2:00 AM PST timezone"
+          echo "This job runs biweekly on 1st and 15th of every month at 2:00 AM PST time"
 
       - name: Authenticate and set context
         uses: redhat-actions/oc-login@v1
