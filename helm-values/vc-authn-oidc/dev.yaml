@@ -90,3 +90,17 @@ acapy:
       enabled: true
       namespaceSelector:
         network.openshift.io/policy-group: ingress
+mongodb:
+  resources:
+    limits:
+      cpu: 300m
+      memory: 1000Mi
+    requests:
+      cpu: 40m
+      memory: 450Mi
+  readinessProbe:
+    enabled: true
+    timeoutSeconds: 10
+  livenessProbe:
+    enabled: true
+    timeoutSeconds: 10
