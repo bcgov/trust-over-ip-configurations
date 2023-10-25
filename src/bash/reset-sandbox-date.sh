@@ -1,4 +1,13 @@
 #!/usr/bin/env bash
+#####################################################
+# reset-sandbox-date.sh
+#
+# This script will determine the date the sandbox will
+# reset based on the current date.
+#
+# The intention is to output a user friendly message
+# of when the sandbox will reset.
+#####################################################
 
 # Is this the back half of the month?
 if [[ $(date +%d) -ge 15 ]]
