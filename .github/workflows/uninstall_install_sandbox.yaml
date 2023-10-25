@@ -2,13 +2,13 @@ name: Uninstall and then re-install Traction Sandbox Instance
 
 on:
   schedule:
-    - cron: '0 9 1,15 * *'
+    - cron: "0 9 1,15 * *"
   workflow_dispatch:
   push:
     branches:
       - main
-    paths:                                               
-      - 'helm-values/traction/**'
+    paths:
+      - "helm-values/traction/**"
 
 jobs:
   uninstall_sandbox:
@@ -29,7 +29,7 @@ jobs:
           openshift_server_url: ${{ secrets.OPENSHIFT_SERVER }}
           openshift_token: ${{ secrets.OPENSHIFT_TOKEN }}
           namespace: ${{ secrets.OPENSHIFT_NAMESPACE }}
-      
+
       - name: Uninstall Traction via Helm
         run: |
           helm uninstall traction-sandbox -n ${{ secrets.OPENSHIFT_NAMESPACE }} --wait --timeout=20m
@@ -42,11 +42,11 @@ jobs:
         uses: RocketChat/Rocket.Chat.GitHub.Action.Notification@1.1.1
         if: always()
         with:
-          type:  ${{ job.status }}
-          job_name: '*Uninstall Traction Sandbox*'
-          mention: 'here'
-          mention_if: 'failure'
-          channel: '#ditp-gha-notifications'
+          type: ${{ job.status }}
+          job_name: "*Uninstall Traction Sandbox*"
+          mention: "here"
+          mention_if: "failure"
+          channel: "#ditp-gha-notifications"
           url: ${{ secrets.ROCKETCHAT_WEBHOOK }}
           commit: true
 
@@ -76,16 +76,17 @@ jobs:
           helm repo add traction https://bcgov.github.io/traction 
           helm upgrade --install traction-sandbox traction/traction \
           -f ./helm-values/traction/values-sandbox.yaml \
-          -n ${{ secrets.OPENSHIFT_NAMESPACE }} --wait --timeout=7m
+          -n ${{ secrets.OPENSHIFT_NAMESPACE }} --wait --timeout=7m \
+          --set .Values.ui.ux.infoBanner.message=$(./src/bash/reset-sandbox-date.sh)
 
       - name: Rocket.Chat Notification
         uses: RocketChat/Rocket.Chat.GitHub.Action.Notification@1.1.1
         if: always()
         with:
-          type:  ${{ job.status }}
-          job_name: '*Install Traction Sandbox*'
-          mention: 'here'
-          mention_if: 'failure'
-          channel: '#ditp-gha-notifications'
+          type: ${{ job.status }}
+          job_name: "*Install Traction Sandbox*"
+          mention: "here"
+          mention_if: "failure"
+          channel: "#ditp-gha-notifications"
           url: ${{ secrets.ROCKETCHAT_WEBHOOK }}
           commit: true
