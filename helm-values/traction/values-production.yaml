@@ -4,7 +4,7 @@ acapy:
     - id: candy-prod
       is_production: true
       is_write: true
-      genesis_url: 'http://test.bcovrin.vonx.io/genesis'
+      genesis_url: 'https://raw.githubusercontent.com/ICCS-ISAC/dtrust-reconu/main/CANdy/prod/pool_transactions_genesis'
       endorser_did: 'LTNyw5R14J66CrF7tmV3i8'
       endorser_alias: 'candy-prod-endorser'
   plugin-config.yml:
@@ -16,7 +16,7 @@ acapy:
           - endorser_alias: candy-prod-endorser
             ledger_id: candy-prod
         create_public_did:
-          - candy-prod-endorser
+          - candy-prod
       reservation:
         expiry_minutes: 2880
         auto_approve: false
@@ -69,7 +69,7 @@ ui:
     authority: https://loginproxy.gov.bc.ca/auth/realms/digitaltrust-nrm
     jwksUri: https://loginproxy.gov.bc.ca/auth/realms/digitaltrust-nrm/protocol/openid-connect/certs
   ariesDetails:
-    ledgerDescription: "bcovrin-test"
+    ledgerDescription: "candy-prod"
   smtp:
     server: apps.smtp.gov.bc.ca
     port: 25
