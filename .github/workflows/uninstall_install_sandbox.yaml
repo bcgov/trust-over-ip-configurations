@@ -32,7 +32,7 @@ jobs:
 
       - name: Uninstall Traction via Helm
         run: |
-          helm uninstall traction-sandbox -n ${{ secrets.OPENSHIFT_NAMESPACE }} --wait --timeout=20m
+          helm uninstall traction-sandbox -n ${{ secrets.OPENSHIFT_NAMESPACE }} --wait --timeout=20m || true
 
       - name: Remove Traction Openshift Objects
         run: |
