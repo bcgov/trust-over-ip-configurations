@@ -8,7 +8,7 @@ on:
     branches:
       - main
     paths:
-      - "helm-values/traction/**"
+      - "helm-values/traction/values-sandbox.yaml"
 
 jobs:
   uninstall_sandbox:
@@ -70,6 +70,9 @@ jobs:
           openshift_server_url: ${{ secrets.OPENSHIFT_SERVER }}
           openshift_token: ${{ secrets.OPENSHIFT_TOKEN }}
           namespace: ${{ secrets.OPENSHIFT_NAMESPACE }}
+      
+      - name: Compile banner message
+        run: echo "BANNER_MESSAGE=$($GITHUB_WORKSPACE/src/bash/reset-sandbox-date.sh)" >> $GITHUB_ENV
 
       - name: Install Traction via Helm
         run: |
@@ -77,7 +80,7 @@ jobs:
           helm upgrade --install traction-sandbox traction/traction \
           -f ./helm-values/traction/values-sandbox.yaml \
           -n ${{ secrets.OPENSHIFT_NAMESPACE }} --wait --timeout=7m \
-          --set .Values.ui.ux.infoBanner.message=$(./src/bash/reset-sandbox-date.sh)
+          --set .Values.ui.ux.infoBanner.message=$BANNER_MESSAGE
 
       - name: Rocket.Chat Notification
         uses: RocketChat/Rocket.Chat.GitHub.Action.Notification@1.1.1
