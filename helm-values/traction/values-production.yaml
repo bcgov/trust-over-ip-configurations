@@ -63,6 +63,12 @@ tenant_proxy:
     targetMemoryUtilizationPercentage: 80
 ui:
   showOIDCReservationLogin: true
+  autoscaling:
+    enabled: true
+    minReplicas: 2
+    maxReplicas: 5
+    targetCPUUtilizationPercentage: 80
+    targetMemoryUtilizationPercentage: 80
   oidc:
     active: true
     showInnkeeperAdminLogin: true
@@ -86,7 +92,7 @@ ui:
       cpu: 300m
       memory: 250Mi
     requests:
-      cpu: 120mwww
+      cpu: 120m
       memory: 128Mi
 ingress:
   annotations:
