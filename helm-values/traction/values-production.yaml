@@ -1,15 +1,51 @@
 ingressSuffix: -prod.apps.silver.devops.gov.bc.ca
 acapy:
+  ledgers.yml:
+    - id: candy-prod
+      is_production: true
+      is_write: true
+      genesis_url: 'https://raw.githubusercontent.com/ICCS-ISAC/dtrust-reconu/main/CANdy/prod/pool_transactions_genesis'
+      endorser_did: 'LTNyw5R14J66CrF7tmV3i8'
+      endorser_alias: 'candy-prod-endorser'
+  plugin-config.yml:
+    traction_innkeeper:
+      innkeeper_wallet:
+        print_key: false
+        print_token: false
+        connect_to_endorser:
+          - endorser_alias: candy-prod-endorser
+            ledger_id: candy-prod
+        create_public_did:
+          - candy-prod
+      reservation:
+        expiry_minutes: 2880
+        auto_approve: false
+        auto_issuer: false
+  walletStorageConfig:
+    url: traction-database-primary:5432
+  walletStorageCredentials:
+    admin_account: walletman
+    existingSecret: traction-database-acapy
+    secretKeys:
+      adminPasswordKey: walletman-password
+      userPasswordKey: acapy-password
   networkPolicy:
     enabled: true
     ingress:
       enabled: true
       namespaceSelector:
         network.openshift.io/policy-group: ingress
+  resources:
+    limits:
+      cpu: 400m
+      memory: 500Mi
+    requests:
+      cpu: 120m
+      memory: 250Mi
   autoscaling:
     enabled: true
-    minReplicas: 5
-    maxReplicas: 10
+    minReplicas: 3
+    maxReplicas: 5
     targetCPUUtilizationPercentage: 80
     targetMemoryUtilizationPercentage: 80
 tenant_proxy:
@@ -21,10 +57,45 @@ tenant_proxy:
         network.openshift.io/policy-group: ingress
   autoscaling:
     enabled: true
-    minReplicas: 4
-    maxReplicas: 8
+    minReplicas: 3
+    maxReplicas: 5
     targetCPUUtilizationPercentage: 80
     targetMemoryUtilizationPercentage: 80
+ui:
+  showOIDCReservationLogin: true
+  autoscaling:
+    enabled: true
+    minReplicas: 2
+    maxReplicas: 5
+    targetCPUUtilizationPercentage: 80
+    targetMemoryUtilizationPercentage: 80
+  oidc:
+    active: true
+    showInnkeeperAdminLogin: true
+    authority: https://loginproxy.gov.bc.ca/auth/realms/digitaltrust-nrm
+    jwksUri: https://loginproxy.gov.bc.ca/auth/realms/digitaltrust-nrm/protocol/openid-connect/certs
+  ariesDetails:
+    ledgerDescription: "candy-prod"
+  smtp:
+    server: apps.smtp.gov.bc.ca
+    port: 25
+    senderAddress: DoNotReplyTractionPROD@gov.bc.ca
+    innkeeperInbox: lucas.o'neil@gov.bc.ca
+  networkPolicy:
+    enabled: true
+    ingress:
+      enabled: true
+      namespaceSelector:
+        network.openshift.io/policy-group: ingress
+  resources:
+    limits:
+      cpu: 300m
+      memory: 250Mi
+    requests:
+      cpu: 120m
+      memory: 128Mi
 ingress:
   annotations:
     route.openshift.io/termination: edge
+postgresql:
+  enabled: false

@@ -50,6 +50,28 @@ tenant_proxy:
     maxReplicas: 5
     targetCPUUtilizationPercentage: 80
     targetMemoryUtilizationPercentage: 80
+ui:
+  image:
+    pullPolicy: Always
+  showOIDCReservationLogin: true
+  oidc:
+    active: true
+    showInnkeeperAdminLogin: true
+    authority: https://test.loginproxy.gov.bc.ca/auth/realms/digitaltrust-nrm
+    jwksUri: https://test.loginproxy.gov.bc.ca/auth/realms/digitaltrust-nrm/protocol/openid-connect/certs
+  ariesDetails:
+    ledgerDescription: "bcovrin-test"
+  smtp:
+    server: apps.smtp.gov.bc.ca
+    port: 25
+    senderAddress: DoNotReplyTractionTEST@gov.bc.ca
+    innkeeperInbox: lucas.o'neil@gov.bc.ca
+  networkPolicy:
+    enabled: true
+    ingress:
+      enabled: true
+      namespaceSelector:
+        network.openshift.io/policy-group: ingress
 ingress:
   annotations:
     route.openshift.io/termination: edge
