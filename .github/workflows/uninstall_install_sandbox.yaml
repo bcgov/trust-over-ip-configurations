@@ -4,11 +4,11 @@ on:
   schedule:
     - cron: "0 9 1,15 * *"
   workflow_dispatch:
-  push:
-    branches:
-      - main
-    paths:
-      - "helm-values/traction/values-sandbox.yaml"
+  # push:
+  #   branches:
+  #     - main
+  #   paths:
+  #     - "helm-values/traction/values-sandbox.yaml"
 
 jobs:
   uninstall_sandbox:
