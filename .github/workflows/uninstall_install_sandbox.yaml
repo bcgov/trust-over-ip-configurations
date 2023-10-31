@@ -77,10 +77,11 @@ jobs:
       - name: Install Traction via Helm
         run: |
           helm repo add traction https://bcgov.github.io/traction 
-          helm upgrade --install traction-sandbox traction/traction \
-          -f ./helm-values/traction/values-sandbox.yaml \
+          helm upgrade --install \
           -n ${{ secrets.OPENSHIFT_NAMESPACE }} --wait --timeout=7m \
-          --set .Values.ui.ux.infoBanner.message=$BANNER_MESSAGE
+          -f ./helm-values/traction/values-sandbox.yaml \
+          --set .Values.ui.ux.infoBanner.message=$BANNER_MESSAGE \
+          traction-sandbox traction/traction
 
       - name: Rocket.Chat Notification
         uses: RocketChat/Rocket.Chat.GitHub.Action.Notification@1.1.1
