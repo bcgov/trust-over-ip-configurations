@@ -74,6 +74,47 @@ ui:
     showInnkeeperAdminLogin: true
     authority: https://loginproxy.gov.bc.ca/auth/realms/digitaltrust-nrm
     jwksUri: https://loginproxy.gov.bc.ca/auth/realms/digitaltrust-nrm/protocol/openid-connect/certs
+    reservationForm: >-
+      {
+        "formDataSchema": {
+          "type": "object",
+          "properties": {
+            "ministry": {
+              "type": "string"
+            },
+            "contactName": {
+              "type": "string"
+            },
+            "tenantReason": {
+              "type": "string"
+            }
+          },
+          "required": ["ministry", "contactName", "tenantReason"]
+        },
+        "formUISchema": {
+          "type": "VerticalLayout",
+          "elements": [
+            {
+              "type": "Control",
+              "scope": "#/properties/ministry",
+              "label": "Ministry"
+            },
+            {
+              "type": "Control",
+              "scope": "#/properties/contactName",
+              "label": "Contact Name"
+            },
+            {
+              "type": "Control",
+              "scope": "#/properties/tenantReason",
+              "label": "Purpose of Tenant",
+              "options": {
+                "multi": true
+              }
+            }
+          ]
+        }
+      }
   ariesDetails:
     ledgerDescription: "candy-prod"
   smtp:
