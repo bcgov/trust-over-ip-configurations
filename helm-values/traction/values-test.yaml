@@ -53,6 +53,11 @@ tenant_proxy:
 ui:
   image:
     pullPolicy: Always
+  ux:
+    infoBanner:
+      message: "Traction TEST Environment"
+      messageLevel: info
+      showMessage: true
   showOIDCReservationLogin: true
   oidc:
     active: true
