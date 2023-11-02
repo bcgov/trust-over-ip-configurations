@@ -11,9 +11,9 @@ acapy:
     - id: bcovrin-test
       is_production: true
       is_write: true
-      genesis_url: 'http://test.bcovrin.vonx.io/genesis'
-      endorser_did: 'DfQetNSm7gGEHuzfUvpfPn'
-      endorser_alias: 'bcovrin-test-endorser'
+      genesis_url: "http://test.bcovrin.vonx.io/genesis"
+      endorser_did: "DfQetNSm7gGEHuzfUvpfPn"
+      endorser_alias: "bcovrin-test-endorser"
   plugin-config.yml:
     traction_innkeeper:
       innkeeper_wallet:
@@ -26,7 +26,7 @@ acapy:
           - bcovrin-test
       reservation:
         expiry_minutes: 2880
-        auto_approve:  true
+        auto_approve: true
         auto_issuer: true
   autoscaling:
     enabled: true
@@ -61,6 +61,9 @@ ui:
   quickConnectEndorserName: "bcovrin-test-endorser"
   image:
     pullPolicy: Always
+  ux:
+    infoBanner:
+      showMessage: true
   oidc:
     active: false
     showInnkeeperAdminLogin: true
