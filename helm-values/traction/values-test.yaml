@@ -6,9 +6,9 @@ acapy:
     - id: bcovrin-test
       is_production: true
       is_write: true
-      genesis_url: 'http://test.bcovrin.vonx.io/genesis'
-      endorser_did: '4pgFAjnSVKCr7CMfpqDjhu'
-      endorser_alias: 'bcovrin-test-endorser'
+      genesis_url: "http://test.bcovrin.vonx.io/genesis"
+      endorser_did: "4pgFAjnSVKCr7CMfpqDjhu"
+      endorser_alias: "bcovrin-test-endorser"
   plugin-config.yml:
     traction_innkeeper:
       innkeeper_wallet:
@@ -53,12 +53,58 @@ tenant_proxy:
 ui:
   image:
     pullPolicy: Always
+  ux:
+    infoBanner:
+      message: "Traction TEST Environment"
+      messageLevel: info
+      showMessage: true
   showOIDCReservationLogin: true
   oidc:
     active: true
     showInnkeeperAdminLogin: true
     authority: https://test.loginproxy.gov.bc.ca/auth/realms/digitaltrust-nrm
     jwksUri: https://test.loginproxy.gov.bc.ca/auth/realms/digitaltrust-nrm/protocol/openid-connect/certs
+    reservationForm: >-
+      {
+        "formDataSchema": {
+          "type": "object",
+          "properties": {
+            "ministry": {
+              "type": "string"
+            },
+            "contactName": {
+              "type": "string"
+            },
+            "tenantReason": {
+              "type": "string"
+            }
+          },
+          "required": ["ministry", "contactName", "tenantReason"]
+        },
+        "formUISchema": {
+          "type": "VerticalLayout",
+          "elements": [
+            {
+              "type": "Control",
+              "scope": "#/properties/ministry",
+              "label": "Ministry"
+            },
+            {
+              "type": "Control",
+              "scope": "#/properties/contactName",
+              "label": "Contact Name"
+            },
+            {
+              "type": "Control",
+              "scope": "#/properties/tenantReason",
+              "label": "Purpose of Tenant",
+              "options": {
+                "multi": true
+              }
+            }
+          ]
+        }
+      }
   ariesDetails:
     ledgerDescription: "bcovrin-test"
   smtp:

@@ -70,6 +70,28 @@ ui:
     showWritableComponents: true
     authority: ""
     jwksUri: ""
+    reservationForm: >-
+      {
+        "formDataSchema": {
+          "type": "object",
+          "properties": {
+            "organization": {
+              "type": "string"
+            }
+          },
+          "required": ["organization"]
+        },
+        "formUISchema": {
+          "type": "VerticalLayout",
+          "elements": [
+            {
+              "type": "Control",
+              "scope": "#/properties/organization",
+              "label": "Company/organization "
+            }
+          ]
+        }
+      }
   ariesDetails:
     ledgerDescription: "bcovrin-test"
   smtp:
