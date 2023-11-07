@@ -111,7 +111,7 @@ ui:
     server: apps.smtp.gov.bc.ca
     port: 25
     senderAddress: DoNotReplyTractionTEST@gov.bc.ca
-    innkeeperInbox: lucas.o'neil@gov.bc.ca
+    innkeeperInbox: "lucas.o'neil@gov.bc.ca,emiliano.sune@quartech.com"
   networkPolicy:
     enabled: true
     ingress:
