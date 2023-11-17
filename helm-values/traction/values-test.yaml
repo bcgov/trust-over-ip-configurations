@@ -41,6 +41,14 @@ acapy:
         expiry_minutes: 2880
         auto_approve: false
         auto_issuer: false
+  walletStorageConfig:
+    url: traction-database-primary:5432
+  walletStorageCredentials:
+    admin_account: walletman
+    existingSecret: traction-database-acapy
+    secretKeys:
+      adminPasswordKey: walletman-password
+      userPasswordKey: acapy-password
   networkPolicy:
     enabled: true
     ingress:
@@ -139,3 +147,5 @@ ui:
 ingress:
   annotations:
     route.openshift.io/termination: edge
+postgresql:
+  enabled: false
