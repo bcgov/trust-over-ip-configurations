@@ -20,6 +20,7 @@ IDIM_WALLET_DB_HOST=wallet-idim
 IDIM_SIT_WALLET_DB_HOST=wallet-idim-sit
 IDIM_QA_WALLET_DB_HOST=wallet-idim-qa
 LCRB_WALLET_DB_HOST=wallet-lcrb
+IDIM_PREPROD_WALLET_DB_HOST=wallet-idim-preprod
 DB_USER_KEY_NAME=database-user
 DB_PASSWORD_KEY_NAME=database-password
 BACKUP_STRATEGY=rolling
