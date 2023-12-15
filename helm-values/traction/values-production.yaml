@@ -116,8 +116,6 @@ ui:
           ]
         }
       }
-  ariesDetails:
-    ledgerDescription: "candy-prod"
   smtp:
     server: apps.smtp.gov.bc.ca
     port: 25
