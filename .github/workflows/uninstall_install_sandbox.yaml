@@ -80,7 +80,7 @@ jobs:
           helm upgrade --install \
           -n ${{ secrets.OPENSHIFT_NAMESPACE }} --wait --timeout=7m \
           -f ./helm-values/traction/values-sandbox.yaml \
-          --set .Values.ui.ux.infoBanner.message="${BANNER_MESSAGE}" \
+          --set ui.ux.infoBanner.message="${BANNER_MESSAGE}" \
           traction-sandbox traction/traction
 
       - name: Rocket.Chat Notification
