@@ -88,8 +88,8 @@ ui:
   oidc:
     active: true
     showInnkeeperAdminLogin: true
-    authority: https://test.loginproxy.gov.bc.ca/auth/realms/digitaltrust-nrm
-    jwksUri: https://test.loginproxy.gov.bc.ca/auth/realms/digitaltrust-nrm/protocol/openid-connect/certs
+    authority: https://test.loginproxy.gov.bc.ca/auth/realms/digitaltrust-citz
+    jwksUri: https://test.loginproxy.gov.bc.ca/auth/realms/digitaltrust-citz/protocol/openid-connect/certs
     reservationForm: >-
       {
         "formDataSchema": {
