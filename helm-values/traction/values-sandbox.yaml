@@ -68,8 +68,8 @@ ui:
     active: false
     showInnkeeperAdminLogin: true
     showWritableComponents: true
-    authority: ""
-    jwksUri: ""
+    authority: https://loginproxy.gov.bc.ca/auth/realms/digitaltrust-citz
+    jwksUri: https://loginproxy.gov.bc.ca/auth/realms/digitaltrust-citz/protocol/openid-connect/certs
     reservationForm: >-
       {
         "formDataSchema": {
