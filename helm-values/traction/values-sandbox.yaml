@@ -70,6 +70,7 @@ ui:
     showWritableComponents: true
     authority: https://loginproxy.gov.bc.ca/auth/realms/digitaltrust-citz
     jwksUri: https://loginproxy.gov.bc.ca/auth/realms/digitaltrust-citz/protocol/openid-connect/certs
+    realm: "digitaltrust-citz"
     reservationForm: >-
       {
         "formDataSchema": {
