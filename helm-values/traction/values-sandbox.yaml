@@ -116,10 +116,13 @@ ingress:
   annotations:
     route.openshift.io/termination: edge
 postgresql:
-  resources:
-    limits:
-      cpu: 400m
-      memory: 1600Mi
-    requests:
-      cpu: 200m
-      memory: 820Mi
+  primary:
+    persistence:
+      size: 5Gi
+    resources:
+      limits:
+        cpu: 400m
+        memory: 1600Mi
+      requests:
+        cpu: 200m
+        memory: 820Mi
