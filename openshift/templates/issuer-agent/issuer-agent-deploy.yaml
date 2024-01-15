@@ -62,6 +62,7 @@ objects:
           role: ${ROLE}
           app: ${APP_NAME}${SUFFIX}
           env: ${TAG_NAME}
+
   - kind: Service
     apiVersion: v1
     metadata:
@@ -190,6 +191,24 @@ objects:
       webhook-url: ${WEBHOOK_URL}
     type: Opaque
 
+  - kind: HorizontalPodAutoscaler
+    apiVersion: autoscaling/v1
+    metadata:
+      name: ${NAME}${SUFFIX}
+      labels:
+        name: ${NAME}${SUFFIX}
+        app: ${APP_NAME}${SUFFIX}
+        app.kubernetes.io/part-of: ${APP_NAME}${SUFFIX}
+        app-group: ${APP_GROUP}
+        role: ${ROLE}
+        env: ${TAG_NAME}
+    spec:
+      scaleTargetRef:
+        kind: DeploymentConfig
+        name: ${NAME}${SUFFIX}
+      minReplicas: ${{MIN_REPLICAS}}
+      maxReplicas: ${{MAX_REPLICAS}}
+
   - kind: DeploymentConfig
     apiVersion: v1
     metadata:
@@ -227,6 +246,18 @@ objects:
             app.openshift.io/connects-to: >-
               [{"apiVersion":"apps.openshift.io/v1","kind":"DeploymentConfig","name":"wallet${SUFFIX}"}]
         spec:
+          affinity:
+            podAntiAffinity:
+              preferredDuringSchedulingIgnoredDuringExecution:
+              - weight: 100
+                podAffinityTerm:
+                  labelSelector:
+                    matchExpressions:
+                    - key: name
+                      values:
+                      - ${NAME}${SUFFIX}
+                      operator: In
+                  topologyKey: kubernetes.io/hostname
           volumes:
             - name: ${NAME}${SUFFIX}-tails
               persistentVolumeClaim:
@@ -778,6 +809,19 @@ parameters:
     description: The base URL for the Tails Server.
     required: true
     value: https://tails-dev.vonx.io
+  # ===============================================================================
+  # Horizontal Pod Autoscaler Configuration
+  #--------------------------------------------------------------------------------
+  - name: MIN_REPLICAS
+    displayName: Minimum Replicas
+    description: The minimum number of pods to have running.
+    required: true
+    value: "3"
+  - name: MAX_REPLICAS
+    displayName: Maximum Replicas
+    description: The maximum number of pods to have running.
+    required: true
+    value: "4"
   # ===============================================================================
   - name: CPU_REQUEST
     displayName: Resources CPU Request
