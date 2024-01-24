@@ -1,0 +1,65 @@
+logging {
+  level  = coalesce(env("AGENT_LOG_LEVEL"), "info")
+  format = "logfmt"
+}
+
+prometheus.remote_write "mimir" {
+  endpoint {
+    url = "https://dts-metrics.apps.silver.devops.gov.bc.ca/api/v1/push"
+    basic_auth {
+      username = env("MIMIR_USERNAME")
+      password = env("MIMIR_PASSWORDS")
+    }
+  }
+}
+
+loki.write "default" {
+  endpoint {
+    url = "https://dts-logs-dev.apps.silver.devops.gov.bc.ca/loki/api/v1/push"
+  }
+}
+
+prometheus.operator.servicemonitors "srvmon" {
+  namespaces = [env("AGENT_NAMESPACE")]
+  forward_to = [prometheus.remote_write.mimir.receiver]
+}
+
+prometheus.operator.podmonitors "podmon" {
+  namespaces = [env("AGENT_NAMESPACE")]
+  forward_to = [prometheus.remote_write.mimir.receiver]
+}
+
+module.git "k8s_pods" {
+  repository = "https://github.com/i5okie/agent-modules.git"
+  revision   = "feature/k8s_pods_namespaced"
+  path       = "modules/k8s_pods/module.river"
+
+  arguments {
+    forward_metrics_to = [prometheus.remote_write.mimir.receiver]
+    forward_logs_to    = [loki.write.default.receiver]
+    namespaces         = [env("AGENT_NAMESPACE")]
+  }
+}
+
+module.git "event_logs" {
+  repository = "https://github.com/grafana/agent-modules.git"
+  revision   = "main"
+  path       = "modules/kubernetes/logs/events.river"
+
+  arguments {
+    forward_to = [loki.write.default.receiver]
+    git_repo = coalesce(env("GIT_REPO"), env("AGENT_REPO"), "https://github.com/grafana/agent-modules.git")
+    git_rev = coalesce(env("GIT_REV"), env("AGENT_REV"), "main")
+    namespaces = [env("AGENT_NAMESPACE")]
+  }
+}
+
+mimir.rules.kubernetes "default" {
+  address = "https://dts-metrics.apps.silver.devops.gov.bc.ca/prometheus/api/v1/rules"
+}
+
+prometheus.scrape "self" {
+  targets         = [{"__address__" = "0.0.0.0:" + "8080"}]
+  forward_to      = [prometheus.remote_write.mimir.receiver]
+  scrape_interval = "10s"
+}
