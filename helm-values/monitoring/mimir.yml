@@ -2370,16 +2370,15 @@ gateway:
       # -- Enables basic authentication for nginx
       enabled: true
       # -- The basic auth username for nginx
-      username: mimir_usr
+      username: ""
       # -- The basic auth password for nginx
-      password: ochiehahd4eer9Eepiedaingiecaiv9d
+      password: ""
       # -- Uses the specified username and password to compute a htpasswd using Sprig's `htpasswd` function.
       # The value is templated using `tpl`. Override this to use a custom htpasswd, e.g. in case the default causes
       # high CPU load.
-      htpasswd: >-
-        {{ htpasswd (required "'gateway.nginx.basicAuth.username' is required" .Values.gateway.nginx.basicAuth.username) (required "'gateway.nginx.basicAuth.password' is required" .Values.gateway.nginx.basicAuth.password) }}
+      htpasswd: ""
       # -- Name of an existing basic auth secret to use instead of gateway.nginx.basicAuth.htpasswd. Must contain '.htpasswd' key
-      existingSecret: null
+      existingSecret: mimir-htpasswd
 
     config:
       # -- NGINX log format
