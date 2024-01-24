@@ -1,0 +1,71 @@
+apiVersion: 1
+datasources:
+  - name: ca7f8f-dev
+    uid: ca7f8f-dev
+    type: prometheus
+    access: proxy
+    orgId: 1
+    url: https://thanos-querier.openshift-monitoring.svc.cluster.local:9092
+    isDefault: false
+    basicAuth: false
+    version: 1
+    editable: false
+    jsonData:
+      httpMethod: GET
+      manageAlerts: true
+      prometheusType: Thanos
+      prometheusVersion: 0.31.1
+      httpHeaderName1: Authorization
+      cacheLevel: 'High'
+      disableRecordingRules: false
+      incrementalQueryOverlapWindow: 10m
+      customQueryParameters: "namespace=ca7f8f-dev"
+      tlsSkipVerify: true
+    secureJsonData:
+      httpHeaderValue1: "Bearer ${GRAFANA_SA_TOKEN}"
+  - name: ca7f8f-test
+    uid: ca7f8f-test
+    type: prometheus
+    access: proxy
+    orgId: 1
+    url: https://thanos-querier.openshift-monitoring.svc.cluster.local:9092
+    isDefault: false
+    basicAuth: false
+    version: 1
+    editable: false
+    jsonData:
+      httpMethod: GET
+      manageAlerts: true
+      prometheusType: Thanos
+      prometheusVersion: 0.31.1
+      httpHeaderName1: Authorization
+      cacheLevel: 'High'
+      disableRecordingRules: false
+      incrementalQueryOverlapWindow: 10m
+      customQueryParameters: "namespace=ca7f8f-test"
+      tlsSkipVerify: true
+    secureJsonData:
+      httpHeaderValue1: "Bearer ${GRAFANA_SA_TOKEN}"
+  - name: ca7f8f-tools
+    uid: ca7f8f-tools
+    type: prometheus
+    access: proxy
+    orgId: 1
+    url: https://thanos-querier.openshift-monitoring.svc.cluster.local:9092
+    isDefault: false
+    basicAuth: false
+    version: 1
+    editable: false
+    jsonData:
+      httpMethod: GET
+      manageAlerts: true
+      prometheusType: Thanos
+      prometheusVersion: 0.31.1
+      httpHeaderName1: Authorization
+      cacheLevel: 'High'
+      disableRecordingRules: false
+      incrementalQueryOverlapWindow: 10m
+      customQueryParameters: "namespace=ca7f8f-tools"
+      tlsSkipVerify: true
+    secureJsonData:
+      httpHeaderValue1: "Bearer ${GRAFANA_SA_TOKEN}"
