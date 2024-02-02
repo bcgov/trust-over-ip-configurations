@@ -670,7 +670,7 @@ write:
   resources:
     limits:
       cpu: 250m
-      memory: 500Mi
+      memory: 1Gi
     requests:
       cpu: 100m
       memory: 45Mi
@@ -704,7 +704,7 @@ write:
     # -- Enable StatefulSetAutoDeletePVC feature
     enableStatefulSetAutoDeletePVC: false
     # -- Size of persistent disk
-    size: 1Gi
+    size: 5Gi
     # -- Storage class to be used.
     # If defined, storageClassName: <storageClass>.
     # If set to "-", storageClassName: "", which disables dynamic provisioning.
@@ -716,7 +716,7 @@ write:
 # Configuration for the table-manager
 tableManager:
   # -- Specifies whether the table-manager should be enabled
-  enabled: false
+  enabled: true
   image:
     # -- The Docker registry for the table-manager image. Overrides `loki.image.registry`
     registry: null
@@ -740,7 +740,8 @@ tableManager:
     # -- Additional labels for table-manager Service
     labels: {}
   # -- Additional CLI args for the table-manager
-  extraArgs: []
+  extraArgs:
+  - -config.expand-env=true
   # -- Environment variables to add to the table-manager pods
   extraEnv: []
   # -- Environment variables from secrets or configmaps to add to the table-manager pods
@@ -786,9 +787,9 @@ tableManager:
   # -- Tolerations for table-manager pods
   tolerations: []
   # -- Enable deletes by retention
-  retention_deletes_enabled: false
+  retention_deletes_enabled: true
   # -- Set retention period
-  retention_period: 0
+  retention_period: 672h
 # Configuration for the read pod(s)
 read:
   # -- Number of replicas for the read
