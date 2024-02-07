@@ -1159,7 +1159,7 @@ backup:
       ## If undefined (the default) or set to null, no storageClassName spec is
       ## set, choosing the default provisioner.
       ##
-      storageClass: "netapp-file-backup"
+      storageClass: "netapp-block-standard"
       ## @param backup.cronjob.storage.accessModes PV Access Mode
       ##
       accessModes:
