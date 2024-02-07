@@ -239,6 +239,16 @@ objects:
                     secretKeyRef:
                       name: ${PREFIX}${LCRB_WALLET_DB_HOST}
                       key: ${DB_PASSWORD_KEY_NAME}
+                - name: WALLET_IDIM_PREPROD_USER
+                  valueFrom:
+                    secretKeyRef:
+                      name: ${PREFIX}${IDIM_PREPROD_WALLET_DB_HOST}
+                      key: ${DB_USER_KEY_NAME}
+                - name: WALLET_IDIM_PREPROD_PASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      name: ${PREFIX}${IDIM_PREPROD_WALLET_DB_HOST}
+                      key: ${DB_PASSWORD_KEY_NAME}
                 - name: WEBHOOK_URL
                   valueFrom:
                     secretKeyRef:
@@ -371,6 +381,13 @@ parameters:
       particular, this is used to wire up the credentials associated to the database.
     required: true
     value: wallet-lcrb
+  - name: IDIM_PREPROD_WALLET_DB_HOST
+    displayName: Wallet Database Hostname
+    description:
+      The name associated to the wallet database deployment resources.  In
+      particular, this is used to wire up the credentials associated to the database.
+    required: true
+    value: wallet-idim-preprod
   - name: DB_USER_KEY_NAME
     displayName: Database User Key Name
     description:
