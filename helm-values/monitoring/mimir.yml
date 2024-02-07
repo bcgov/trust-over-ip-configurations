@@ -2379,7 +2379,6 @@ gateway:
       htpasswd: ""
       # -- Name of an existing basic auth secret to use instead of gateway.nginx.basicAuth.htpasswd. Must contain '.htpasswd' key
       existingSecret: mimir-htpasswd
-
     config:
       # -- NGINX log format
       logFormat: |-
@@ -2431,7 +2430,7 @@ gateway:
           sendfile     on;
           tcp_nopush   on;
 
-          resolver  dns-default.openshift-dns.svc.cluster.local valid=10s;
+          resolver  dns-default.openshift-dns.svc.cluster.local.;
 
           {{- with .Values.gateway.nginx.config.httpSnippet }}
           {{ . | nindent 2 }}
