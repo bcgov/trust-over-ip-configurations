@@ -253,11 +253,11 @@ ingress:
 
 resources:
   limits:
-    cpu: 200m
+    cpu: 1
     memory: 1Gi
   requests:
-    cpu: 60m
-    memory: 250Mi
+    cpu: 350m
+    memory: 500Mi
 
 ## Node labels for pod assignment
 ## ref: https://kubernetes.io/docs/user-guide/node-selection/
@@ -779,7 +779,7 @@ grafana.ini:
     api_url: ${KEYCLOAK_SSO_API_URL}
     allowed_domains:
     use_pkce: true
-    role_attribute_path: contains(roles[*], 'grafanaadmin') && 'GrafanaAdmin' || contains(roles[*], 'grafanaeditor') && 'GrafanaEditor' || 'Viewer'
+    role_attribute_path: contains(roles[*], 'grafanaadmin') && 'GrafanaAdmin' || contains(roles[*], 'admin') && 'Admin' || contains(roles[*], 'editor') && 'Editor' || 'Viewer'
     allow_assign_grafana_admin: true
     groups_attribute_path: groups
  # https://grafana.com/docs/grafana/latest/auth/github/#enable-github-in-grafana
