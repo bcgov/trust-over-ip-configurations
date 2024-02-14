@@ -270,14 +270,12 @@ loki:
   # -- Storage config. Providing this will automatically populate all necessary storage configs in the templated config.
   storage:
     bucketNames:
-      chunks: dts-logs-chunks-bucket
-      ruler: dts-logs-ruler-bucket
-      admin: dts-logs-admin-bucket
+      chunks: dts-logs
     type: s3
     s3:
       accessKeyId: "${AWS_ACCESS_KEY_ID}"
       secretAccessKey: "${AWS_SECRET_ACCESS_KEY}"
-      endpoint: https://dts-minio-dev.apps.silver.devops.gov.bc.ca
+      endpoint: http://minio.ca7f8f-tools.svc.cluster.local.:9000
       region: ca-west-1
       insecure: false
       s3ForcePathStyle: true
@@ -336,8 +334,8 @@ loki:
     #   max_per_second: 20
     #   up_to: 3
     aws:
-      s3: https://${AWS_ACCESS_KEY_ID}:${AWS_SECRET_ACCESS_KEY}@dts-minio-dev.apps.silver.devops.gov.bc.ca
-      bucketnames: dts-logs-chunks-bucket,dts-logs-ruler-bucket
+      s3: http://${AWS_ACCESS_KEY_ID}:${AWS_SECRET_ACCESS_KEY}@minio.ca7f8f-tools.svc.cluster.local.:9000
+      bucketnames: dts-logs
     boltdb_shipper:
       active_index_directory: /var/loki/index
       build_per_tenant_index: true
