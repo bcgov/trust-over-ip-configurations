@@ -47,7 +47,7 @@ global:
   # -- Definitions to set up nginx resolver
   dnsService: dns-default
   dnsNamespace: openshift-dns
-  clusterDomain: cluster.local
+  clusterDomain: cluster.local.
 
   # -- Common environment variables to add to all pods directly managed by this chart.
   # scope: admin-api, alertmanager, compactor, distributor, gateway, ingester, memcached, nginx, overrides-exporter, querier, query-frontend, query-scheduler, ruler, store-gateway, smoke-test, tokengen
@@ -120,34 +120,6 @@ mimir:
     activity_tracker:
       filepath: /active-query-tracker/activity.log
 
-    {{- if .Values.enterprise.enabled }}
-    admin_api:
-      leader_election:
-        enabled: true
-        ring:
-          kvstore:
-            store: "memberlist"
-
-    admin_client:
-      storage:
-      {{- if .Values.minio.enabled }}
-        type: s3
-        s3:
-          access_key_id: {{ .Values.minio.rootUser }}
-          bucket_name: enterprise-metrics-admin
-          endpoint: {{ .Release.Name }}-minio.{{ .Release.Namespace }}.svc:9000
-          insecure: true
-          secret_access_key: {{ .Values.minio.rootPassword }}
-      {{- end }}
-      {{- if (index .Values "admin-cache" "enabled") }}
-        cache:
-          backend: memcached
-          memcached:
-            addresses: {{ include "mimir.adminCacheAddress" . }}
-            max_item_size: {{ mul (index .Values "admin-cache").maxItemMemory 1024 1024 }}
-      {{- end }}
-    {{- end }}
-
     alertmanager:
       data_dir: /data
       enable_api: true
@@ -160,23 +132,6 @@ mimir:
       fallback_config_file: /configs/alertmanager_fallback_config.yaml
       {{- end }}
 
-    {{- if .Values.minio.enabled }}
-    alertmanager_storage:
-      backend: s3
-      s3:
-        access_key_id: {{ .Values.minio.rootUser }}
-        bucket_name: {{ include "mimir.minioBucketPrefix" . }}-ruler
-        endpoint: {{ .Release.Name }}-minio.{{ .Release.Namespace }}.svc:9000
-        insecure: true
-        secret_access_key: {{ .Values.minio.rootPassword }}
-    {{- end }}
-
-    {{- if .Values.enterprise.enabled }}
-    auth:
-      type: enterprise
-    {{- end }}
-
-    # This configures how the store-gateway synchronizes blocks stored in the bucket. It uses Minio by default for getting started (configured via flags) but this should be changed for production deployments.
     blocks_storage:
       backend: s3
       bucket_store:
@@ -219,10 +174,6 @@ mimir:
         head_compaction_interval: 15m
         wal_replay_concurrency: 3
 
-    {{- if .Values.enterprise.enabled }}
-    cluster_name: "{{ .Release.Name }}"
-    {{- end }}
-
     compactor:
       compaction_interval: 30m
       deletion_delay: 2h
@@ -259,35 +210,6 @@ mimir:
       frontend_address: {{ template "mimir.fullname" . }}-query-frontend-headless.{{ .Release.Namespace }}.svc:{{ include "mimir.serverGrpcListenPort" . }}
       {{- end }}
 
-    {{- if and .Values.enterprise.enabled }}
-    gateway:
-      proxy:
-        admin_api:
-          url: http://{{ template "mimir.fullname" . }}-admin-api.{{ .Release.Namespace }}.svc:{{ include "mimir.serverHttpListenPort" . }}
-        alertmanager:
-          url: http://{{ template "mimir.fullname" . }}-alertmanager-headless.{{ .Release.Namespace }}.svc:{{ include "mimir.serverHttpListenPort" . }}
-        compactor:
-          url: http://{{ template "mimir.fullname" . }}-compactor.{{ .Release.Namespace }}.svc:{{ include "mimir.serverHttpListenPort" . }}
-        default:
-          url: http://{{ template "mimir.fullname" . }}-admin-api.{{ .Release.Namespace }}.svc:{{ include "mimir.serverHttpListenPort" . }}
-        distributor:
-          url: dns:///{{ template "mimir.fullname" . }}-distributor-headless.{{ .Release.Namespace }}.svc.{{ .Values.global.clusterDomain }}:{{ include "mimir.serverGrpcListenPort" . }}
-        ingester:
-          url: http://{{ template "mimir.fullname" . }}-ingester-headless.{{ .Release.Namespace }}.svc:{{ include "mimir.serverHttpListenPort" . }}
-        query_frontend:
-          url: http://{{ template "mimir.fullname" . }}-query-frontend.{{ .Release.Namespace }}.svc:{{ include "mimir.serverHttpListenPort" . }}
-        ruler:
-          url: http://{{ template "mimir.fullname" . }}-ruler.{{ .Release.Namespace }}.svc:{{ include "mimir.serverHttpListenPort" . }}
-        store_gateway:
-          url: http://{{ template "mimir.fullname" . }}-store-gateway-headless.{{ .Release.Namespace }}.svc:{{ include "mimir.serverHttpListenPort" . }}
-        {{- if and .Values.enterprise.enabled .Values.graphite.enabled }}
-        graphite_write_proxy:
-          url: http://{{ template "mimir.fullname" . }}-graphite-write-proxy.{{ .Release.Namespace }}.svc:{{ include "mimir.serverHttpListenPort" . }}
-        graphite_querier:
-          url: http://{{ template "mimir.fullname" . }}-graphite-querier.{{ .Release.Namespace }}.svc:{{ include "mimir.serverHttpListenPort" . }}
-        {{- end}}
-    {{- end }}
-
     ingester:
       ring:
         final_sleep: 0s
@@ -302,16 +224,6 @@ mimir:
       grpc_client_config:
         max_recv_msg_size: 104857600
         max_send_msg_size: 104857600
-
-    {{- if .Values.enterprise.enabled }}
-    instrumentation:
-      enabled: true
-      distributor_client:
-        address: dns:///{{ template "mimir.fullname" . }}-distributor-headless.{{ .Release.Namespace }}.svc.{{ .Values.global.clusterDomain }}:{{ include "mimir.serverGrpcListenPort" . }}
-
-    license:
-      path: "/license/license.jwt"
-    {{- end }}
 
     limits:
       # Limit queries to 500 days. You can override this on a per-tenant basis.
@@ -343,7 +255,7 @@ mimir:
     ruler:
       alertmanager_url: dnssrvnoa+http://_http-metrics._tcp.{{ template "mimir.fullname" . }}-alertmanager-headless.{{ .Release.Namespace }}.svc.{{ .Values.global.clusterDomain }}/alertmanager
       enable_api: true
-      rule_path: /data
+      rule_path: /data/ruler
 
     {{- if or (.Values.minio.enabled) (index .Values "metadata-cache" "enabled") }}
     ruler_storage:
@@ -386,55 +298,34 @@ mimir:
         zone_awareness_enabled: true
         {{- end }}
 
-    {{- if and .Values.enterprise.enabled .Values.graphite.enabled }}
-    graphite:
-      enabled: true
-
-      write_proxy:
-        distributor_client:
-          address: dns:///{{ template "mimir.fullname" . }}-distributor.{{ .Release.Namespace }}.svc:{{ include "mimir.serverGrpcListenPort" .  }}
-
-      querier:
-        remote_read:
-          query_address: http://{{ template "mimir.fullname" . }}-query-frontend.{{ .Release.Namespace }}.svc:{{ include "mimir.serverHttpListenPort" .  }}/prometheus
-        proxy_bad_requests: false
-
-        schemas:
-          default_storage_schemas_file: /etc/graphite-proxy/storage-schemas.conf
-          default_storage_aggregations_file: /etc/graphite-proxy/storage-aggregations.conf
-        aggregation_cache:
-          memcached:
-            addresses: dnssrvnoa+{{ template "mimir.fullname" . }}-gr-aggr-cache.{{ .Release.Namespace}}.svc:11211
-            timeout: 1s
-        metric_name_cache:
-          memcached:
-            addresses: dnssrvnoa+{{ template "mimir.fullname" . }}-gr-metricname-cache.{{ .Release.Namespace}}.svc:11211
-            timeout: 1s
-    {{- end}}
-
   # -- Additional structured values on top of the text based 'mimir.config'. Applied after the text based config is evaluated for templates. Enables adding and modifying YAML elements in the evaulated 'mimir.config'.
   structuredConfig:
     common:
       storage:
         backend: s3
         s3:
-          endpoint: dts-minio-dev.apps.silver.devops.gov.bc.ca
+          endpoint: minio.ca7f8f-tools.svc.cluster.local.:9000
           region: ca-west-1
+          insecure: true
           secret_access_key: "${AWS_SECRET_ACCESS_KEY}" # This is a secret injected via an environment variable
           access_key_id: "${AWS_ACCESS_KEY_ID}"
+          bucket_name: dts-metrics
 
     alertmanager_storage:
+      storage_prefix: alerts
       s3:
-        bucket_name: dts-metrics-ruler-bucket
+        bucket_name: dts-metrics
 
     blocks_storage:
+      storage_prefix: blocks
       backend: s3
       s3:
-        bucket_name: dts-metrics-blocks-bucket
+        bucket_name: dts-metrics
 
     ruler_storage:
+      storage_prefix: ruler
       s3:
-        bucket_name: dts-metrics-ruler-bucket
+        bucket_name: dts-metrics
 
 
 # -- runtimeConfig provides a reloadable runtime configuration. Changing the runtimeConfig doesn't require a restart of all components.
@@ -960,66 +851,6 @@ ingester:
   zoneAwareReplication:
     # -- Enable zone-aware replication for ingester
     enabled: false
-    # -- Maximum number of ingesters that can be unavailable per zone during rollout
-    maxUnavailable: 50
-    # -- topologyKey to use in pod anti-affinity. If unset, no anti-affinity rules are generated. If set, the generated anti-affinity rule makes sure that pods from different zones do not mix.
-    # E.g.: topologyKey: 'kubernetes.io/hostname'
-    topologyKey: null
-    # -- Auxiliary values for migration, see https://grafana.com/docs/helm-charts/mimir-distributed/latest/migration-guides/migrate-from-single-zone-with-helm/
-    migration:
-      # -- Indicate if migration is ongoing for multi zone ingester
-      enabled: false
-      # -- Exclude default zone on write path
-      excludeDefaultZone: false
-      # -- Enable zone-awareness, read path only
-      readPath: false
-      # -- Total number of replicas to start in availability zones when migration is enabled
-      replicas: 0
-      # -- Scale default zone ingesters to 0
-      scaleDownDefaultZone: false
-      # -- Enable zone-awareness, write path only
-      writePath: false
-    # -- Zone definitions for ingester zones. Note: you have to redefine the whole list to change parts as YAML does not allow to modify parts of a list.
-    zones:
-    # -- Name of the zone, used in labels and selectors. Must follow Kubernetes naming restrictions: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
-    - name: zone-a
-      # -- nodeselector to restrict where pods of this zone can be placed. E.g.:
-      # nodeSelector:
-      #   topology.kubernetes.io/zone: zone-a
-      nodeSelector: null
-      # -- extraAffinity adds user defined custom affinity rules (merged with generated rules)
-      extraAffinity: {}
-      # -- Ingester data Persistent Volume Storage Class
-      # If defined, storageClassName: <storageClass>
-      # If set to "-", then use `storageClassName: ""`, which disables dynamic provisioning
-      # If undefined or set to null (the default), then fall back to the value of `ingester.persistentVolume.storageClass`.
-      storageClass: null
-    # -- Name of the zone, used in labels and selectors. Must follow Kubernetes naming restrictions: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
-    - name: zone-b
-      # -- nodeselector to restrict where pods of this zone can be placed. E.g.:
-      # nodeSelector:
-      #   topology.kubernetes.io/zone: zone-b
-      nodeSelector: null
-      # -- extraAffinity adds user defined custom affinity rules (merged with generated rules)
-      extraAffinity: {}
-      # -- Ingester data Persistent Volume Storage Class
-      # If defined, storageClassName: <storageClass>
-      # If set to "-", then use `storageClassName: ""`, which disables dynamic provisioning
-      # If undefined or set to null (the default), then fall back to the value of `ingester.persistentVolume.storageClass`.
-      storageClass: null
-    # -- Name of the zone, used in labels and selectors. Must follow Kubernetes naming restrictions: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
-    - name: zone-c
-      # -- nodeselector to restrict where pods of this zone can be placed. E.g.:
-      # nodeSelector:
-      #   topology.kubernetes.io/zone: zone-c
-      nodeSelector: null
-      # -- extraAffinity adds user defined custom affinity rules (merged with generated rules)
-      extraAffinity: {}
-      # -- Ingester data Persistent Volume Storage Class
-      # If defined, storageClassName: <storageClass>
-      # If set to "-", then use `storageClassName: ""`, which disables dynamic provisioning
-      # If undefined or set to null (the default), then fall back to the value of `ingester.persistentVolume.storageClass`.
-      storageClass: null
 
 overrides_exporter:
   enabled: true
@@ -2190,7 +2021,7 @@ nginx:
 gateway:
   # -- The gateway is deployed by default for enterprise installations (enterprise.enabled=true).
   # Toggle this to have it deployed for non-enterprise installations too.
-  enabledNonEnterprise: true
+  enabledNonEnterprise: false
 
   # -- Number of replicas for the Deployment
   replicas: 3
