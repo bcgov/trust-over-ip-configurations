@@ -59,6 +59,7 @@ tenant_proxy:
         network.openshift.io/policy-group: ingress
 ui:
   quickConnectEndorserName: "bcovrin-test-endorser"
+  requireEmailForReservation: false
   image:
     pullPolicy: Always
   ux:
@@ -79,8 +80,7 @@ ui:
             "organization": {
               "type": "string"
             }
-          },
-          "required": ["organization"]
+          }
         },
         "formUISchema": {
           "type": "VerticalLayout",
