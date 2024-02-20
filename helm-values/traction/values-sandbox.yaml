@@ -62,6 +62,9 @@ ui:
   image:
     pullPolicy: Always
   ux:
+    aboutBusiness:
+      linkTitle: "No service agreement available for Sandbox environment"
+      link: " "
     infoBanner:
       showMessage: true
   oidc:
