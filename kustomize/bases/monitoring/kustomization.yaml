@@ -1,0 +1,24 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+- agent-flow-ingress.yaml
+- agent-role-binding.yaml
+- agent-role.yaml
+- agent-sa.yaml
+- agent-service.yaml
+- agent-statefulset.yaml
+- grafana-rolebinding.yaml
+
+generatorOptions:
+  disableNameSuffixHash: true
+
+configMapGenerator:
+- name: grafana-agent-config
+  files:
+  - config.river
+
+secretGenerator:
+  - name: grafana-agent-secrets
+    envs:
+    - secrets.env

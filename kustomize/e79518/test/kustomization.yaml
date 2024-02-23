@@ -1,0 +1,23 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: e79518-test
+
+resources:
+- ../../bases/monitoring/
+
+patches:
+  - patch: |-
+      - op: replace
+        path: /spec/rules/0/host
+        value: dts-e79518-test-agent.apps.silver.devops.gov.bc.ca
+    target:
+      kind: Ingress
+      name: monitoring-grafana-agent
+  - patch: |-
+      - op: replace
+        path: /subjects/0/namespace
+        value: e79518-test
+    target:
+      kind: RoleBinding
+      name: monitoring-grafana-agent
