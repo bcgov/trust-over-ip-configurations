@@ -90,6 +90,7 @@ ui:
     showInnkeeperAdminLogin: true
     authority: https://test.loginproxy.gov.bc.ca/auth/realms/digitaltrust-citz
     jwksUri: https://test.loginproxy.gov.bc.ca/auth/realms/digitaltrust-citz/protocol/openid-connect/certs
+    extraQueryParams: '{"kc_idp_hint":"idir"}'
     realm: "digitaltrust-citz"
     reservationForm: >-
       {
