@@ -1,0 +1,40 @@
+{
+    "ver_config_id": "showcase-person",
+    "subject_identifier": "",
+    "generate_consistent_identifier": true,
+    "proof_request": {
+        "name": "BC Wallet Showcase Person",
+        "version": "1.0",
+        "requested_attributes": [
+            {
+                "names": [
+                    "region",
+                    "country",
+                    "given_names",
+                    "postal_code",
+                    "birthdate_dateint",
+                    "street_address",
+                    "picture",
+                    "family_name",
+                    "expiry_date_dateint",
+                    "locality"
+                ],
+                "restrictions": [
+                    {
+                        "schema_name": "Person",
+                        "issuer_did": "L6ASjmDDbDH7yPL1t2yFj9"
+                    },
+                    {
+                        "schema_name": "Person",
+                        "issuer_did": "QEquAHkM35w4XVT3Ku5yat"
+                    },
+                    {
+                        "schema_name": "Person",
+                        "issuer_did": "M6dhuFj5UwbhWkSLmvYSPc"
+                    }
+                ]
+            }
+        ],
+        "requested_predicates": []
+    }
+}
