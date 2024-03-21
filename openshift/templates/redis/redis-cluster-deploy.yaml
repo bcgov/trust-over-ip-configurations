@@ -6,15 +6,36 @@
 #  - Cluster requires one time initialization.
 #   - TODO: Automate the cluster initialization process.
 #  - https://gist.github.com/jujaga/7048148a7c960d6a910ff29f33565407
-#  - https://github.com/bcgov/nr-get-token/wiki/Redis-Troubleshooting
+#  - https://github.com/bcgov/common-service-showcase/wiki/Redis-Troubleshooting
+
+# ==================================================
+# Troubleshooting
+# ==================================================
+# Resync the Redis Cluster
+# --------------------------------------------------
+#  export INSTANCE=<YOURINSTANCE>
+#  export NAMESPACE=<YOURNAMESPACE>
+#  oc get pods -n $NAMESPACE -l statefulset=redis-$INSTANCE -o jsonpath='{range.items[*]}{.status.podIP} 6379 {end}' | xargs -n2 oc exec -n $NAMESPACE -i redis-$INSTANCE-0 -- redis-cli -c CLUSTER MEET
+# --------------------------------------------------
+# Redis Cluster Info
+# --------------------------------------------------
+#  oc exec -n $NAMESPACE -i redis-$INSTANCE-0 -- redis-cli -c CLUSTER INFO
+# --------------------------------------------------
+# Redis Cluster Nodes
+# --------------------------------------------------
+#  oc exec -n $NAMESPACE -i redis-$INSTANCE-0 -- redis-cli -c CLUSTER NODES
+# ==================================================
 
 # TODO List:
-#   - Automate the cluster initialization process, as listed above.
+#   - Automate the cluster initialization process:
+#     export INSTANCE=<YOURINSTANCE>
+#     export NAMESPACE=<YOURNAMESPACE>
+#     oc exec -n $NAMESPACE -it redis-$INSTANCE-0 -- redis-cli -a $(oc get secret -n $NAMESPACE redis-$INSTANCE -o jsonpath='{.data.password}' | base64 -d) --cluster create --cluster-replicas 1 $(oc get pods -n $NAMESPACE -l statefulset=redis-$INSTANCE -o jsonpath='{range.items[*]}{.status.podIP}:6379 {end}')
+#
 #   - Decouple the image from the DC.
 #     - Manage the image in the tools project with deployment environment tags.
-
 ---
-apiVersion: v1
+apiVersion: template.openshift.io/v1
 kind: Template
 metadata:
   annotations:
@@ -92,7 +113,7 @@ objects:
             exit 1
           fi
           echo Updating my IP to $POD_IP in $CLUSTER_CONFIG
-          sed -i.bak -e /myself/ s/[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}/$POD_IP/ $CLUSTER_CONFIG
+          sed -i.bak -e "/myself/ s/[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}/$POD_IP/" $CLUSTER_CONFIG
         fi
         exec $@
 
@@ -137,6 +158,18 @@ objects:
             role: ${ROLE}
             statefulset: ${NAME}${INSTANCE_DELIMITER}${INSTANCE}
         spec:
+          affinity:
+            podAntiAffinity:
+              preferredDuringSchedulingIgnoredDuringExecution:
+              - weight: 100
+                podAffinityTerm:
+                  labelSelector:
+                    matchExpressions:
+                    - key: app
+                      values:
+                      - ${NAME}${INSTANCE_DELIMITER}${INSTANCE}
+                      operator: In
+                  topologyKey: kubernetes.io/hostname
           containers:
             - name: redis
               image: ${IMAGE_REGISTRY}/${IMAGE_NAME}:${IMAGE_TAG}
@@ -312,7 +345,7 @@ parameters:
     description: Redis Image Tag
     displayName: Image Tag
     required: true
-    value: 6.2.6-alpine
+    value: 7-alpine
 
   - name: PVC_SIZE
     description: The size of the persistent volume to create.
@@ -347,12 +380,12 @@ parameters:
     value: 256Mi
 
   - name: TAG_NAME
-    description: 
-    displayName: 
+    description:
+    displayName:
     required: true
     value: dev
   - name: NAMESPACE_NAME
-    description: 
-    displayName: 
+    description:
+    displayName:
     required: true
     value: e79518
