@@ -1,7 +1,7 @@
 {
     "ver_config_id": "sso-pathfinder-2",
     "subject_identifier": "",
-    "generate_consistent_identifier": true,
+    "generate_consistent_identifier": false,
     "proof_request": {
         "name": "SSO Pathfinder Proof Request 2",
         "version": "1.0",
