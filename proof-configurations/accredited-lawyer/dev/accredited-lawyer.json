@@ -1,9 +1,10 @@
 {
-  "id": "accredited-lawyer-dev",
+  "ver_config_id": "accredited-lawyer-dev",
+  "include_v1_attributes": true,
   "subject_identifier": "PPID",
-  "configuration": {
-    "name": "accredited-lawyer",
-    "version": "1.5.2",
+  "proof_request": {
+    "name": "Accredited Lawyer",
+    "version": "1.5.3",
     "requested_attributes": [
       {
         "names": [
