@@ -22,15 +22,11 @@
                 "restrictions": [
                     {
                         "schema_name": "Person",
-                        "issuer_did": "L6ASjmDDbDH7yPL1t2yFj9"
-                    },
-                    {
-                        "schema_name": "Person",
-                        "issuer_did": "QEquAHkM35w4XVT3Ku5yat"
-                    },
-                    {
-                        "schema_name": "Person",
                         "issuer_did": "M6dhuFj5UwbhWkSLmvYSPc"
+                    },
+                    {
+                        "schema_name": "Person",
+                        "issuer_did": "RGjWbW1eycP7FrMf4QJvX8"
                     }
                 ]
             }

@@ -1,0 +1,25 @@
+{
+    "ver_config_id": "sso-pathfinder-1",
+    "subject_identifier": "",
+    "generate_consistent_identifier": false,
+    "proof_request": {
+        "name": "SSO Pathfinder Proof Request 1",
+        "version": "1.0",
+        "requested_attributes": [
+            {
+                "names": [
+                    "given_name",
+                    "given_names",
+                    "family_name",
+                    "country"
+                ],
+                "restrictions": [
+                    {
+                        "issuer_did": "KStpBJeuwwouK289zCM6gr"
+                    }
+                ]
+            }
+        ],
+        "requested_predicates": []
+    }
+}

@@ -1,0 +1,27 @@
+{
+    "ver_config_id": "sso-pathfinder-2",
+    "subject_identifier": "",
+    "generate_consistent_identifier": false,
+    "proof_request": {
+        "name": "SSO Pathfinder Proof Request 2",
+        "version": "1.0",
+        "requested_attributes": [
+            {
+                "names": [
+                    "given_names",
+                    "family_name",
+                    "locality",
+                    "region",
+                    "postal_code",
+                    "street_address"
+                ],
+                "restrictions": [
+                    {
+                        "issuer_did": "KStpBJeuwwouK289zCM6gr"
+                    }
+                ]
+            }
+        ],
+        "requested_predicates": []
+    }
+}
