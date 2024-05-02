@@ -37,10 +37,10 @@ acapy:
         network.openshift.io/policy-group: ingress
   resources:
     limits:
-      cpu: 400m
+      cpu: 1
       memory: 500Mi
     requests:
-      cpu: 120m
+      cpu: 250m
       memory: 250Mi
   autoscaling:
     enabled: true
