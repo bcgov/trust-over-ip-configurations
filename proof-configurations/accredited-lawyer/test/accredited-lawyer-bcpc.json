@@ -29,6 +29,11 @@
             "issuer_did": "AuJrigKQGRLJajKAebTgWu",
             "schema_name": "Member Card",
             "schema_version": "1.5.1"
+          },
+          {
+            "issuer_did": "4xE68b6S5VRFrKMMG1U95M",
+            "schema_name": "Member Card",
+            "schema_version": "1.5.1"
           }
         ]
       },

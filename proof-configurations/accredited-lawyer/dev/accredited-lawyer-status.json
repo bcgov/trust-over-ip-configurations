@@ -1,16 +1,13 @@
 {
-  "ver_config_id": "accredited-lawyer-bcpc-dev",
+  "ver_config_id": "accredited-lawyer-status-dev",
   "include_v1_attributes": true,
   "subject_identifier": "PPID",
   "proof_request": {
-    "name": "Accredited Lawyer with BC Person Credential",
+    "name": "Accredited Lawyer Status",
     "version": "1.0.0",
     "requested_attributes": [
       {
         "names": [
-          "PPID",
-          "Given Name",
-          "Surname",
           "Member Status",
           "Member Status Code"
         ],
@@ -26,6 +23,11 @@
             "schema_version": "1.0.1"
           },
           {
+            "issuer_did": "UUHA3oknprvKrpa7a6sncK",
+            "schema_name": "Member Card",
+            "schema_version": "1.5.1"
+          },
+          {
             "issuer_did": "DZBaHghKsVHcJoiwkykG3r",
             "schema_name": "Member Certificate",
             "schema_version": "0.5.0"
@@ -39,44 +41,6 @@
             "issuer_did": "AuJrigKQGRLJajKAebTgWu",
             "schema_name": "Member Card",
             "schema_version": "1.5.1"
-          },
-          {
-            "issuer_did": "UUHA3oknprvKrpa7a6sncK",
-            "schema_name": "Member Card",
-            "schema_version": "1.5.1"
-          }
-        ]
-      },
-      {
-        "names": [
-          "family_name",
-          "given_names"
-        ],
-        "restrictions": [
-          {
-            "issuer_did": "XpgeQa93eZvGSZBZef3PHn",
-            "schema_name": "Person",
-            "schema_version": "1.0"
-          },
-          {
-            "issuer_did": "7xjfawcnyTUcduWVysLww5",
-            "schema_name": "Person",
-            "schema_version": "1.0"
-          },
-          {
-            "issuer_did": "Ui6HA36FvN83cEtmYYHxrn",
-            "schema_name": "unverified_person",
-            "schema_version": "0.1.0"
-          },
-          {
-            "issuer_did": "NCwGwDrzbZEqesYQummzWW",
-            "schema_name": "unverified_person",
-            "schema_version": "0.4.0"
-          },
-          {
-            "issuer_did": "RGjWbW1eycP7FrMf4QJvX8",
-            "schema_name": "Person",
-            "schema_version": "1.0"
           },
           {
             "issuer_did": "4xE68b6S5VRFrKMMG1U95M",
