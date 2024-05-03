@@ -1,0 +1,40 @@
+{
+  "ver_config_id": "accredited-lawyer-status-test",
+  "include_v1_attributes": true,
+  "subject_identifier": "PPID",
+  "proof_request": {
+    "name": "Accredited Lawyer Status",
+    "version": "1.0.0",
+    "requested_attributes": [
+      {
+        "names": [
+          "Member Status",
+          "Member Status Code"
+        ],
+        "restrictions": [
+          {
+            "issuer_did": "DZBaHghKsVHcJoiwkykG3r",
+            "schema_name": "Member Certificate",
+            "schema_version": "0.5.0"
+          },
+          {
+            "issuer_did": "DZBaHghKsVHcJoiwkykG3r",
+            "schema_name": "Member Certificate",
+            "schema_version": "1.0.1"
+          },
+          {
+            "issuer_did": "AuJrigKQGRLJajKAebTgWu",
+            "schema_name": "Member Card",
+            "schema_version": "1.5.1"
+          },
+          {
+            "issuer_did": "4xE68b6S5VRFrKMMG1U95M",
+            "schema_name": "Member Card",
+            "schema_version": "1.5.1"
+          }
+        ]
+      }
+    ],
+    "requested_predicates": []
+  }
+}
