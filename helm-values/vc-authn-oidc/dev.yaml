@@ -73,6 +73,10 @@ acapy:
     webhook-url: 'https://{{ include "vc-authn-oidc.host" . }}/webhooks'
 
   ledgers.yml:
+    - genesis_url: https://raw.githubusercontent.com/sovrin-foundation/sovrin/stable/sovrin/pool_transactions_live_genesis
+      id: SovrinMainNet
+      is_production: true
+      is_write: true
     - id: SOVRINSandbox
       is_production: true
       is_write: true
