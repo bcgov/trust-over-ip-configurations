@@ -8,6 +8,8 @@
     "requested_attributes": [
       {
         "names": [
+          "PPID",
+          "Member Status",
           "Member Status Code"
         ],
         "restrictions": [
