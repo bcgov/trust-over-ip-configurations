@@ -73,6 +73,10 @@ acapy:
     webhook-url: 'https://{{ include "vc-authn-oidc.host" . }}/webhooks'
 
   ledgers.yml:
+    - genesis_url: https://raw.githubusercontent.com/sovrin-foundation/sovrin/stable/sovrin/pool_transactions_live_genesis
+      id: SovrinMainNet
+      is_production: true
+      is_write: true
     - id: SovrinStagingNet
       is_production: true
       is_write: true
@@ -97,10 +101,10 @@ acapy:
 mongodb:
   resources:
     limits:
-      cpu: 800m
+      cpu: 1
       memory: 1000Mi
     requests:
-      cpu: 40m
+      cpu: 400m
       memory: 450Mi
   readinessProbe:
     enabled: true

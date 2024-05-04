@@ -94,10 +94,10 @@ acapy:
 mongodb:
   resources:
     limits:
-      cpu: 800m
+      cpu: 1
       memory: 1000Mi
     requests:
-      cpu: 40m
+      cpu: 400m
       memory: 450Mi
   readinessProbe:
     enabled: true
