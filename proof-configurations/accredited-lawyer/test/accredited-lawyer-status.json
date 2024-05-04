@@ -4,7 +4,7 @@
   "subject_identifier": "PPID",
   "proof_request": {
     "name": "Accredited Lawyer Status",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "requested_attributes": [
       {
         "names": [
@@ -13,11 +13,6 @@
           "Member Status Code"
         ],
         "restrictions": [
-          {
-            "issuer_did": "DZBaHghKsVHcJoiwkykG3r",
-            "schema_name": "Member Certificate",
-            "schema_version": "0.5.0"
-          },
           {
             "issuer_did": "DZBaHghKsVHcJoiwkykG3r",
             "schema_name": "Member Certificate",

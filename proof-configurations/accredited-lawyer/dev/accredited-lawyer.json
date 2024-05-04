@@ -18,10 +18,10 @@
           {
             "issuer_did": "RznYFPVhHpYZgsn4Hu3StV",
             "schema_name": "Member Certificate",
-            "schema_version": "0.5.0"
+            "schema_version": "1.0.1"
           },
           {
-            "issuer_did": "RznYFPVhHpYZgsn4Hu3StV",
+            "issuer_did": "DZBaHghKsVHcJoiwkykG3r",
             "schema_name": "Member Certificate",
             "schema_version": "1.0.1"
           },
@@ -29,16 +29,6 @@
             "issuer_did": "UUHA3oknprvKrpa7a6sncK",
             "schema_name": "Member Card",
             "schema_version": "1.5.1"
-          },
-          {
-            "issuer_did": "DZBaHghKsVHcJoiwkykG3r",
-            "schema_name": "Member Certificate",
-            "schema_version": "0.5.0"
-          },
-          {
-            "issuer_did": "DZBaHghKsVHcJoiwkykG3r",
-            "schema_name": "Member Certificate",
-            "schema_version": "1.0.1"
           },
           {
             "issuer_did": "AuJrigKQGRLJajKAebTgWu",
