@@ -14,6 +14,7 @@ objects:
         name: ${NAME}${SUFFIX}
         app: ${APP_NAME}${SUFFIX}
         env: ${TAG_NAME}
+        backup: ${BACKUP}
     spec:
       description: |
         Allow the api(s) to access the db.
@@ -59,6 +60,7 @@ objects:
         role: ${ROLE}
         env: ${TAG_NAME}
         template: ${NAME}${SUFFIX}
+        backup: ${BACKUP}
     spec:
       strategy:
         type: Recreate
@@ -90,6 +92,7 @@ objects:
             app-group: ${APP_GROUP}
             role: ${ROLE}
             env: ${TAG_NAME}
+            backup: ${BACKUP}
         spec:
           volumes:
             - name: ${NAME}${SUFFIX}-data
@@ -173,6 +176,7 @@ objects:
         role: ${ROLE}
         env: ${TAG_NAME}
         template: ${NAME}${SUFFIX}
+        backup: ${BACKUP}
     spec:
       storageClassName: ${PERSISTENT_VOLUME_CLASS}
       accessModes:
@@ -191,6 +195,7 @@ objects:
         app-group: ${APP_GROUP}
         role: ${ROLE}
         env: ${TAG_NAME}
+        backup: ${BACKUP}
     stringData:
       admin-password: ${MONGODB_ADMIN_PASSWORD}
       database-password: ${MONGODB_PASSWORD}
@@ -208,6 +213,7 @@ objects:
         role: ${ROLE}
         env: ${TAG_NAME}
         template: ${NAME}${SUFFIX}
+        backup: ${BACKUP}
     spec:
       ports:
         - name: mongodb
@@ -258,6 +264,12 @@ parameters:
       Policies
     required: true
     value: controller
+  - name: BACKUP
+    displayName: Backup Target
+    description:
+      allow the backup container access to this pod
+    required: true
+    value: "true"
   - name: IMAGE_NAMESPACE
     displayName: Image Namespace
     required: true
