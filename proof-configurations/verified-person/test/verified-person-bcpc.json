@@ -1,0 +1,24 @@
+{
+  "ver_config_id": "verified-person-bcpc-test",
+  "subject_identifier": "",
+  "proof_request": {
+    "name": "BC Person Credential",
+    "version": "1.0.0",
+    "requested_attributes": [
+      {
+        "names": [
+          "family_name",
+          "given_names"
+        ],
+        "restrictions": [
+          {
+            "issuer_did": "RGjWbW1eycP7FrMf4QJvX8",
+            "schema_name": "Person",
+            "schema_version": "1.0"
+          }
+        ]
+      }
+    ],
+    "requested_predicates": []
+  }
+}
