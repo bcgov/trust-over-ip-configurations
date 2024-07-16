@@ -1,0 +1,107 @@
+ingressSuffix: .apps.silver.devops.gov.bc.ca
+
+image:
+  repository: ghcr.io/bcgov/vc-authn-oidc
+  pullPolicy: IfNotPresent
+
+acapyTenancyMode: single
+setNonRevoked: true
+useOobPresentProof: false
+useOobLocalDIDService: false
+controllerCameraRedirectUrl: wallet_howto
+controllerPresentationExpireTime: 300
+useHTTPS: true
+logLevel: INFO
+
+resources:
+  limits:
+    cpu: 100m
+    memory: 512Mi
+  requests:
+    cpu: 10m
+    memory: 128Mi
+
+autoscaling:
+  enabled: false
+  minReplicas: 3
+  maxReplicas: 5
+  targetCPUUtilizationPercentage: 80
+
+networkPolicy:
+  enabled: true
+  ingress:
+    enabled: true
+    namespaceSelector:
+      network.openshift.io/policy-group: ingress
+
+ingress:
+  enabled: true
+  annotations:
+   route.openshift.io/termination: edge
+
+acapy:
+  image:
+    repository: ghcr.io/hyperledger/aries-cloudagent-python
+    pullPolicy: IfNotPresent
+
+  autoscaling:
+    enabled: true
+    minReplicas: 3
+    maxReplicas: 5
+    targetCPUUtilizationPercentage: 80
+
+  argfile.yml:
+    admin-insecure-mode: false
+    auto-accept-invites: true
+    auto-accept-requests: true
+    auto-ping-connection: true
+    auto-provision: true
+    auto-respond-credential-offer: true
+    auto-respond-messages: true
+    auto-verify-presentation: true
+    genesis-transactions-list: /tmp/ledgers.yml
+    label: '{{ include "acapy.label" .}}'
+    log-level: info
+    monitor-ping: true
+    multitenant-admin: false
+    multitenant: false
+    public-invites: true
+    read-only-ledger: true
+    wallet-name: askar-wallet
+    wallet-storage-type: postgres_storage
+    wallet-type: askar
+    webhook-url: 'https://{{ include "vc-authn-oidc.host" . }}/webhooks'
+
+  ledgers.yml:
+    - id: SovrinMainNet
+      is_production: true
+      is_write: true
+      genesis_url: 'https://raw.githubusercontent.com/sovrin-foundation/sovrin/stable/sovrin/pool_transactions_live_genesis'
+    - id: BCovrinTest
+      is_production: true
+      genesis_url: 'http://test.bcovrin.vonx.io/genesis'
+    - id: CANdyProd
+      is_production: true
+      genesis_url: 'https://raw.githubusercontent.com/ICCS-ISAC/dtrust-reconu/main/CANdy/prod/pool_transactions_genesis'
+
+  networkPolicy:
+    enabled: true
+    ingress:
+      enabled: true
+      namespaceSelector:
+        network.openshift.io/policy-group: ingress
+
+mongodb:
+  resources:
+    limits:
+      cpu: 300m
+      memory: 1000Mi
+    requests:
+      cpu: 40m
+      memory: 450Mi
+  readinessProbe:
+    enabled: true
+    timeoutSeconds: 10
+  livenessProbe:
+    enabled: true
+    timeoutSeconds: 10
