@@ -1,0 +1,133 @@
+traction:
+  ingressSuffix: -sandbox.apps.silver.devops.gov.bc.ca
+  acapy:
+    image:
+      pullPolicy: Always
+    secret:
+      adminApiKey:
+        generated: true
+      pluginInnkeeper:
+        generated: true
+    ledgers.yml:
+      - id: bcovrin-test
+        is_production: true
+        is_write: true
+        genesis_url: "http://test.bcovrin.vonx.io/genesis"
+        endorser_did: "DfQetNSm7gGEHuzfUvpfPn"
+        endorser_alias: "bcovrin-test-endorser"
+    plugin-config.yml:
+      traction_innkeeper:
+        innkeeper_wallet:
+          print_key: true
+          print_token: true
+          connect_to_endorser:
+            - endorser_alias: bcovrin-test-endorser
+              ledger_id: bcovrin-test
+          create_public_did:
+            - bcovrin-test
+        reservation:
+          expiry_minutes: 2880
+          auto_approve: true
+          auto_issuer: true
+    autoscaling:
+      enabled: true
+      minReplicas: 1
+      maxReplicas: 10
+      targetCPUUtilizationPercentage: 80
+      targetMemoryUtilizationPercentage: 80
+      stabilizationWindowSeconds: 300
+    resources:
+      limits:
+        cpu: 400m
+        memory: 1600Mi
+      requests:
+        cpu: 200m
+        memory: 820Mi
+    networkPolicy:
+      enabled: true
+      ingress:
+        enabled: true
+        namespaceSelector:
+          network.openshift.io/policy-group: ingress
+  tenant_proxy:
+    image:
+      pullPolicy: Always
+    networkPolicy:
+      enabled: true
+      ingress:
+        enabled: true
+        namespaceSelector:
+          network.openshift.io/policy-group: ingress
+  ui:
+    quickConnectEndorserName: "bcovrin-test-endorser"
+    requireEmailForReservation: false
+    image:
+      pullPolicy: Always
+    ux:
+      aboutBusiness:
+        linkTitle: "No service agreement available for Sandbox environment"
+        link: " "
+      infoBanner:
+        showMessage: true
+    oidc:
+      active: false
+      showInnkeeperAdminLogin: true
+      showWritableComponents: true
+      authority: https://dev.loginproxy.gov.bc.ca/auth/realms/digitaltrust-citz
+      jwksUri: https://dev.loginproxy.gov.bc.ca/auth/realms/digitaltrust-citz/protocol/openid-connect/certs
+      extraQueryParams: '{"kc_idp_hint":"idir"}'
+      realm: "digitaltrust-citz"
+      reservationForm: >-
+        {
+          "formDataSchema": {
+            "type": "object",
+            "properties": {
+              "organization": {
+                "type": "string"
+              }
+            }
+          },
+          "formUISchema": {
+            "type": "VerticalLayout",
+            "elements": [
+              {
+                "type": "Control",
+                "scope": "#/properties/organization",
+                "label": "Company/organization "
+              }
+            ]
+          }
+        }
+    ariesDetails:
+      ledgerDescription: "bcovrin-test"
+    smtp:
+      server: apps.smtp.gov.bc.ca
+      port: 25
+      senderAddress: DoNotReplyTractionSandbox@gov.bc.ca
+      innkeeperInbox: ""
+    networkPolicy:
+      enabled: true
+      ingress:
+        enabled: true
+        namespaceSelector:
+          network.openshift.io/policy-group: ingress
+    autoscaling:
+      enabled: true
+      minReplicas: 2
+      maxReplicas: 5
+      targetCPUUtilizationPercentage: 80
+      targetMemoryUtilizationPercentage: 80
+  ingress:
+    annotations:
+      route.openshift.io/termination: edge
+  postgresql:
+    primary:
+      persistence:
+        size: 5Gi
+      resources:
+        limits:
+          cpu: 2
+          memory: 4000Mi
+        requests:
+          cpu: 200m
+          memory: 820Mi
