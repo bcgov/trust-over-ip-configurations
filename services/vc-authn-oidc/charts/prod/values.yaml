@@ -132,3 +132,7 @@ vc-authn-oidc:
     primary:
       persistence:
         size: 5Gi
+      resources:
+        limits:
+          cpu: 700m
+          memory: 2600Mi
