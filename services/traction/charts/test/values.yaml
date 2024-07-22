@@ -62,6 +62,9 @@ traction:
       maxReplicas: 5
       targetCPUUtilizationPercentage: 80
       targetMemoryUtilizationPercentage: 80
+    resources:
+      limits:
+        cpu: 800m
   tenant_proxy:
     image:
       pullPolicy: Always

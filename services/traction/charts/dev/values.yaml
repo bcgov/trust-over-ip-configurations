@@ -75,7 +75,7 @@ traction:
           network.openshift.io/policy-group: ingress
     resources:
       limits:
-        cpu: 500m
+        cpu: 800m
   tenant_proxy:
     image:
       tag: sha-c6abd7a
