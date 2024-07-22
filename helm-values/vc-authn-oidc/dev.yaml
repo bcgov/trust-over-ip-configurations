@@ -111,3 +111,8 @@ mongodb:
   livenessProbe:
     enabled: true
     timeoutSeconds: 10
+postgresql:
+  primary:
+    resources:
+      limits:
+        cpu: 800m
