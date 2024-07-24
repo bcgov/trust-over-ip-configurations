@@ -137,6 +137,9 @@ vc-authn-oidc:
     auth:
       existingSecret: "vc-authn-oidc-postgresql"
     primary:
+      resources:
+        limits:
+          cpu: 600m
       persistence:
         size: 5Gi
     metrics:
