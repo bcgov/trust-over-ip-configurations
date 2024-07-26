@@ -13,11 +13,13 @@ jobs:
       any_changed: ${{ steps.gitops-changes.outputs.any_changed }}
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - name: Scan services directory
         id: gitops-changes
         uses: tj-actions/changed-files@v44
         with:
-          files: services/*.*
+          path: services
       - name: List all changed files
         env:
           ALL_CHANGED_FILES: ${{ steps.gitops-changes.outputs.all_changed_files }}
