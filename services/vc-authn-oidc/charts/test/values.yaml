@@ -4,7 +4,6 @@ vc-authn-oidc:
   image:
     repository: ghcr.io/bcgov/vc-authn-oidc
     pullPolicy: IfNotPresent
-    tag: sha-46e31f6
 
   acapyTenancyMode: single
   setNonRevoked: true
@@ -137,6 +136,9 @@ vc-authn-oidc:
     auth:
       existingSecret: "vc-authn-oidc-postgresql"
     primary:
+      resources:
+        limits:
+          cpu: 600m
       persistence:
         size: 5Gi
     metrics:
