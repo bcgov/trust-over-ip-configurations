@@ -1,11 +1,9 @@
 vc-authn-oidc:
   ingressSuffix: -dev.apps.silver.devops.gov.bc.ca
-
   image:
     repository: ghcr.io/bcgov/vc-authn-oidc
     pullPolicy: IfNotPresent
-    tag: sha-46e31f6
-
+    tag: sha-1a1052c
   acapyTenancyMode: single
   setNonRevoked: true
   useOobPresentProof: false
@@ -14,17 +12,14 @@ vc-authn-oidc:
   controllerPresentationExpireTime: 300
   useHTTPS: true
   logLevel: INFO
-
   auth:
     api:
       existingSecret: "vc-authn-oidc-api-key"
     token:
       privateKey:
         existingSecret: "vc-authn-oidc-jwt-token"
-
   database:
     existingSecret: "vc-authn-oidc-mongodb"
-
   resources:
     limits:
       cpu: 100m
@@ -32,42 +27,35 @@ vc-authn-oidc:
     requests:
       cpu: 10m
       memory: 128Mi
-
   autoscaling:
     enabled: false
     minReplicas: 1
     maxReplicas: 2
     targetCPUUtilizationPercentage: 80
-
   networkPolicy:
     enabled: true
     ingress:
       enabled: true
       namespaceSelector:
         network.openshift.io/policy-group: ingress
-
   ingress:
     enabled: true
     annotations:
       route.openshift.io/termination: edge
-
   acapy:
     image:
       repository: ghcr.io/hyperledger/aries-cloudagent-python
       pullPolicy: IfNotPresent
-
     existingSecret: "vc-authn-oidc-acapy-secret"
     agentSeed:
       existingSecret: "vc-authn-oidc-agent"
     walletStorageCredentials:
       existingSecret: "vc-authn-oidc-postgresql"
-
     autoscaling:
       enabled: true
       minReplicas: 1
       maxReplicas: 3
       targetCPUUtilizationPercentage: 80
-
     argfile.yml:
       admin-insecure-mode: false
       auto-accept-invites: true
@@ -89,7 +77,6 @@ vc-authn-oidc:
       wallet-storage-type: postgres_storage
       wallet-type: askar
       webhook-url: 'https://{{ include "vc-authn-oidc.host" . }}/webhooks'
-
     ledgers.yml:
       - genesis_url: https://raw.githubusercontent.com/sovrin-foundation/sovrin/stable/sovrin/pool_transactions_live_genesis
         id: SovrinMainNet
@@ -108,7 +95,6 @@ vc-authn-oidc:
       - id: CANdyProd
         is_production: true
         genesis_url: "https://raw.githubusercontent.com/ICCS-ISAC/dtrust-reconu/main/CANdy/prod/pool_transactions_genesis"
-
     networkPolicy:
       enabled: true
       ingress:
@@ -131,7 +117,6 @@ vc-authn-oidc:
     livenessProbe:
       enabled: true
       timeoutSeconds: 10
-
   postgresql:
     auth:
       existingSecret: "vc-authn-oidc-postgresql"
