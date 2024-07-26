@@ -18,12 +18,19 @@ jobs:
         uses: tj-actions/changed-files@v44
         with:
           files: services/*.*
+      - name: List all changed files
+        env:
+          ALL_CHANGED_FILES: ${{ steps.gitops-changes.outputs.all_changed_files }}
+        run: |
+          for file in ${ALL_CHANGED_FILES}; do
+            echo "$file was changed"
+          done
 
   sync_changes:
     runs-on: ubuntu-latest
     needs:
       - changed_files
-    if: needs.changed_files.outputs.any_changed == 'true' && (github.event.pull_request.merged == true || github.event_name == 'workflow_dispatch')
+    if: needs.changed_files.outputs.any_changed == 'true'
     steps:
     - uses: actions/checkout@v4
 
