@@ -4,7 +4,6 @@ vc-authn-oidc:
   image:
     repository: ghcr.io/bcgov/vc-authn-oidc
     pullPolicy: IfNotPresent
-    tag: sha-46e31f6
 
   acapyTenancyMode: single
   setNonRevoked: true
