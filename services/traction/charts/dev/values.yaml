@@ -2,7 +2,7 @@ traction:
   ingressSuffix: -dev.apps.silver.devops.gov.bc.ca
   acapy:
     image:
-      tag: sha-6b4e5d4
+      tag: sha-81b3729
       pullPolicy: Always
     secret:
       adminApiKey:
@@ -78,7 +78,7 @@ traction:
         cpu: 800m
   tenant_proxy:
     image:
-      tag: sha-6b4e5d4
+      tag: sha-81b3729
       pullPolicy: Always
     networkPolicy:
       enabled: true
@@ -90,7 +90,7 @@ traction:
     showOIDCReservationLogin: true
     quickConnectEndorserName: "bcovrin-test-endorser"
     image:
-      tag: sha-6b4e5d4
+      tag: sha-81b3729
       pullPolicy: Always
     existingSecret: ""
     ux:
