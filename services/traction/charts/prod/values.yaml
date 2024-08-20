@@ -8,6 +8,12 @@ traction:
         genesis_url: "https://raw.githubusercontent.com/ICCS-ISAC/dtrust-reconu/main/CANdy/prod/pool_transactions_genesis"
         endorser_did: "LTNyw5R14J66CrF7tmV3i8"
         endorser_alias: "candy-prod-endorser"
+      - id: sovrin-mainnet
+        is_production: true
+        is_write: true
+        genesis_url: "https://raw.githubusercontent.com/sovrin-foundation/sovrin/stable/sovrin/pool_transactions_live_genesis"
+        endorser_did: "65ZC9nkjXBzgsh1cgfkkBB"
+        endorser_alias: "sovrin-mainnet-endorser"
     plugin-config.yml:
       traction_innkeeper:
         innkeeper_wallet:
@@ -16,8 +22,11 @@ traction:
           connect_to_endorser:
             - endorser_alias: candy-prod-endorser
               ledger_id: candy-prod
+            - endorser_alias: sovrin-mainnet
+              ledger_id: sovrin-mainnet
           create_public_did:
             - candy-prod
+            - sovrin-mainnet
         reservation:
           expiry_minutes: 2880
           auto_approve: false

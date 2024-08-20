@@ -24,6 +24,10 @@ traction:
         genesis_url: "https://raw.githubusercontent.com/ICCS-ISAC/dtrust-reconu/main/CANdy/dev/pool_transactions_genesis"
         endorser_did: "85DZerr49BLCuG5wWyDviy"
         endorser_alias: "candy-dev-endorser"
+      - id: candy-test
+        is_production: true
+        is_write: false
+        genesis_url: "https://raw.githubusercontent.com/ICCS-ISAC/dtrust-reconu/main/CANdy/test/pool_transactions_genesis"
       - id: candy-prod
         is_production: true
         is_write: false
@@ -34,6 +38,10 @@ traction:
         genesis_url: "https://raw.githubusercontent.com/sovrin-foundation/sovrin/stable/sovrin/pool_transactions_sandbox_genesis"
         endorser_did: "EZpKx6nT56Hv83JmNz7ik8"
         endorser_alias: "sovrin-testnet-endorser"
+      - id: sovrin-mainnet
+        is_production: true
+        is_write: false
+        genesis_url: "https://raw.githubusercontent.com/sovrin-foundation/sovrin/stable/sovrin/pool_transactions_live_genesis"
     plugin-config.yml:
       traction_innkeeper:
         innkeeper_wallet:
