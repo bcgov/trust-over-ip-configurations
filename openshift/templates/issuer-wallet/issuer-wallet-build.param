@@ -6,9 +6,9 @@
 NAME=issuer-kit-wallet
 APP_NAME=issuer-kit
 APP_GROUP=issuer-kit-storage
-GIT_REPO_URL=https://github.com/bcgov/issuer-kit.git
+GIT_REPO_URL=https://github.com/bcgov/trust-over-ip-configurations.git
 GIT_REF=main
-SOURCE_CONTEXT_DIR=wallet/config
+SOURCE_CONTEXT_DIR=openshift/templates/issuer-wallet/config
 SOURCE_IMAGE_KIND=DockerImage
 SOURCE_IMAGE_REGISTRY=registry.access.redhat.com/
 SOURCE_IMAGE_NAME=rhscl/postgresql-10-rhel7
