@@ -6,8 +6,9 @@ vc-authn-oidc:
     tag: sha-23676cc
   acapyTenancyMode: single
   setNonRevoked: true
-  useOobPresentProof: false
+  useOobPresentProof: true
   useOobLocalDIDService: false
+  useUrlDeepLink: true
   controllerCameraRedirectUrl: wallet_howto
   controllerPresentationExpireTime: 300
   useHTTPS: true
