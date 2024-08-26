@@ -6,8 +6,9 @@ image:
 
 acapyTenancyMode: single
 setNonRevoked: true
-useOobPresentProof: false
+useOobPresentProof: true
 useOobLocalDIDService: false
+useUrlDeepLink: true
 controllerCameraRedirectUrl: wallet_howto
 controllerPresentationExpireTime: 300
 useHTTPS: true
