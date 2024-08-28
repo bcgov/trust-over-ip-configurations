@@ -1,6 +1,13 @@
 traction:
   ingressSuffix: -prod.apps.silver.devops.gov.bc.ca
   acapy:
+    secret:
+      adminApiKey:
+        existingSecret: traction-acapy-api
+      pluginInnkeeper:
+        existingSecret: traction-acapy-plugin-innkeeper
+      walletKey:
+        existingSecret: traction-acapy-walletkey
     ledgers.yml:
       - id: candy-prod
         is_production: true

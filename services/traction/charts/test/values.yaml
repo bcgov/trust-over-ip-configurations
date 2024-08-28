@@ -3,6 +3,13 @@ traction:
   acapy:
     image:
       pullPolicy: Always
+    secret:
+      adminApiKey:
+        existingSecret: traction-acapy-api
+      pluginInnkeeper:
+        existingSecret: traction-acapy-plugin-innkeeper
+      walletKey:
+        existingSecret: traction-acapy-walletkey
     ledgers.yml:
       - id: bcovrin-test
         is_production: true
