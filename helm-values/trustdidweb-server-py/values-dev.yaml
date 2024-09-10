@@ -1,0 +1,58 @@
+---
+ingressSuffix: .apps.silver.devops.gov.bc.ca
+openshift:
+  route:
+    path: "/"
+    tls:
+      enabled: true
+      insecureEdgeTerminationPolicy: None
+      termination: edge
+    wildcardPolicy: None
+    timeout: 2m
+ingress:
+  labels:
+    certbot-managed: "true"
+  annotations:
+    route.openshift.io/termination: edge
+networkPolicy:
+  ingress:
+    namespaceSelector:
+      network.openshift.io/policy-group: ingress
+server:
+  image:
+    pullPolicy: Always
+  host: "dev.digitaltrust.vonx.io"
+  environment:
+    DOMAIN: "dev.digitaltrust.vonx.io"
+    ENDORSER_MULTIKEY: "z6MkhBoJbVzavFnKza3eP413fCuaCojottETdyqGQz9Moimq"
+  autoscaling:
+    enabled: true
+    minReplicas: 1
+    maxReplicas: 10
+    targetCPUUtilizationPercentage: 80
+    targetMemoryUtilizationPercentage: 80
+    stabilizationWindowSeconds: 300
+  resources:
+    limits:
+      cpu: 400m
+      memory: 1600Mi
+    requests:
+      cpu: 200m
+      memory: 820Mi
+  networkPolicy:
+    enabled: true
+    ingress:
+      enabled: true
+      namespaceSelector:
+        network.openshift.io/policy-group: ingress
+postgresql:
+  primary:
+    persistence:
+      size: 5Gi
+    resources:
+      limits:
+        cpu: 2
+        memory: 4000Mi
+      requests:
+        cpu: 200m
+        memory: 820Mi
