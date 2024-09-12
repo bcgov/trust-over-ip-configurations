@@ -145,6 +145,17 @@ issuers:
             value:
               input: country
               from: claim
+        - model: attribute
+          fields:
+            type:
+              input: registered_urls
+              from: value
+            format:
+              input: text
+              from: value
+            value:
+              input: registered_urls
+              from: claim
     - schema: cannabis-marketing-licence.lcrb
       description: Cannabis Marketing Licence
       label_en: Cannabis Marketing Licence
