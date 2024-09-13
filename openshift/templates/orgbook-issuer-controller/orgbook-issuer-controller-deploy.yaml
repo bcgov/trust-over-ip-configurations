@@ -246,6 +246,8 @@ objects:
                   value: ${MAX_CRED_RESPONSE_TIMEOUT}
                 - name: OIDC_JWKS_URI
                   value: ${OIDC_JWKS_URI}
+                - name: ISSUE_CRED_VERSION
+                  value: ${ISSUE_CREDENTIAL_PROTOCOL}
               volumeMounts:
                 - name: ${NAME}${SUFFIX}-routes-volume
                   mountPath: ${CONFIG_MOUNT_PATH}${ROUTES_FILE_NAME}
@@ -451,6 +453,11 @@ parameters:
     description: The URI pointing to a JWKS to be used for token validation. It is used to protect the /issue-credential endpoint.
     required: false
     value: ""
+  - name: ISSUE_CREDENTIAL_PROTOCOL
+    displayName: ISSUE CREDENTIAL PROTOCOL
+    description: The protocol version to use when issuing credentials. Supported values are V10 and V20.
+    required: true
+    value: "V10"
   - name: MIN_REPLICAS
     displayName: Minimum Replicas
     description: The minimum number of pods to have running.
