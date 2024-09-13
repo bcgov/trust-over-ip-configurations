@@ -6,6 +6,7 @@ vc-authn-oidc:
     tag: sha-23676cc
   acapyTenancyMode: single
   setNonRevoked: true
+  invitationLabel: BC Gov SSO Service (Dev)
   useOobPresentProof: true
   useOobLocalDIDService: false
   useUrlDeepLink: true
