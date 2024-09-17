@@ -67,7 +67,7 @@
       data_type: text
       required: false
 - name: cannabis-marketing-licence.lcrb
-  version: '1.0.8'
+  version: '1.0.9'
   description: Cannabis Marketing Licence Issued by Liquor and Cannabis Regulation Branch
   path: /cannabis-marketing-licence
   cardinality:
@@ -97,6 +97,11 @@
       description_en: Expiry Date
       data_type: date
       required: true
+    registered_urls:
+      label_en: Registered URLs
+      description_en: Registered URLs
+      data_type: text
+      required: false
 
 ### eof ###
 

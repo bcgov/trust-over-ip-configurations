@@ -16,9 +16,11 @@ OUTPUT_FORMAT=json
 
 # Combine the profile's default config files with its environment specific config files before generating the config map ...
 profileRoot=$( dirname "$0" )/config/${PROFILE}
+profileEnv=${profileRoot}/${DEPLOYMENT_ENV_NAME}
 profileTmp=$( dirname "$0" )/config/${PROFILE}/tmp
 mkdir -p ${profileTmp}
 cp -f ${profileRoot}/* ${profileTmp} 2>/dev/null
+cp -f ${profileEnv}/* ${profileTmp} 2>/dev/null
 
 # Generate the config map ...
 CONFIG_SOURCE_PATH=${profileTmp}
