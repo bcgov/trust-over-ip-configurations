@@ -1,0 +1,103 @@
+{
+  "subject_identifier": "user_id",
+  "proof_request": {
+    "name": "CSB Transcriber (Dev)",
+    "version": "1.0",
+    "requested_attributes": [
+      {
+        "names": [
+          "user_id",
+          "company_name"
+        ],
+        "restrictions": [
+          {
+            "cred_def_id": "RSDAVyaiUjFPCj245PoY3P:3:CL:34742:transcriber",
+            "schema_name": "contractor-credential",
+            "schema_issuer_did": "9defyjkM6MX5zh2D5Mwo1U"
+          },
+          {
+            "cred_def_id": "QX5kJqzx6c98Qvi7DDNAb6:3:CL:34742:transcriber",
+            "schema_name": "contractor-credential",
+            "schema_issuer_did": "BQu1v6o9Z9ttkdwbVqpyZB"
+          },
+          {
+            "cred_def_id": "EmX9iHJrL7R6MBLH38QYp:3:CL:34742:transcriber",
+            "schema_name": "contractor-credential",
+            "schema_issuer_did": "B8B9jho4L57A1f6MmXpAbu"
+          }
+        ]
+      }
+    ],
+    "requested_predicates": [
+      {
+        "name": "contract_start_dateint",
+        "restrictions": [
+          {
+            "cred_def_id": "RSDAVyaiUjFPCj245PoY3P:3:CL:34742:transcriber",
+            "schema_name": "contractor-credential",
+            "schema_issuer_did": "9defyjkM6MX5zh2D5Mwo1U"
+          },
+          {
+            "cred_def_id": "QX5kJqzx6c98Qvi7DDNAb6:3:CL:34742:transcriber",
+            "schema_name": "contractor-credential",
+            "schema_issuer_did": "BQu1v6o9Z9ttkdwbVqpyZB"
+          },
+          {
+            "cred_def_id": "EmX9iHJrL7R6MBLH38QYp:3:CL:34742:transcriber",
+            "schema_name": "contractor-credential",
+            "schema_issuer_did": "B8B9jho4L57A1f6MmXpAbu"
+          }
+        ],
+        "p_value": "$today_int",
+        "p_type": "<="
+      },
+      {
+        "name": "contract_end_dateint",
+        "restrictions": [
+          {
+            "cred_def_id": "RSDAVyaiUjFPCj245PoY3P:3:CL:34742:transcriber",
+            "schema_name": "contractor-credential",
+            "schema_issuer_did": "9defyjkM6MX5zh2D5Mwo1U"
+          },
+          {
+            "cred_def_id": "QX5kJqzx6c98Qvi7DDNAb6:3:CL:34742:transcriber",
+            "schema_name": "contractor-credential",
+            "schema_issuer_did": "BQu1v6o9Z9ttkdwbVqpyZB"
+          },
+          {
+            "cred_def_id": "EmX9iHJrL7R6MBLH38QYp:3:CL:34742:transcriber",
+            "schema_name": "contractor-credential",
+            "schema_issuer_did": "B8B9jho4L57A1f6MmXpAbu"
+          }
+        ],
+        "p_value": "$today_int",
+        "p_type": ">"
+      },
+      {
+        "name": "criminal_record_expiry_dateint",
+        "restrictions": [
+          {
+            "cred_def_id": "RSDAVyaiUjFPCj245PoY3P:3:CL:34742:transcriber",
+            "schema_name": "contractor-credential",
+            "schema_issuer_did": "9defyjkM6MX5zh2D5Mwo1U"
+          },
+          {
+            "cred_def_id": "QX5kJqzx6c98Qvi7DDNAb6:3:CL:34742:transcriber",
+            "schema_name": "contractor-credential",
+            "schema_issuer_did": "BQu1v6o9Z9ttkdwbVqpyZB"
+          },
+          {
+            "cred_def_id": "EmX9iHJrL7R6MBLH38QYp:3:CL:34742:transcriber",
+            "schema_name": "contractor-credential",
+            "schema_issuer_did": "B8B9jho4L57A1f6MmXpAbu"
+          }
+        ],
+        "p_value": "$today_int",
+        "p_type": ">"
+      }
+    ]
+  },
+  "generate_consistent_identifier": false,
+  "include_v1_attributes": true,
+  "ver_config_id": "csb-transcriber"
+}
