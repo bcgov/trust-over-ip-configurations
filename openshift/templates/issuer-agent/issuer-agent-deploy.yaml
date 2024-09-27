@@ -285,7 +285,8 @@ objects:
                   --wallet-storage-creds "$(eval echo \"${WALLET_STORAGE_CREDENTIALS}\")"
                   --seed "${INDY_WALLET_SEED}"
                   --admin '0.0.0.0' ${ADMIN_INTERFACE_PORT}
-                  $([ ! -z "${AGENT_ADMIN_API_KEY}" ] && echo "--admin-api-key ${AGENT_ADMIN_API_KEY}" || echo "--admin-insecure-mode"));
+                  $([ ! -z "${AGENT_ADMIN_API_KEY}" ] && echo "--admin-api-key ${AGENT_ADMIN_API_KEY}" || echo "--admin-insecure-mode")
+                  --plugin rpc.v1_0);
               env:
                 - name: ACAPY_LABEL
                   value: ${ACAPY_LABEL}
