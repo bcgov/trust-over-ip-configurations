@@ -2,8 +2,8 @@ apiVersion: v2
 name: vc-authn-oidc
 description: vc-authn-oidc - test
 type: application
-version: "0.2.3"
-appVersion: "2.2.0"
+version: "0.2.2"
+appVersion: "2.1.0"
 dependencies:
   - name: vc-authn-oidc
     version: 0.2.3
