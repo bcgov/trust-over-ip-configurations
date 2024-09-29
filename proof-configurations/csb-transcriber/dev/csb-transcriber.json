@@ -16,12 +16,12 @@
             "schema_issuer_did": "9defyjkM6MX5zh2D5Mwo1U"
           },
           {
-            "cred_def_id": "QX5kJqzx6c98Qvi7DDNAb6:3:CL:34742:transcriber",
+            "cred_def_id": "QX5kJqzx6c98Qvi7DDNAb6:3:CL:213:transcriber",
             "schema_name": "contractor-credential",
             "schema_issuer_did": "BQu1v6o9Z9ttkdwbVqpyZB"
           },
           {
-            "cred_def_id": "EmX9iHJrL7R6MBLH38QYp:3:CL:34742:transcriber",
+            "cred_def_id": "EmX9iHJrL7R6MBLH38QYp:3:CL:1560:transcriber",
             "schema_name": "contractor-credential",
             "schema_issuer_did": "B8B9jho4L57A1f6MmXpAbu"
           }
@@ -38,12 +38,12 @@
             "schema_issuer_did": "9defyjkM6MX5zh2D5Mwo1U"
           },
           {
-            "cred_def_id": "QX5kJqzx6c98Qvi7DDNAb6:3:CL:34742:transcriber",
+            "cred_def_id": "QX5kJqzx6c98Qvi7DDNAb6:3:CL:213:transcriber",
             "schema_name": "contractor-credential",
             "schema_issuer_did": "BQu1v6o9Z9ttkdwbVqpyZB"
           },
           {
-            "cred_def_id": "EmX9iHJrL7R6MBLH38QYp:3:CL:34742:transcriber",
+            "cred_def_id": "EmX9iHJrL7R6MBLH38QYp:3:CL:1560:transcriber",
             "schema_name": "contractor-credential",
             "schema_issuer_did": "B8B9jho4L57A1f6MmXpAbu"
           }
@@ -60,12 +60,12 @@
             "schema_issuer_did": "9defyjkM6MX5zh2D5Mwo1U"
           },
           {
-            "cred_def_id": "QX5kJqzx6c98Qvi7DDNAb6:3:CL:34742:transcriber",
+            "cred_def_id": "QX5kJqzx6c98Qvi7DDNAb6:3:CL:213:transcriber",
             "schema_name": "contractor-credential",
             "schema_issuer_did": "BQu1v6o9Z9ttkdwbVqpyZB"
           },
           {
-            "cred_def_id": "EmX9iHJrL7R6MBLH38QYp:3:CL:34742:transcriber",
+            "cred_def_id": "EmX9iHJrL7R6MBLH38QYp:3:CL:1560:transcriber",
             "schema_name": "contractor-credential",
             "schema_issuer_did": "B8B9jho4L57A1f6MmXpAbu"
           }
@@ -82,12 +82,12 @@
             "schema_issuer_did": "9defyjkM6MX5zh2D5Mwo1U"
           },
           {
-            "cred_def_id": "QX5kJqzx6c98Qvi7DDNAb6:3:CL:34742:transcriber",
+            "cred_def_id": "QX5kJqzx6c98Qvi7DDNAb6:3:CL:213:transcriber",
             "schema_name": "contractor-credential",
             "schema_issuer_did": "BQu1v6o9Z9ttkdwbVqpyZB"
           },
           {
-            "cred_def_id": "EmX9iHJrL7R6MBLH38QYp:3:CL:34742:transcriber",
+            "cred_def_id": "EmX9iHJrL7R6MBLH38QYp:3:CL:1560:transcriber",
             "schema_name": "contractor-credential",
             "schema_issuer_did": "B8B9jho4L57A1f6MmXpAbu"
           }

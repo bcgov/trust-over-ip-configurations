@@ -11,7 +11,7 @@
         ],
         "restrictions": [
           {
-            "cred_def_id": "EmX9iHJrL7R6MBLH38QYp:3:CL:34742:transcriber",
+            "cred_def_id": "EmX9iHJrL7R6MBLH38QYp:3:CL:1560:transcriber",
             "schema_name": "contractor-credential",
             "schema_issuer_did": "B8B9jho4L57A1f6MmXpAbu"
           }
@@ -23,7 +23,7 @@
         "name": "contract_start_dateint",
         "restrictions": [
           {
-            "cred_def_id": "EmX9iHJrL7R6MBLH38QYp:3:CL:34742:transcriber",
+            "cred_def_id": "EmX9iHJrL7R6MBLH38QYp:3:CL:1560:transcriber",
             "schema_name": "contractor-credential",
             "schema_issuer_did": "B8B9jho4L57A1f6MmXpAbu"
           }
@@ -35,7 +35,7 @@
         "name": "contract_end_dateint",
         "restrictions": [
           {
-            "cred_def_id": "EmX9iHJrL7R6MBLH38QYp:3:CL:34742:transcriber",
+            "cred_def_id": "EmX9iHJrL7R6MBLH38QYp:3:CL:1560:transcriber",
             "schema_name": "contractor-credential",
             "schema_issuer_did": "B8B9jho4L57A1f6MmXpAbu"
           }
@@ -47,7 +47,7 @@
         "name": "criminal_record_expiry_dateint",
         "restrictions": [
           {
-            "cred_def_id": "EmX9iHJrL7R6MBLH38QYp:3:CL:34742:transcriber",
+            "cred_def_id": "EmX9iHJrL7R6MBLH38QYp:3:CL:1560:transcriber",
             "schema_name": "contractor-credential",
             "schema_issuer_did": "B8B9jho4L57A1f6MmXpAbu"
           }
