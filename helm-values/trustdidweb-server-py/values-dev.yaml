@@ -1,14 +1,6 @@
 ---
 ingressSuffix: .apps.silver.devops.gov.bc.ca
-openshift:
-  route:
-    path: "/"
-    tls:
-      enabled: true
-      insecureEdgeTerminationPolicy: None
-      termination: edge
-    wildcardPolicy: None
-    timeout: 2m
+
 ingress:
   labels:
     certbot-managed: "true"
@@ -18,13 +10,14 @@ networkPolicy:
   ingress:
     namespaceSelector:
       network.openshift.io/policy-group: ingress
+      
 server:
   image:
     pullPolicy: Always
   host: "dev.digitaltrust.vonx.io"
   environment:
     DOMAIN: "dev.digitaltrust.vonx.io"
-    ENDORSER_MULTIKEY: "z6MkhBoJbVzavFnKza3eP413fCuaCojottETdyqGQz9Moimq"
+    ENDORSER_MULTIKEY: "z6MkqTopWc3mB8dkqQfyNfEJkGR2HWuLnC3RZo6LbEfCPPDU"
   autoscaling:
     enabled: true
     minReplicas: 1
