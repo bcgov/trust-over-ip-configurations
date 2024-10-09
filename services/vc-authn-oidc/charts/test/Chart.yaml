@@ -1,11 +1,10 @@
 apiVersion: v2
 name: vc-authn-oidc
 description: vc-authn-oidc - test
-
 type: application
-version: 0.2.2
-appVersion: "2.1.0"
+version: 0.2.4
+appVersion: "2.2.1"
 dependencies:
   - name: vc-authn-oidc
-    version: 0.2.2
+    version: 0.2.4
     repository: https://bcgov.github.io/vc-authn-oidc

@@ -336,6 +336,11 @@ objects:
                   value: ${ACAPY_AUTO_WRITE_TRANSACTIONS}
                 - name: ACAPY_CREATE_REVOCATION_TRANSACTIONS
                   value: ${ACAPY_CREATE_REVOCATION_TRANSACTIONS}
+                
+                - name: ACAPY_PLUGIN
+                  value: ${ACAPY_PLUGIN}
+                - name: ACAPY_PLUGIN_CONFIG
+                  value: ${ACAPY_PLUGIN_CONFIG}
 
                 - name: AGENT_WALLET_NAME
                   value: ${NAME}${SUFFIX}-wallet
@@ -717,6 +722,20 @@ parameters:
     required: true
     value: 'false'
   # ===============================================================================
+
+  # ===============================================================================
+  # Plugin Configuration
+  #--------------------------------------------------------------------------------
+  - name: ACAPY_PLUGIN
+    displayName: Plugin list
+    description: Plugin list
+    required: false
+    value:
+  - name: ACAPY_PLUGIN_CONFIG
+    displayName: Plugin configuration file
+    description: Plugin configuration file
+    required: false
+    value:
 
   # ===============================================================================
   # Wallet Configuration

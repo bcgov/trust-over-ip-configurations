@@ -1,3 +1,4 @@
-FROM docker.io/bcgovimages/aries-cloudagent:py36-1.16-1_0.7.4
+FROM ghcr.io/hyperledger/aries-cloudagent-python:py3.9-0.12.2
 
-RUN echo "Just pulling the image from Docker Hub"
+# Install DRP plugin in agent image
+RUN pip install git+https://github.com/hyperledger/aries-acapy-plugins@0.12.2#subdirectory=rpc
