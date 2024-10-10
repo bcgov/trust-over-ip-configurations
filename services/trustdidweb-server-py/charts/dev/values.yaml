@@ -1,23 +1,21 @@
 ---
-ingressSuffix: .apps.silver.devops.gov.bc.ca
-
 ingress:
-  labels:
-    certbot-managed: "true"
   annotations:
     route.openshift.io/termination: edge
 networkPolicy:
   ingress:
     namespaceSelector:
       network.openshift.io/policy-group: ingress
-      
+
 server:
   image:
+    repository: image-registry.openshift-image-registry.svc:5000/4a9599-tools/tdw-server
+    tag: latest
     pullPolicy: Always
-  host: "dev.digitaltrust.vonx.io"
+  host: "registry-dev.apps.silver.devops.gov.bc.ca"
   environment:
-    DOMAIN: "dev.digitaltrust.vonx.io"
-    ENDORSER_MULTIKEY: "z6MkqTopWc3mB8dkqQfyNfEJkGR2HWuLnC3RZo6LbEfCPPDU"
+    DOMAIN: "registry-dev.apps.silver.devops.gov.bc.ca"
+    ENDORSER_MULTIKEY: "z6MkgSZwM4LUgh2WEtX6TC1FRYevRbgZHkH4ty7e13TiSQy3"
   autoscaling:
     enabled: true
     minReplicas: 1
