@@ -1,0 +1,10 @@
+apiVersion: v2
+name: tdw-server
+description: tdw-server - dev
+type: application
+version: 0.0.9
+appVersion: "0.1.0"
+dependencies:
+  - name: tdw-server
+    version: 0.0.9
+    repository: https://identity.foundation/trustdidweb-server-py
