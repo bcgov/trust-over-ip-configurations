@@ -9,8 +9,8 @@ networkPolicy:
 
 server:
   image:
-    repository: image-registry.openshift-image-registry.svc:5000/4a9599-tools/tdw-server
-    tag: latest
+    repository: ghcr.io/decentralized-identity/trustdidweb-server-py
+    tag: 0.1.0
     pullPolicy: Always
   host: "registry-dev.apps.silver.devops.gov.bc.ca"
   environment:
