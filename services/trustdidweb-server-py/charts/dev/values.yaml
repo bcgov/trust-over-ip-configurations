@@ -1,0 +1,49 @@
+---
+ingress:
+  annotations:
+    route.openshift.io/termination: edge
+networkPolicy:
+  ingress:
+    namespaceSelector:
+      network.openshift.io/policy-group: ingress
+
+server:
+  image:
+    repository: ghcr.io/decentralized-identity/trustdidweb-server-py
+    tag: 0.1.0
+    pullPolicy: Always
+  host: "registry-dev.apps.silver.devops.gov.bc.ca"
+  environment:
+    DOMAIN: "registry-dev.apps.silver.devops.gov.bc.ca"
+    ENDORSER_MULTIKEY: "z6MkgSZwM4LUgh2WEtX6TC1FRYevRbgZHkH4ty7e13TiSQy3"
+  autoscaling:
+    enabled: true
+    minReplicas: 1
+    maxReplicas: 10
+    targetCPUUtilizationPercentage: 80
+    targetMemoryUtilizationPercentage: 80
+    stabilizationWindowSeconds: 300
+  resources:
+    limits:
+      cpu: 400m
+      memory: 1600Mi
+    requests:
+      cpu: 200m
+      memory: 820Mi
+  networkPolicy:
+    enabled: true
+    ingress:
+      enabled: true
+      namespaceSelector:
+        network.openshift.io/policy-group: ingress
+postgresql:
+  primary:
+    persistence:
+      size: 5Gi
+    resources:
+      limits:
+        cpu: 2
+        memory: 4000Mi
+      requests:
+        cpu: 200m
+        memory: 820Mi
