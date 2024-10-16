@@ -10,6 +10,43 @@ traction:
         existingSecret: traction-acapy-plugin-innkeeper
       walletKey:
         existingSecret: traction-acapy-walletkey
+    argfile.yml:
+      auto-accept-invites: true
+      auto-accept-requests: true
+      auto-create-revocation-transactions: true
+      auto-ping-connection: true
+      auto-promote-author-did: true
+      auto-provision: true
+      auto-request-endorsement: true
+      auto-respond-credential-offer: false
+      auto-respond-credential-proposal: false
+      auto-respond-credential-request: true
+      auto-respond-messages: true
+      auto-respond-presentation-proposal: true
+      auto-respond-presentation-request: false
+      auto-store-credential: true
+      auto-verify-presentation: true
+      auto-write-transactions: true
+      emit-new-didcomm-mime-type: true
+      emit-new-didcomm-prefix: true
+      endorser-alias: endorser
+      endorser-protocol-role: author
+      genesis-transactions-list: /home/aries/ledgers.yml
+      label: '{{ include "acapy.label" .}}'
+      log-level: info
+      monitor-ping: true
+      monitor-revocation-notification: true
+      multitenant-admin: true
+      multitenant: true
+      notify-revocation: true
+      preserve-exchange-records: false
+      public-invites: true
+      read-only-ledger: false
+      tails-server-base-url: https://tails-test.vonx.io
+      tails-server-upload-url: https://tails-test.vonx.io
+      wallet-name: askar-wallet
+      wallet-storage-type: postgres_storage
+      wallet-type: askar
     ledgers.yml:
       - id: bcovrin-test
         is_production: true
