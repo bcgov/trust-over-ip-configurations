@@ -10,7 +10,7 @@ networkPolicy:
 server:
   image:
     repository: ghcr.io/decentralized-identity/trustdidweb-server-py
-    tag: 0.1.0
+    tag: 0.1.1
     pullPolicy: Always
   host: "registry-test.apps.silver.devops.gov.bc.ca"
   environment:
