@@ -15,7 +15,7 @@ server:
   host: "registry-dev.apps.silver.devops.gov.bc.ca"
   environment:
     DOMAIN: "registry-dev.apps.silver.devops.gov.bc.ca"
-    ENDORSER_MULTIKEY: "z6MkgSZwM4LUgh2WEtX6TC1FRYevRbgZHkH4ty7e13TiSQy3"
+    ENDORSER_MULTIKEY: "z6Mkqnasc6f4mY1vbpGxCkgZNW5VGumPNQGMyqCpf8zWgUX8"
   autoscaling:
     enabled: true
     minReplicas: 1
