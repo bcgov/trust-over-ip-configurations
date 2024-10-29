@@ -1,0 +1,11 @@
+apiVersion: v2
+name: traction
+type: application
+description: traction - sandbox
+version: "0.3.3"
+appVersion: "0.5.1"
+
+dependencies:
+  - name: traction
+    version: "0.3.3"
+    repository: https://bcgov.github.io/traction
