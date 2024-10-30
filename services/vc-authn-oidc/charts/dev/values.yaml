@@ -46,7 +46,6 @@ vc-authn-oidc:
       route.openshift.io/termination: edge
   acapy:
     image:
-      repository: ghcr.io/hyperledger/aries-cloudagent-python
       pullPolicy: IfNotPresent
     existingSecret: "vc-authn-oidc-acapy-secret"
     agentSeed:
