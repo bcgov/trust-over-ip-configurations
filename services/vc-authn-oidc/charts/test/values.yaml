@@ -53,7 +53,6 @@ vc-authn-oidc:
 
   acapy:
     image:
-      repository: ghcr.io/hyperledger/aries-cloudagent-python
       pullPolicy: IfNotPresent
 
     existingSecret: "vc-authn-oidc-acapy-secret"
