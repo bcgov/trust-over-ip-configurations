@@ -7,6 +7,9 @@ acapy:
       generated: true
     pluginInnkeeper:
       generated: true
+  argfile.yml:
+    tails-server-base-url: https://tails-dev.vonx.io
+    tails-server-upload-url: https://tails-dev.vonx.io
   ledgers.yml:
     - id: bcovrin-test
       is_production: true
