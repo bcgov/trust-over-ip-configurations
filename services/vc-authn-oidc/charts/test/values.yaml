@@ -58,8 +58,13 @@ vc-authn-oidc:
     existingSecret: "vc-authn-oidc-acapy-secret"
     agentSeed:
       existingSecret: "vc-authn-oidc-agent"
+    walletStorageConfig:
+      url: vc-authn-oidc-agent-database-primary:5432
     walletStorageCredentials:
-      existingSecret: "vc-authn-oidc-postgresql"
+      existingSecret: "vc-authn-oidc-agent-database"
+      secretKeys:
+        adminPasswordKey: admin-password
+        userPasswordKey: acapy-password
 
     autoscaling:
       enabled: true
@@ -133,17 +138,4 @@ vc-authn-oidc:
       timeoutSeconds: 10
 
   postgresql:
-    auth:
-      existingSecret: "vc-authn-oidc-postgresql"
-    primary:
-      resources:
-        limits:
-          cpu: 600m
-      persistence:
-        size: 5Gi
-    metrics:
-      enabled: true
-      containerSecurityContext:
-        enabled: false
-      serviceMonitor:
-        enabled: true
+    enabled: false
