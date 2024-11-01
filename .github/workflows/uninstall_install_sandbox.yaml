@@ -79,7 +79,7 @@ jobs:
           helm repo add traction https://bcgov.github.io/traction 
           helm upgrade --install \
           -n ${{ secrets.OPENSHIFT_NAMESPACE }} --wait --timeout=7m \
-          -f ./services/traction/sandbox/Values.yaml \
+          -f ./services/traction/sandbox/values.yaml \
           --set ui.ux.infoBanner.message="${BANNER_MESSAGE}" \
           traction-sandbox traction/traction
 
