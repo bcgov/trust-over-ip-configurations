@@ -8,8 +8,9 @@ vc-authn-oidc:
   acapyTenancyMode: single
   setNonRevoked: true
   invitationLabel: BC Gov SSO Service
-  useOobPresentProof: false
+  useOobPresentProof: true
   useOobLocalDIDService: false
+  useUrlDeepLink: true
   controllerCameraRedirectUrl: wallet_howto
   controllerPresentationExpireTime: 300
   useHTTPS: true
