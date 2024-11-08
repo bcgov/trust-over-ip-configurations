@@ -6,5 +6,5 @@ version: "0.2.5"
 appVersion: "2.2.2"
 dependencies:
   - name: vc-authn-oidc
-    version: 0.2.4
+    version: 0.2.5
     repository: https://bcgov.github.io/vc-authn-oidc
