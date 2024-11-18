@@ -143,6 +143,8 @@ ingress:
   annotations:
     route.openshift.io/termination: edge
 postgresql:
+  auth:
+    database: null
   primary:
     persistence:
       size: 5Gi
