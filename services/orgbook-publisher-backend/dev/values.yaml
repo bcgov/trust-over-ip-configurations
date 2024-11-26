@@ -15,7 +15,7 @@ server:
   host: "dev.publisher.orgbook.gov.bc.ca"
   environment:
     DOMAIN: "dev.publisher.orgbook.gov.bc.ca"
-    PUBLISHER_MULTIKEY: ""
+    PUBLISHER_MULTIKEY: "z6MkekByGjKYvP6dpMBJEHt5UN72rKPVoDgzcS9Hoq6bjfr1"
     TRACTION_API_URL: "https://traction-tenant-proxy-dev.apps.silver.devops.gov.bc.ca"
     ORGBOOK_URL: "https://dev.orgbook.gov.bc.ca"
     DID_WEB_SERVER_URL: "https://registry-dev.apps.silver.devops.gov.bc.ca"
