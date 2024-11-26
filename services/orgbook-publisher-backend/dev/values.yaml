@@ -7,7 +7,7 @@ networkPolicy:
     namespaceSelector:
       network.openshift.io/policy-group: ingress
 
-server:
+backend:
   image:
     repository: ghcr.io/bcgov/orgbook-publisher-service
     tag: v0.0.1
@@ -40,14 +40,4 @@ server:
       enabled: true
       namespaceSelector:
         network.openshift.io/policy-group: ingress
-postgresql:
-  primary:
-    persistence:
-      size: 5Gi
-    resources:
-      limits:
-        cpu: 500m
-        memory: 500Mi
-      requests:
-        cpu: 100m
-        memory: 100Mi
+
