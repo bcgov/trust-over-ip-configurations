@@ -1,0 +1,55 @@
+---
+ingress:
+  annotations:
+    route.openshift.io/termination: edge
+networkPolicy:
+  ingress:
+    namespaceSelector:
+      network.openshift.io/policy-group: ingress
+
+server:
+  image:
+    repository: ghcr.io/bcgov/orgbook-publisher-service
+    tag: 0.1.1
+    pullPolicy: Always
+  host: "dev.publisher.orgbook.gov.bc.ca"
+  environment:
+    DOMAIN: "dev.publisher.orgbook.gov.bc.ca"
+    PUBLISHER_MULTIKEY: ""
+    TRACTION_API_URL: "https://traction-tenant-proxy-dev.apps.silver.devops.gov.bc.ca"
+    TRACTION_API_KEY: ""
+    TRACTION_TENANT_ID: ""
+    ORGBOOK_URL: "https://dev.orgbook.gov.bc.ca"
+    DID_WEB_SERVER_URL: "https://registry-dev.apps.silver.devops.gov.bc.ca"
+    ISSUER_REGISTRY_URL: "https://bcgov.github.io/digital-trust-toolkit/registrations/issuers/dev.json"
+  autoscaling:
+    enabled: true
+    minReplicas: 1
+    maxReplicas: 10
+    targetCPUUtilizationPercentage: 80
+    targetMemoryUtilizationPercentage: 80
+    stabilizationWindowSeconds: 300
+  resources:
+    limits:
+      cpu: 400m
+      memory: 1600Mi
+    requests:
+      cpu: 200m
+      memory: 820Mi
+  networkPolicy:
+    enabled: true
+    ingress:
+      enabled: true
+      namespaceSelector:
+        network.openshift.io/policy-group: ingress
+postgresql:
+  primary:
+    persistence:
+      size: 5Gi
+    resources:
+      limits:
+        cpu: 500m
+        memory: 500Mi
+      requests:
+        cpu: 100m
+        memory: 100Mi
