@@ -10,15 +10,13 @@ networkPolicy:
 server:
   image:
     repository: ghcr.io/bcgov/orgbook-publisher-service
-    tag: 0.1.1
+    tag: v0.0.1
     pullPolicy: Always
   host: "dev.publisher.orgbook.gov.bc.ca"
   environment:
     DOMAIN: "dev.publisher.orgbook.gov.bc.ca"
     PUBLISHER_MULTIKEY: ""
     TRACTION_API_URL: "https://traction-tenant-proxy-dev.apps.silver.devops.gov.bc.ca"
-    TRACTION_API_KEY: ""
-    TRACTION_TENANT_ID: ""
     ORGBOOK_URL: "https://dev.orgbook.gov.bc.ca"
     DID_WEB_SERVER_URL: "https://registry-dev.apps.silver.devops.gov.bc.ca"
     ISSUER_REGISTRY_URL: "https://bcgov.github.io/digital-trust-toolkit/registrations/issuers/dev.json"
