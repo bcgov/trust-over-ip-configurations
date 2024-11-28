@@ -12,10 +12,10 @@ server:
     repository: ghcr.io/decentralized-identity/trustdidweb-server-py
     tag: 0.1.1
     pullPolicy: Always
-  host: "registry-dev.apps.silver.devops.gov.bc.ca"
+  host: "registry-dev.digitaltrust.gov.bc.ca"
   environment:
-    DOMAIN: "registry-dev.apps.silver.devops.gov.bc.ca"
-    ENDORSER_MULTIKEY: "z6Mkqnasc6f4mY1vbpGxCkgZNW5VGumPNQGMyqCpf8zWgUX8"
+    DOMAIN: "registry-dev.digitaltrust.gov.bc.ca"
+    ENDORSER_MULTIKEY: "z6MkekByGjKYvP6dpMBJEHt5UN72rKPVoDgzcS9Hoq6bjfr1"
   autoscaling:
     enabled: true
     minReplicas: 1

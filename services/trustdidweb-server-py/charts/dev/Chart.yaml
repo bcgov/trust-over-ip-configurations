@@ -1,6 +1,6 @@
 apiVersion: v2
-name: tdw-server
-description: tdw-server - dev
+name: webvh-server
+description: DID Web server with Verifiable History
 type: application
 version: 0.0.9
 appVersion: "0.1.0"
