@@ -14,7 +14,7 @@ networkPolicy:
 backend:
   image:
     repository: ghcr.io/bcgov/orgbook-publisher-service
-    tag: v0.0.2
+    tag: v0.0.3
     pullPolicy: Always
   host: "publisher-dev.orgbook.gov.bc.ca"
   environment:
