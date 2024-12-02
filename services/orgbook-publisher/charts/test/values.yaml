@@ -3,23 +3,27 @@ ingress:
   annotations:
     route.openshift.io/termination: edge
   tls:
-    - secretName: tdw-server-tls
+    - secretName: orgbook-publisher-tls
       hosts:
-        - registry-test.digitaltrust.gov.bc.ca
+        - publisher-test.orgbook.gov.bc.ca
 networkPolicy:
   ingress:
     namespaceSelector:
       network.openshift.io/policy-group: ingress
 
-server:
+backend:
   image:
-    repository: ghcr.io/decentralized-identity/trustdidweb-server-py
-    tag: 0.1.1
+    repository: ghcr.io/bcgov/orgbook-publisher-service
+    tag: v0.0.5
     pullPolicy: Always
-  host: "registry-test.digitaltrust.gov.bc.ca"
+  host: "publisher-test.orgbook.gov.bc.ca"
   environment:
-    DOMAIN: "registry-test.digitaltrust.gov.bc.ca"
-    ENDORSER_MULTIKEY: "z6MkpiDTaJuPzFZpg8MCYRM4ff7i6hNMQaL7fUP5pHBFo75c"
+    DOMAIN: "publisher-test.orgbook.gov.bc.ca"
+    PUBLISHER_MULTIKEY: "z6MkpiDTaJuPzFZpg8MCYRM4ff7i6hNMQaL7fUP5pHBFo75c"
+    TRACTION_API_URL: "https://traction-tenant-proxy-test.apps.silver.devops.gov.bc.ca"
+    ORGBOOK_URL: "https://test.orgbook.gov.bc.ca"
+    DID_WEB_SERVER_URL: "https://registry-test.digitaltrust.gov.bc.ca"
+    ISSUER_REGISTRY_URL: "https://bcgov.github.io/digital-trust-toolkit/registrations/issuers/test.json"
   autoscaling:
     enabled: true
     minReplicas: 1
@@ -40,14 +44,3 @@ server:
       enabled: true
       namespaceSelector:
         network.openshift.io/policy-group: ingress
-postgresql:
-  primary:
-    persistence:
-      size: 5Gi
-    resources:
-      limits:
-        cpu: 500m
-        memory: 500Mi
-      requests:
-        cpu: 100m
-        memory: 100Mi

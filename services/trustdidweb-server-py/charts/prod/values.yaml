@@ -5,7 +5,7 @@ ingress:
   tls:
     - secretName: tdw-server-tls
       hosts:
-        - registry-test.digitaltrust.gov.bc.ca
+        - registry.digitaltrust.gov.bc.ca
 networkPolicy:
   ingress:
     namespaceSelector:
@@ -16,14 +16,14 @@ server:
     repository: ghcr.io/decentralized-identity/trustdidweb-server-py
     tag: 0.1.1
     pullPolicy: Always
-  host: "registry-test.digitaltrust.gov.bc.ca"
+  host: "registry.digitaltrust.gov.bc.ca"
   environment:
-    DOMAIN: "registry-test.digitaltrust.gov.bc.ca"
-    ENDORSER_MULTIKEY: "z6MkpiDTaJuPzFZpg8MCYRM4ff7i6hNMQaL7fUP5pHBFo75c"
+    DOMAIN: "registry.digitaltrust.gov.bc.ca"
+    ENDORSER_MULTIKEY: "z6MkpJybUKKTCjrYPL6B6EWw534ESR3oEC6Bo2XSAefeUG7Y"
   autoscaling:
     enabled: true
     minReplicas: 1
-    maxReplicas: 3
+    maxReplicas: 6
     targetCPUUtilizationPercentage: 80
     targetMemoryUtilizationPercentage: 80
     stabilizationWindowSeconds: 300

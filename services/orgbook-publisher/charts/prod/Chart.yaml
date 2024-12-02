@@ -1,0 +1,10 @@
+apiVersion: v2
+name: orgbook-publisher
+description: orgbook-publisher - prod
+type: application
+version: 0.0.2
+appVersion: "0.0.4"
+dependencies:
+  - name: orgbook-publisher
+    version: 0.0.4
+    repository: https://bcgov.github.io/orgbook-publisher-service
