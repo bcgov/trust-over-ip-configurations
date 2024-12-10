@@ -44,3 +44,7 @@ backend:
       enabled: true
       namespaceSelector:
         network.openshift.io/policy-group: ingress
+mongodb:
+  commonLabels:
+    backup: "true"
+    env: test

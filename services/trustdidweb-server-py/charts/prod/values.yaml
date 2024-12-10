@@ -29,10 +29,10 @@ server:
     stabilizationWindowSeconds: 300
   resources:
     limits:
-      cpu: 400m
+      cpu: 500m
       memory: 1600Mi
     requests:
-      cpu: 200m
+      cpu: 300m
       memory: 820Mi
   networkPolicy:
     enabled: true
@@ -41,13 +41,9 @@ server:
       namespaceSelector:
         network.openshift.io/policy-group: ingress
 postgresql:
+  commonLabels:
+    backup: "true"
+    env: prod
   primary:
     persistence:
       size: 5Gi
-    resources:
-      limits:
-        cpu: 500m
-        memory: 500Mi
-      requests:
-        cpu: 100m
-        memory: 100Mi
