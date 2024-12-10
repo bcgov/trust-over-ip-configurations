@@ -43,6 +43,7 @@ server:
 postgresql:
   commonLabels:
     backup: "true"
+    env: prod
   primary:
     persistence:
       size: 5Gi
