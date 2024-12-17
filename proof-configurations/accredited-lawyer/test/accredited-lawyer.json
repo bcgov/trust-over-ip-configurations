@@ -1,9 +1,10 @@
 {
-  "id": "accredited-lawyer-test",
+  "ver_config_id": "accredited-lawyer-test",
+  "include_v1_attributes": true,
   "subject_identifier": "PPID",
-  "configuration": {
+  "proof_request": {
     "name": "accredited-lawyer",
-    "version": "1.5.3",
+    "version": "1.5.4",
     "requested_attributes": [
       {
         "names": [
@@ -28,6 +29,9 @@
             "issuer_did": "4xE68b6S5VRFrKMMG1U95M",
             "schema_name": "Member Card",
             "schema_version": "1.5.1"
+          },
+          {
+            "cred_def_id": "MLvtJW6pFuYu4NnMB14d29:3:CL:248:lawyer"
           }
         ]
       }

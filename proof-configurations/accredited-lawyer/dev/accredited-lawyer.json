@@ -4,7 +4,7 @@
   "subject_identifier": "PPID",
   "proof_request": {
     "name": "Accredited Lawyer",
-    "version": "1.5.3",
+    "version": "1.5.4",
     "requested_attributes": [
       {
         "names": [
@@ -39,6 +39,9 @@
             "issuer_did": "4xE68b6S5VRFrKMMG1U95M",
             "schema_name": "Member Card",
             "schema_version": "1.5.1"
+          },
+          {
+            "cred_def_id": "MLvtJW6pFuYu4NnMB14d29:3:CL:248:lawyer"
           }
         ]
       }
