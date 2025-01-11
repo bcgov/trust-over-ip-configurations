@@ -4,7 +4,7 @@
   "subject_identifier": "PPID",
   "proof_request": {
     "name": "Accredited Lawyer Status",
-    "version": "1.0.2",
+    "version": "1.0.3",
     "requested_attributes": [
       {
         "names": [
@@ -30,6 +30,9 @@
           },
           {
             "cred_def_id": "MLvtJW6pFuYu4NnMB14d29:3:CL:248:lawyer"
+          },
+          {
+            "cred_def_id": "QzLYGuAebsy3MXQ6b1sFiT:3:CL:2351:lawyer"
           }
         ]
       }
