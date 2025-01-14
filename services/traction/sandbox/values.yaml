@@ -60,7 +60,6 @@ acapy:
     stabilizationWindowSeconds: 300
   resources:
     limits:
-      cpu: 400m
       memory: 1600Mi
     requests:
       cpu: 200m
@@ -150,7 +149,6 @@ postgresql:
       size: 5Gi
     resources:
       limits:
-        cpu: 2
         memory: 4000Mi
       requests:
         cpu: 200m

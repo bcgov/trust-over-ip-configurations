@@ -7,48 +7,46 @@ spec:
   port: 5432
 
   users:
-  - name: acapy
-    options: "CREATEDB CREATEROLE"
-  - name: walletman
-    options: "CREATEDB CREATEROLE"
-  - name: pgadmin
-    options: SUPERUSER
+    - name: acapy
+      options: "CREATEDB CREATEROLE"
+    - name: walletman
+      options: "CREATEDB CREATEROLE"
+    - name: pgadmin
+      options: SUPERUSER
 
   instances:
-  - name: ha
-    replicas: 2
-    affinity:
-      podAntiAffinity:
-        preferredDuringSchedulingIgnoredDuringExecution:
-        - podAffinityTerm:
-            labelSelector:
-              matchLabels:
-                postgres-operator.crunchydata.com/instance-set: ha
-            topologyKey: kubernetes.io/hostname
-          weight: 1
-    dataVolumeClaimSpec:
-      accessModes:
-      - ReadWriteOnce
-      resources:
-        requests:
-          storage: 1Gi
-      storageClassName: netapp-block-standard
-    resources:
-      limits:
-        cpu: 250m
-        memory: 250Mi
-      requests:
-        cpu: 100m
-        memory: 150Mi
-    sidecars:
-      replicaCertCopy:
+    - name: ha
+      replicas: 2
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - podAffinityTerm:
+                labelSelector:
+                  matchLabels:
+                    postgres-operator.crunchydata.com/instance-set: ha
+                topologyKey: kubernetes.io/hostname
+              weight: 1
+      dataVolumeClaimSpec:
+        accessModes:
+          - ReadWriteOnce
         resources:
-          limits:
-            cpu: 100m
-            memory: 64Mi
           requests:
-            cpu: 1m
-            memory: 32Mi
+            storage: 1Gi
+        storageClassName: netapp-block-standard
+      resources:
+        limits:
+          memory: 250Mi
+        requests:
+          cpu: 100m
+          memory: 150Mi
+      sidecars:
+        replicaCertCopy:
+          resources:
+            limits:
+              memory: 64Mi
+            requests:
+              cpu: 1m
+              memory: 32Mi
   patroni:
     dynamicConfiguration:
       postgresql:
@@ -60,9 +58,9 @@ spec:
           shared_buffers: 250MB
           wal_buffers: "-1"
         pg_hba:
-        - host all all 0.0.0.0/0 md5
-        - host all all 0.0.0.0/0 trust
-        - host all all ::1/128 trust
+          - host all all 0.0.0.0/0 md5
+          - host all all 0.0.0.0/0 trust
+          - host all all ::1/128 trust
     leaderLeaseDurationSeconds: 30
     port: 8008
     syncPeriodSeconds: 10
@@ -77,30 +75,28 @@ spec:
       repoHost:
         resources:
           limits:
-            cpu: 500m
             memory: 1Gi
           requests:
             cpu: 150m
             memory: 256Mi
       repos:
-      - name: repo1
-        schedules:
-          full: 0 0 * * 0 # Perform a full backup weekly
-          differential: 0 0 * * 1-6 # Perform differential backups on other days
-          incremental: 30 * * * * # Perform incremental backups 30 minutes past the hour, every hour
-        volume:
-          volumeClaimSpec:
-            accessModes:
-            - ReadWriteOnce
-            resources:
-              requests:
-                storage: 1Gi
-            storageClassName: netapp-file-standard
+        - name: repo1
+          schedules:
+            full: 0 0 * * 0 # Perform a full backup weekly
+            differential: 0 0 * * 1-6 # Perform differential backups on other days
+            incremental: 30 * * * * # Perform incremental backups 30 minutes past the hour, every hour
+          volume:
+            volumeClaimSpec:
+              accessModes:
+                - ReadWriteOnce
+              resources:
+                requests:
+                  storage: 1Gi
+              storageClassName: netapp-file-standard
       sidecars:
         pgbackrest:
           resources:
             limits:
-              cpu: 500m
               memory: 1Gi
             requests:
               cpu: 250m
@@ -110,7 +106,6 @@ spec:
       exporter:
         resources:
           limits:
-            cpu: 250m
             memory: 128Mi
           requests:
             cpu: 100m
@@ -120,12 +115,12 @@ spec:
       affinity:
         podAntiAffinity:
           preferredDuringSchedulingIgnoredDuringExecution:
-          - podAffinityTerm:
-              labelSelector:
-                matchLabels:
-                  postgres-operator.crunchydata.com/role: pgbouncer
-              topologyKey: kubernetes.io/hostname
-            weight: 1
+            - podAffinityTerm:
+                labelSelector:
+                  matchLabels:
+                    postgres-operator.crunchydata.com/role: pgbouncer
+                topologyKey: kubernetes.io/hostname
+              weight: 1
       config:
         global:
           client_tls_sslmode: disable
@@ -133,7 +128,6 @@ spec:
       replicas: 1
       resources:
         limits:
-          cpu: 50m
           memory: 128Mi
         requests:
           cpu: 1m
@@ -143,7 +137,7 @@ spec:
     pgAdmin:
       dataVolumeClaimSpec:
         accessModes:
-        - "ReadWriteOnce"
+          - "ReadWriteOnce"
         resources:
           requests:
             storage: 1Gi

@@ -83,7 +83,6 @@ traction:
       targetMemoryUtilizationPercentage: 80
     resources:
       limits:
-        cpu: 800m
   tenant_proxy:
     image:
       pullPolicy: Always

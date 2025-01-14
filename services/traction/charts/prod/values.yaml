@@ -58,7 +58,6 @@ traction:
           network.openshift.io/policy-group: ingress
     resources:
       limits:
-        cpu: 1
         memory: 500Mi
       requests:
         cpu: 250m
@@ -152,7 +151,6 @@ traction:
           network.openshift.io/policy-group: ingress
     resources:
       limits:
-        cpu: 300m
         memory: 250Mi
       requests:
         cpu: 120m
