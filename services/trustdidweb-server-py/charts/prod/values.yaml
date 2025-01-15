@@ -29,7 +29,6 @@ server:
     stabilizationWindowSeconds: 300
   resources:
     limits:
-      cpu: 500m
       memory: 1600Mi
     requests:
       cpu: 300m

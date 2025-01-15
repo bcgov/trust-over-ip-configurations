@@ -28,7 +28,6 @@ vc-authn-oidc:
 
   resources:
     limits:
-      cpu: 100m
       memory: 512Mi
     requests:
       cpu: 10m
@@ -100,13 +99,13 @@ vc-authn-oidc:
       - id: SovrinMainNet
         is_production: true
         is_write: true
-        genesis_url: 'https://raw.githubusercontent.com/sovrin-foundation/sovrin/stable/sovrin/pool_transactions_live_genesis'
+        genesis_url: "https://raw.githubusercontent.com/sovrin-foundation/sovrin/stable/sovrin/pool_transactions_live_genesis"
       - id: BCovrinTest
         is_production: true
-        genesis_url: 'http://test.bcovrin.vonx.io/genesis'
+        genesis_url: "http://test.bcovrin.vonx.io/genesis"
       - id: CANdyProd
         is_production: true
-        genesis_url: 'https://raw.githubusercontent.com/ICCS-ISAC/dtrust-reconu/main/CANdy/prod/pool_transactions_genesis'
+        genesis_url: "https://raw.githubusercontent.com/ICCS-ISAC/dtrust-reconu/main/CANdy/prod/pool_transactions_genesis"
 
     networkPolicy:
       enabled: true
@@ -119,7 +118,6 @@ vc-authn-oidc:
       existingSecret: "vc-authn-oidc-mongodb"
     resources:
       limits:
-        cpu: 1600m
         memory: 1000Mi
       requests:
         cpu: 400m

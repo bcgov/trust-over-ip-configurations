@@ -1,8 +1,0 @@
-kind: ServiceAccount
-apiVersion: v1
-metadata:
-  name: monitoring-grafana-agent
-  labels:
-    app.kubernetes.io/instance: monitoring
-    app.kubernetes.io/managed-by: Kustomize
-    app.kubernetes.io/name: grafana-agent

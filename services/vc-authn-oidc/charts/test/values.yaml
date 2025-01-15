@@ -28,7 +28,6 @@ vc-authn-oidc:
 
   resources:
     limits:
-      cpu: 100m
       memory: 512Mi
     requests:
       cpu: 10m
@@ -126,7 +125,6 @@ vc-authn-oidc:
       existingSecret: "vc-authn-oidc-mongodb"
     resources:
       limits:
-        cpu: 1
         memory: 1000Mi
       requests:
         cpu: 400m
