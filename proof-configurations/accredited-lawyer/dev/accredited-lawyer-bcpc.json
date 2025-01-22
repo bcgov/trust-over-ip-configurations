@@ -1,10 +1,10 @@
 {
   "ver_config_id": "accredited-lawyer-bcpc",
-  "include_v1_attributes": true,
+  "include_v1_attributes": false,
   "subject_identifier": "PPID",
   "proof_request": {
     "name": "Accredited Lawyer with BC Person Credential",
-    "version": "1.1.0",
+    "version": "1.1.1",
     "requested_attributes": [
       {
         "names": [
