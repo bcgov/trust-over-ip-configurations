@@ -16,7 +16,7 @@
           {
             "issuer_did": "DZBaHghKsVHcJoiwkykG3r",
             "schema_name": "Member Certificate",
-            "schema_version": "1.0.1"
+            "schema_version": "1.0.2"
           },
           {
             "cred_def_id": "MLvtJW6pFuYu4NnMB14d29:3:CL:248:lawyer"
