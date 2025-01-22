@@ -14,7 +14,7 @@
         ],
         "restrictions": [
           {
-            "issuer_did": "DZBaHghKsVHcJoiwkykG3r",
+            "issuer_did": "YD8BhPVNgQGVMzd7aJHSbW",
             "schema_name": "Member Certificate",
             "schema_version": "1.0.2"
           },
