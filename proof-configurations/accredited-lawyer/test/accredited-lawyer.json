@@ -1,10 +1,10 @@
 {
   "ver_config_id": "accredited-lawyer",
-  "include_v1_attributes": true,
+  "include_v1_attributes": false,
   "subject_identifier": "PPID",
   "proof_request": {
     "name": "accredited-lawyer",
-    "version": "1.5.5",
+    "version": "1.6.1",
     "requested_attributes": [
       {
         "names": [
@@ -16,19 +16,9 @@
         ],
         "restrictions": [
           {
-            "issuer_did": "DZBaHghKsVHcJoiwkykG3r",
+            "issuer_did": "YD8BhPVNgQGVMzd7aJHSbW",
             "schema_name": "Member Certificate",
-            "schema_version": "1.0.1"
-          },
-          {
-            "issuer_did": "AuJrigKQGRLJajKAebTgWu",
-            "schema_name": "Member Card",
-            "schema_version": "1.5.1"
-          },
-          {
-            "issuer_did": "4xE68b6S5VRFrKMMG1U95M",
-            "schema_name": "Member Card",
-            "schema_version": "1.5.1"
+            "schema_version": "1.0.2"
           },
           {
             "cred_def_id": "MLvtJW6pFuYu4NnMB14d29:3:CL:248:lawyer"

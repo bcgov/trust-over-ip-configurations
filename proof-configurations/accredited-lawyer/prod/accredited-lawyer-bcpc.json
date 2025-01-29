@@ -1,10 +1,10 @@
 {
   "ver_config_id": "accredited-lawyer-bcpc",
-  "include_v1_attributes": true,
+  "include_v1_attributes": false,
   "subject_identifier": "PPID",
   "proof_request": {
     "name": "Accredited Lawyer with BC Person Credential",
-    "version": "1.0.3",
+    "version": "1.0.4",
     "requested_attributes": [
       {
         "names": [
@@ -15,11 +15,6 @@
           "Member Status Code"
         ],
         "restrictions": [
-          {
-            "issuer_did": "4xE68b6S5VRFrKMMG1U95M",
-            "schema_name": "Member Card",
-            "schema_version": "1.5.1"
-          },
           {
             "cred_def_id": "QzLYGuAebsy3MXQ6b1sFiT:3:CL:2351:lawyer"
           }

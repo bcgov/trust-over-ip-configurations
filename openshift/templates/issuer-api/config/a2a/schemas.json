@@ -12,21 +12,6 @@
       "Issuer"
     ],
     "schema_name": "Member Certificate",
-    "schema_version": "1.0.1"
-  },
-  {
-    "default": false,
-    "public": false,
-    "revocable": false,
-    "attributes": [
-      "PPID",
-      "Surname",
-      "Given Name",
-      "Member Status",
-      "Member Status Code",
-      "Issuer"
-    ],
-    "schema_name": "Member Certificate",
-    "schema_version": "0.5.0"
+    "schema_version": "1.0.2"
   }
 ]
