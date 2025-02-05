@@ -32,18 +32,18 @@ jobs:
           cd acapy-vc-authn-oidc
           echo "SHORT_SHA=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
 
-      # - name: Install OpenShift CLI tools
-      #   uses: redhat-actions/openshift-tools-installer@v1
-      #   with:
-      #     oc: "4.16"
+      - name: Install OpenShift CLI tools
+        uses: redhat-actions/openshift-tools-installer@v1
+        with:
+          oc: "4.16"
 
-      # - name: Authenticate and set context
-      #   uses: redhat-actions/oc-login@v1
-      #   with:
-      #     openshift_server_url: ${{ secrets.OPENSHIFT_SERVER }}
-      #     openshift_token: ${{ secrets.OPENSHIFT_TOKEN }}
-      #     certificate_authority_data: ${{ secrets.OPENSHIFT_CA_CRT }}
-      #     namespace: ${{ secrets.OPENSHIFT_NAMESPACE }}
+      - name: Authenticate and set context
+        uses: redhat-actions/oc-login@v1
+        with:
+          openshift_server_url: ${{ secrets.OPENSHIFT_SERVER }}
+          openshift_token: ${{ secrets.OPENSHIFT_TOKEN }}
+          certificate_authority_data: ${{ secrets.OPENSHIFT_CA_CRT }}
+          namespace: ${{ secrets.OPENSHIFT_NAMESPACE_VC_AUTHN_DEV }}
 
       - name: Deploy vc-authn-oidc to Development
         run: |
