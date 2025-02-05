@@ -7,4 +7,4 @@ appVersion: "2.2.1"
 dependencies:
   - name: vc-authn-oidc
     version: 0.2.4
-    repository: https://bcgov.github.io/vc-authn-oidc
+    repository: https://openwallet-foundation.github.io/acapy-vc-authn-oidc
