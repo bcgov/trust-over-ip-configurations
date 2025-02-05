@@ -32,10 +32,18 @@ jobs:
           cd acapy-vc-authn-oidc
           echo "SHORT_SHA=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
 
-      - name: Install OpenShift CLI tools
-        uses: redhat-actions/openshift-tools-installer@v1
+      - name: Setup Image Metadata
+        id: meta
+        uses: docker/metadata-action@v5
         with:
-          oc: "4.16"
+          images: ghcr.io/openwallet-foundation/acapy-vc-authn-oidc
+          tags: |
+            type=raw,value=sha-${{ steps.slug.outputs.SHORT_SHA }}
+
+      # - name: Install OpenShift CLI tools
+      #   uses: redhat-actions/openshift-tools-installer@v1
+      #   with:
+      #     oc: "4.16"
 
       # - name: Authenticate and set context
       #   uses: redhat-actions/oc-login@v1
