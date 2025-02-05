@@ -6,7 +6,7 @@ on:
       ref:
         description: 'SHA to deploy'
         required: false
-        default: ''
+        default: 'main'
 
 jobs:
   deploy_dev:
@@ -20,7 +20,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           repository: openwallet-foundation/acapy-vc-authn-oidc
-          ref: ${{ github.event.inputs.ref || 'main' }}
+          ref: ${{ github.event.inputs.ref || '' }}
           sparse-checkout: |
             charts
           path: acapy-vc-authn-oidc
@@ -42,13 +42,13 @@ jobs:
         with:
           oc: "4.16"
 
-      - name: Authenticate and set context
-        uses: redhat-actions/oc-login@v1
-        with:
-          openshift_server_url: ${{ secrets.OPENSHIFT_SERVER }}
-          openshift_token: ${{ secrets.OPENSHIFT_TOKEN }}
-          certificate_authority_data: ${{ secrets.OPENSHIFT_CA_CRT }}
-          namespace: ${{ secrets.OPENSHIFT_NAMESPACE }}
+      # - name: Authenticate and set context
+      #   uses: redhat-actions/oc-login@v1
+      #   with:
+      #     openshift_server_url: ${{ secrets.OPENSHIFT_SERVER }}
+      #     openshift_token: ${{ secrets.OPENSHIFT_TOKEN }}
+      #     certificate_authority_data: ${{ secrets.OPENSHIFT_CA_CRT }}
+      #     namespace: ${{ secrets.OPENSHIFT_NAMESPACE }}
 
       - name: Get Build Info
         id: values
