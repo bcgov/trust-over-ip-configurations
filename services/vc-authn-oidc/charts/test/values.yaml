@@ -2,7 +2,7 @@ vc-authn-oidc:
   ingressSuffix: -test.apps.silver.devops.gov.bc.ca
 
   image:
-    repository: ghcr.io/bcgov/vc-authn-oidc
+    repository: ghcr.io/openwallet-foundation/acapy-vc-authn-oidc
     pullPolicy: IfNotPresent
 
   acapyTenancyMode: single
