@@ -34,7 +34,7 @@ jobs:
           tags: |
             type=semver,pattern={{version}}
             type=semver,pattern={{major}}.{{minor}}
-            type=ref,value=${{ github.event.inputs.tag }}
+            type=ref,value=${{ github.event.inputs.ref }}
             type=sha
 
       - name: Install OpenShift CLI tools
