@@ -21,7 +21,7 @@ jobs:
         with:
           repository: openwallet-foundation/acapy-vc-authn-oidc
           fetch-depth: 0
-          ref: ${{ github.event.inputs.ref || '' }}
+          ref: ${{ github.event.inputs.ref }}
           sparse-checkout: |
             charts
           path: acapy-vc-authn-oidc
