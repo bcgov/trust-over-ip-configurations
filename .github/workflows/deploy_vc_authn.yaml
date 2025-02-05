@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       ref:
-        description: 'SHA to deploy'
+        description: 'Branch or SHA to deploy'
         required: false
         default: 'main'
 
@@ -45,15 +45,9 @@ jobs:
       #     certificate_authority_data: ${{ secrets.OPENSHIFT_CA_CRT }}
       #     namespace: ${{ secrets.OPENSHIFT_NAMESPACE }}
 
-      - name: Get Build Info
-        id: values
-        shell: bash
+      - name: Deploy vc-authn-oidc to Development
         run: |
-          echo "helm upgrade --install vc-authn-oidc -f ./dev-values.yaml --set image.tag=$sha-${{ steps.slug.outputs.SHORT_SHA }}" ./acapy-vc-authn-oidc/charts/vc-authn-oidc --wait"
-
-      # - name: Deploy vc-authn-oidc to Development
-      #   run: |
-      #     cp services/vc-authn-oidc/charts/dev/values.yaml ./dev-values.yaml
-      #     yq e -i 'del(.vc-authn-oidc) | . *= load("services/vc-authn-oidc/charts/dev/values.yaml").vc-authn-oidc' ./dev-values.yaml
-      #     cat ./dev-values.yaml
-      #     # helm upgrade --install vc-authn-oidc -f ./dev-values.yaml --set image.tag=${{ steps.meta.outputs.tags }}" ./acapy-vc-authn-oidc/charts/vc-authn-oidc --wait
+          cp services/vc-authn-oidc/charts/dev/values.yaml ./dev-values.yaml
+          yq e -i 'del(.vc-authn-oidc) | . *= load("services/vc-authn-oidc/charts/dev/values.yaml").vc-authn-oidc' ./dev-values.yaml
+          cat ./dev-values.yaml
+          # helm upgrade --install vc-authn-oidc -f ./dev-values.yaml --set image.tag=sha-${{ steps.slug.outputs.SHORT_SHA }} ./acapy-vc-authn-oidc/charts/vc-authn-oidc --wait
