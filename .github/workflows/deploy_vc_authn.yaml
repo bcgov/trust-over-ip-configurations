@@ -49,8 +49,6 @@ jobs:
         id: values
         shell: bash
         run: |
-          echo "image_tag=${{ fromJSON(steps.meta.outputs.json).tags[0] }}"
-          echo "image_version=${{ fromJSON(steps.meta.outputs.json).labels['org.opencontainers.image.version'] }}"
           echo "helm upgrade --install vc-authn-oidc -f ./dev-values.yaml --set image.tag=$sha-${{ steps.slug.outputs.SHORT_SHA }}" ./acapy-vc-authn-oidc/charts/vc-authn-oidc --wait"
 
       # - name: Deploy vc-authn-oidc to Development
