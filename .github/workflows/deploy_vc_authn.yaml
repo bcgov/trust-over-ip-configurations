@@ -32,14 +32,6 @@ jobs:
           cd acapy-vc-authn-oidc
           echo "SHORT_SHA=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
 
-      - name: Setup Image Metadata
-        id: meta
-        uses: docker/metadata-action@v5
-        with:
-          images: ghcr.io/openwallet-foundation/acapy-vc-authn-oidc
-          tags: |
-            type=raw,value=sha-${{ steps.slug.outputs.SHORT_SHA }}
-
       # - name: Install OpenShift CLI tools
       #   uses: redhat-actions/openshift-tools-installer@v1
       #   with:
@@ -59,7 +51,7 @@ jobs:
         run: |
           echo "image_tag=${{ fromJSON(steps.meta.outputs.json).tags[0] }}"
           echo "image_version=${{ fromJSON(steps.meta.outputs.json).labels['org.opencontainers.image.version'] }}"
-          echo "helm upgrade --install vc-authn-oidc -f ./dev-values.yaml --set image.tag=${{ steps.meta.outputs.tags }}" ./acapy-vc-authn-oidc/charts/vc-authn-oidc --wait"
+          echo "helm upgrade --install vc-authn-oidc -f ./dev-values.yaml --set image.tag=$sha-${{ steps.slug.outputs.SHORT_SHA }}" ./acapy-vc-authn-oidc/charts/vc-authn-oidc --wait"
 
       # - name: Deploy vc-authn-oidc to Development
       #   run: |
