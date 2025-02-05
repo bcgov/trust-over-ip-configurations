@@ -15,10 +15,15 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
+      - name: Checkout acapy-vc-authn-oidc
+        uses: actions/checkout@v4
         with:
-          fetch-depth: 0
           repository: openwallet-foundation/acapy-vc-authn-oidc
-          ref: ${{ github.event.inputs.tag || 'main' }}
+          ref: ${{ github.event.inputs.ref || 'main' }}
+          sparse-checkout: |
+            charts
+          path: acapy-vc-authn-oidc
 
       - name: Setup Image Metadata
         id: meta
@@ -31,7 +36,7 @@ jobs:
             type=semver,pattern={{major}}.{{minor}}
             type=ref
             type=sha
-      
+
       - name: Install OpenShift CLI tools
         uses: redhat-actions/openshift-tools-installer@v1
         with:
@@ -51,10 +56,11 @@ jobs:
         run: |
           echo "image_tag=${{ fromJSON(steps.meta.outputs.json).tags[0] }}"
           echo "image_version=${{ fromJSON(steps.meta.outputs.json).labels['org.opencontainers.image.version'] }}"
-          echo "helm upgrade --install vc-authn-oidc ./services/vc-authn-oidc/charts/dev --set image.tag=${{ steps.meta.outputs.tags }}"
-          
-      # - name: Deploy to dev
-      #   run: |
-      #     helm upgrade --install vc-authn-oidc \
-      #       ./services/vc-authn-oidc/charts/dev \
-      #       --set image.tag=${{ steps.meta.outputs.tags }}
+          echo "helm upgrade --install vc-authn-oidc -f ./dev-values.yaml --set image.tag=${{ steps.meta.outputs.tags }}" ./acapy-vc-authn-oidc/charts/vc-authn-oidc --wait"
+
+      - name: Deploy vc-authn-oidc to Development
+        run: |
+          cp services/vc-authn-oidc/charts/dev/values.yaml ./dev-values.yaml
+          yq e -i 'del(.vc-authn-oidc) | . *= load("services/vc-authn-oidc/charts/dev/values.yaml").vc-authn-oidc' ./dev-values.yaml
+          cat ./dev-values.yaml
+          # helm upgrade --install vc-authn-oidc -f ./dev-values.yaml --set image.tag=${{ steps.meta.outputs.tags }}" ./acapy-vc-authn-oidc/charts/vc-authn-oidc --wait
