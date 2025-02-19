@@ -9,9 +9,11 @@ on:
         default: 'main'
 
 jobs:
-  deploy_dev:
-    name: Deploy to dev
+  prepare:
+    name: Prepare job variables
     runs-on: ubuntu-latest
+    outputs:
+      short-sha: ${{ steps.slug.outputs.SHORT_SHA }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -32,6 +34,46 @@ jobs:
           cd acapy-vc-authn-oidc
           echo "SHORT_SHA=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
 
+  build_dev:
+    needs: [prepare]
+    name: "Build BCGov VC-AuthN Controller DEV"
+    runs-on: ubuntu-latest
+    if: github.repository_owner == 'bcgov'
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build VC-AuthN
+        uses: ./.github/actions/build_image
+        id: builder
+        with:
+          context: "./services/vc-authn-oidc"
+          dockerfile: "./services/vc-authn-oidc/Dockerfile"
+          image_name: ${{ github.repository_owner}}/acapy-vc-authn-oidc
+          image_tag: ${{ needs.prepare.outputs.short-sha }}
+          registry: ghcr.io
+          registry_username: ${{ github.repository_owner}}
+          registry_password: ${{ secrets.GITHUB_TOKEN }}
+    outputs:
+      image_tag: ${{ steps.builder.outputs.image_tag }}
+      image_version: ${{ steps.builder.outputs.image_version }}
+
+  deploy_dev:
+    needs: [prepare, build_dev]
+    name: Deploy to dev
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Checkout acapy-vc-authn-oidc
+        uses: actions/checkout@v4
+        with:
+          repository: openwallet-foundation/acapy-vc-authn-oidc
+          fetch-depth: 0
+          ref: ${{ github.event.inputs.ref }}
+          sparse-checkout: |
+            charts
+          path: acapy-vc-authn-oidc
+
       - name: Install OpenShift CLI tools
         uses: redhat-actions/openshift-tools-installer@v1
         with:
@@ -49,4 +91,4 @@ jobs:
         run: |
           cp services/vc-authn-oidc/charts/dev/values.yaml ./dev-values.yaml
           yq e -i 'del(.vc-authn-oidc) | . *= load("services/vc-authn-oidc/charts/dev/values.yaml").vc-authn-oidc' ./dev-values.yaml
-          helm upgrade --install vc-authn-oidc -f ./dev-values.yaml --set image.tag=sha-${{ steps.slug.outputs.SHORT_SHA }} ./acapy-vc-authn-oidc/charts/vc-authn-oidc --wait
+          helm upgrade --install vc-authn-oidc -f ./dev-values.yaml --set image.tag=sha-${{ needs.prepare.outputs.short-sha }} ./acapy-vc-authn-oidc/charts/vc-authn-oidc --wait
