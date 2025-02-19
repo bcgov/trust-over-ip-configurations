@@ -1,5 +1,6 @@
-# TODO: update with official tagged version
-FROM ghcr.io/openwallet-foundation/acapy-vc-authn-oidc:sha-1f88935
+ARG IMAGE_TAG=latest
+
+FROM ghcr.io/openwallet-foundation/acapy-vc-authn-oidc:${IMAGE_TAG}
 
 # Copy custom QR code templates
-COPY services/vc-authn-oidc/templates /app/templates
+COPY templates /app/templates
