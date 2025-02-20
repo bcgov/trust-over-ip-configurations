@@ -2,7 +2,7 @@ vc-authn-oidc:
   ingressSuffix: -test.apps.silver.devops.gov.bc.ca
 
   image:
-    repository: ghcr.io/openwallet-foundation/acapy-vc-authn-oidc
+    repository: ghcr.io/bcgov/acapy-vc-authn-oidc
     pullPolicy: IfNotPresent
 
   acapyTenancyMode: single
@@ -11,8 +11,12 @@ vc-authn-oidc:
   useOobPresentProof: true
   useOobLocalDIDService: false
   useUrlDeepLink: true
-  controllerCameraRedirectUrl: wallet_howto
-  controllerPresentationExpireTime: 300
+  
+  controller:
+    cameraRedirectUrl: wallet_howto
+    presentationExpireTime: 300
+    templateDirectory: /app/templates
+  
   useHTTPS: true
   logLevel: INFO
 
