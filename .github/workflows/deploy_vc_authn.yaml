@@ -49,6 +49,7 @@ jobs:
           dockerfile: "./services/vc-authn-oidc/Dockerfile"
           image_name: ${{ github.repository_owner}}/acapy-vc-authn-oidc
           image_tag: ${{ needs.prepare.outputs.short-sha }}
+          source_sha: ${{ needs.prepare.outputs.short-sha }}
           registry: ghcr.io
           registry_username: ${{ github.repository_owner}}
           registry_password: ${{ secrets.GITHUB_TOKEN }}
