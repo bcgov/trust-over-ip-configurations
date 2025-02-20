@@ -21,10 +21,6 @@ inputs:
     required: true
     type: string
     default: ''
-  source_sha:
-    required: false
-    type: string
-    default: ''
   registry:
     required: true
     type: string
@@ -70,7 +66,6 @@ runs:
         images: ${{ inputs.registry }}/${{ inputs.image_name }}
         tags: |
           type=raw,value=${{ inputs.image_tag }}
-          type=raw,value=sha-${inputs.source_sha}
 
     - name: Build and push image
       id: builder
