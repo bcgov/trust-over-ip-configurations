@@ -1,5 +1,5 @@
-name: Build Traction Acapy Image
-description: Build Traction Acapy Image
+name: Build Image
+description: Build Image
 inputs:
   ref:
     description: 'The branch, tag or SHA to checkout'
