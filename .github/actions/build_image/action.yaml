@@ -76,8 +76,8 @@ runs:
         push: true
         tags: ${{ steps.meta.outputs.tags }}
         labels: ${{ steps.meta.outputs.labels }}
-      env:
-        IMAGE_TAG: ${{ inputs.image_tag }}
+        build-args: |
+          IMAGE_TAG=${{ inputs.image_tag }}
 
     - id: values  
       shell: bash
