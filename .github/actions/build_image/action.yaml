@@ -1,5 +1,5 @@
-name: Build Traction Acapy Image
-description: Build Traction Acapy Image
+name: Build Image
+description: Build Image
 inputs:
   ref:
     description: 'The branch, tag or SHA to checkout'
@@ -76,8 +76,8 @@ runs:
         push: true
         tags: ${{ steps.meta.outputs.tags }}
         labels: ${{ steps.meta.outputs.labels }}
-      env:
-        IMAGE_TAG: ${{ inputs.image_tag }}
+        build-args: |
+          IMAGE_TAG=${{ inputs.image_tag }}
 
     - id: values  
       shell: bash
