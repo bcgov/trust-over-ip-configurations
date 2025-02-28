@@ -1,0 +1,95 @@
+name: Build and Deploy vc-authn-oidc Test
+
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Tag to build (leave empty for latest)'
+        required: false
+        default: ''
+
+jobs:
+  build_image:
+    name: "Build BCGov VC-AuthN Controller"
+    runs-on: ubuntu-latest
+    if: github.repository_owner == 'bcgov'
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build VC-AuthN
+        uses: ./.github/actions/build_image
+        id: builder
+        with:
+          context: "./services/vc-authn-oidc"
+          dockerfile: "./services/vc-authn-oidc/Dockerfile"
+          image_name: ${{ github.repository_owner}}/acapy-vc-authn-oidc
+          image_tag: ${{ inputs.tag }}
+          registry: ghcr.io
+          registry_username: ${{ github.repository_owner}}
+          registry_password: ${{ secrets.GITHUB_TOKEN }}
+    outputs:
+      image_tag: ${{ steps.builder.outputs.image_tag }}
+      image_version: ${{ steps.builder.outputs.image_version }}
+
+  update-configs-and-sync:
+    runs-on: ubuntu-latest
+    name: Update Configs and Sync
+    needs:
+      - build_image
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Lookup latest chart
+        id: chart_version
+        run: |
+          helm repo add acapy-vc-authn-oidc https://openwallet-foundation.github.io/acapy-vc-authn-oidc
+          helm repo update
+          echo "APP_VERSION=$(helm search repo acapy-vc-authn-oidc -ojson | jq '.[0].app_version')" >> $GITHUB_OUTPUT
+          echo "CHART_VERSION=$(helm search repo acapy-vc-authn-oidc -ojson | jq '.[0].version')" >> $GITHUB_OUTPUT
+
+      - name: Update test
+        env:
+          APP_VERSION: ${{ steps.chart_version.outputs.APP_VERSION }}
+          CHART_VERSION: ${{ steps.chart_version.outputs.CHART_VERSION }}
+          IMAGE_TAG: ${{ needs.build_image.outputs.image_version }}
+        run: |
+          yq e -i '.vc-authn-oidc.image.tag' = env(IMAGE_TAG) services/vc-authn-oidc/charts/test/values.yaml
+          yq e -i '.appVersion = env(APP_VERSION)' services/vc-authn-oidc/charts/test/Chart.yaml
+          yq e -i '.version = env(CHART_VERSION)' services/vc-authn-oidc/charts/test/Chart.yaml
+          yq e -i '.dependencies[0].version = env(CHART_VERSION)' services/vc-authn-oidc/charts/test/Chart.yaml
+
+      - name: Update prod
+        env:
+          APP_VERSION: ${{ steps.chart_version.outputs.APP_VERSION }}
+          CHART_VERSION: ${{ steps.chart_version.outputs.CHART_VERSION }}
+          IMAGE_TAG: ${{ needs.build_image.outputs.image_version }}
+        run: |
+          yq e -i '.vc-authn-oidc.image.tag' = env(IMAGE_TAG) services/vc-authn-oidc/charts/prod/values.yaml
+          yq e -i '.appVersion = env(APP_VERSION)' services/vc-authn-oidc/charts/prod/Chart.yaml
+          yq e -i '.version = env(CHART_VERSION)' services/vc-authn-oidc/charts/prod/Chart.yaml
+          yq e -i '.dependencies[0].version = env(CHART_VERSION)' services/vc-authn-oidc/charts/prod/Chart.yaml
+
+      - name: Commit and Push
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add services/vc-authn-oidc/charts/test/Chart.yaml services/vc-authn-oidc/charts/prod/Chart.yaml
+          git commit -m "Update chart and app versions, and set image tag" || echo "No changes to commit"
+          git push origin main
+
+      - name: Trigger and wait for GitOps sync workflow
+        uses: convictional/trigger-workflow-and-wait@v1.6.5
+        id: workflow-trigger
+        with:
+          owner: bcgov
+          repo: trust-over-ip-configurations
+          github_token: ${{ secrets.DITP_CONFIGS_REPO_TOKEN }}
+          workflow_file_name: gitops_sync.yaml
+
+      - name: Trigger ArgoCD Sync of e79518-test-vc-authn-oidc
+        uses: OpsVerseIO/argocd-sync@0.2.0
+        with:
+          address: gitops-shared.apps.silver.devops.gov.bc.ca
+          token: ${{ secrets.DITP_GITOPS_ARGO_SECRET}}
+          action: sync
+          appName: "e79518-test-vc-authn-oidc"
+ 
