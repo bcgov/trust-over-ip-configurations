@@ -27,8 +27,6 @@ traction:
           connect_to_endorser:
             - endorser_alias: candy-prod-endorser
               ledger_id: candy-prod
-            - endorser_alias: sovrin-mainnet
-              ledger_id: sovrin-mainnet
           create_public_did:
             - candy-prod
         reservation:

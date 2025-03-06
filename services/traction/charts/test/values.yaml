@@ -44,7 +44,6 @@ traction:
           create_public_did:
             - bcovrin-test
             - candy-test
-            - sovrin-testnet
         reservation:
           expiry_minutes: 2880
           auto_approve: false
