@@ -12,6 +12,6 @@ SOURCE_CONTEXT_DIR=.
 SOURCE_IMAGE_KIND=DockerImage
 SOURCE_IMAGE_REGISTRY=artifacts.developer.gov.bc.ca/github-docker-remote/
 SOURCE_IMAGE_NAME=hyperledger/aries-cloudagent-python
-SOURCE_IMAGE_TAG=py3.9-0.12.2
+SOURCE_IMAGE_TAG=py3.9-0.12.5
 DOCKER_FILE_PATH=openshift/templates/issuer-agent/Dockerfile
 OUTPUT_IMAGE_TAG=latest
