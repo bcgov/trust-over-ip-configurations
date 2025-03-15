@@ -6,29 +6,30 @@ inputs:
     required: false
     default: ''  
   context:
+    description: 'The build context'
     required: true
-    type: string
     default: '.'
   dockerfile:
+    description: 'The Dockerfile to build'
     required: true
-    type: string
     default: ''
   image_name:
+    description: 'The name of the image'
     required: true
-    type: string
     default: ''
   image_tag:
+    description: 'The image tag: determines both the source image tag and the tag applied to the built image'
     required: true
-    type: string
-    default: ''
+    default: 'latest'
   registry:
+    description: 'The registry to push the image to'
     required: true
-    type: string
     default: ghcr.io
   registry_username:
+    description: 'The username to login to the registry'
     required: true
-    type: string
   registry_password:
+    description: 'The password to login to the registry'
     required: true
 
 outputs:

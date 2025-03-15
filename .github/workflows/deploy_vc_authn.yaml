@@ -1,4 +1,4 @@
-name: Deploy vc-authn-oidc
+name: Build and Deploy VC-AuthN to DEV
 
 on:
   workflow_dispatch:
@@ -18,22 +18,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Checkout acapy-vc-authn-oidc
-        uses: actions/checkout@v4
-        with:
-          repository: openwallet-foundation/acapy-vc-authn-oidc
-          fetch-depth: 0
-          ref: ${{ github.event.inputs.ref }}
-          sparse-checkout: |
-            charts
-          path: acapy-vc-authn-oidc
-
-      - name: Get short SHA
-        id: slug
-        run: |
-          cd acapy-vc-authn-oidc
-          echo "SHORT_SHA=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
-
   build_dev:
     needs: [prepare]
     name: "Build BCGov VC-AuthN Controller DEV"
@@ -48,7 +32,7 @@ jobs:
           context: "./services/vc-authn-oidc"
           dockerfile: "./services/vc-authn-oidc/Dockerfile"
           image_name: ${{ github.repository_owner}}/acapy-vc-authn-oidc
-          image_tag: sha-${{ needs.prepare.outputs.short-sha }}
+          image_tag: dev
           registry: ghcr.io
           registry_username: ${{ github.repository_owner}}
           registry_password: ${{ secrets.GITHUB_TOKEN }}
