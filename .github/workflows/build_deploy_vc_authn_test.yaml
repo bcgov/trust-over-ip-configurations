@@ -1,4 +1,4 @@
-name: Build and Deploy vc-authn-oidc Test
+name: Build VC-AuthN Release and update ArgoCD configurations for TEST,PROD
 
 on:
   workflow_dispatch:
