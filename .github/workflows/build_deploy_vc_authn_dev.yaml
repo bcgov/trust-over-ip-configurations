@@ -8,6 +8,12 @@ on:
         required: false
         default: 'main'
 
+  push:
+    branches:
+      - main
+    paths:
+      - "services/vc-authn-oidc/templates/**"
+
 jobs:
   prepare:
     name: Prepare job variables
