@@ -6,4 +6,4 @@ appVersion: 7.4.2
 dependencies:
   - name: redis
     version: 20.12.2
-    repository: oci://registry-1.docker.io/bitnamicharts/redis
+    repository: https://charts.bitnami.com/bitnami/
