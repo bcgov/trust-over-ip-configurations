@@ -22,7 +22,11 @@ jobs:
       - name: Run Your Job
         run: |
           echo "This job runs biweekly on 1st and 15th of every month at 2:00 AM PST"
-
+      
+      - name: Install OpenShift CLI tools
+        uses: redhat-actions/openshift-tools-installer@v1
+        with:
+          oc: "4.14"
       - name: Authenticate and set context
         uses: redhat-actions/oc-login@v1
         with:
@@ -63,6 +67,11 @@ jobs:
       - name: Run Your Job
         run: |
           echo "This job runs biweekly on 1st and 15th of every month at 2:00 AM PST"
+      
+      - name: Install OpenShift CLI tools
+        uses: redhat-actions/openshift-tools-installer@v1
+        with:
+          oc: "4.14"
 
       - name: Authenticate and set context
         uses: redhat-actions/oc-login@v1
