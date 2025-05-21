@@ -3,7 +3,7 @@ ingress:
   annotations:
     route.openshift.io/termination: edge
   tls:
-    - secretName: tdw-server-tls
+    - secretName: webvh-server-tls
       hosts:
         - registry-dev.digitaltrust.gov.bc.ca
 networkPolicy:
@@ -13,13 +13,10 @@ networkPolicy:
 
 server:
   image:
-    repository: ghcr.io/decentralized-identity/trustdidweb-server-py
-    tag: 0.1.1
+    repository: ghcr.io/decentralized-identity/didwebvh-server-py
+    tag: 0.2.2
     pullPolicy: Always
   host: "registry-dev.digitaltrust.gov.bc.ca"
-  environment:
-    DOMAIN: "registry-dev.digitaltrust.gov.bc.ca"
-    ENDORSER_MULTIKEY: "z6MkekByGjKYvP6dpMBJEHt5UN72rKPVoDgzcS9Hoq6bjfr1"
   autoscaling:
     enabled: true
     minReplicas: 1
@@ -29,10 +26,11 @@ server:
     stabilizationWindowSeconds: 300
   resources:
     limits:
-      memory: 1600Mi
+      cpu: 250m
+      memory: 512Mi
     requests:
-      cpu: 300m
-      memory: 820Mi
+      cpu: 50m
+      memory: 128Mi
   networkPolicy:
     enabled: true
     ingress:
