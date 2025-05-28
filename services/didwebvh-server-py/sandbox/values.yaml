@@ -13,10 +13,9 @@ server:
     tag: 0.2.2
     pullPolicy: Always
   host: "didwebvh-server-py-sandbox.apps.silver.devops.gov.bc.ca"
-  environment:
-    # This is a public key for the default sandbox witness.
-    # It belongs to the ditp-demo-issuer Traction Dev tenant.
-    DEFAULT_WITNESS_KEY: 'z6MkrKBYqpPXXXG6pwsvctvBgTpP6ka5jfjUQWAfvkZ8uMi8'
+  # This is a public key for the default sandbox witness.
+  # It belongs to the ditp-demo-issuer Traction Dev tenant.
+  dfault_witness_key: "z6MkrKBYqpPXXXG6pwsvctvBgTpP6ka5jfjUQWAfvkZ8uMi8"
   autoscaling:
     enabled: true
     minReplicas: 1
