@@ -42,6 +42,14 @@ jobs:
         run: |
           oc delete -n ${{ secrets.OPENSHIFT_NAMESPACE_SANDBOX }} all,secret,pod,networkpolicy,configmap,pvc --selector "app.kubernetes.io/instance"=traction-sandbox
 
+      - name: Uninstall DID WebVH Server via Helm
+        run: |
+          helm uninstall didwebvh-server-py -n ${{ secrets.OPENSHIFT_NAMESPACE_SANDBOX }} --wait --timeout=20m || true
+
+      - name: Remove DID WebVH Server Openshift Objects
+        run: |
+          oc delete -n ${{ secrets.OPENSHIFT_NAMESPACE_SANDBOX }} all,secret,pod,networkpolicy,configmap,pvc --selector "app.kubernetes.io/instance"=didwebvh-server-py-sandbox
+
       - name: Rocket.Chat Notification
         uses: RocketChat/Rocket.Chat.GitHub.Action.Notification@1.1.1
         if: always()
@@ -91,6 +99,15 @@ jobs:
           -f ./services/traction/sandbox/values.yaml \
           --set ui.ux.infoBanner.message="${BANNER_MESSAGE}" \
           traction-sandbox traction/traction
+
+      - name: Install DID WebVH Server via Helm
+        run: |
+          helm repo add didwebvh-server-py https://identity.foundation/didwebvh-server-py
+          helm upgrade --install \
+          -n ${{ secrets.OPENSHIFT_NAMESPACE_SANDBOX }} --wait --timeout=7m \
+          -f ./services/didwebvh-server-py/sandbox/values.yaml \
+          --set ui.ux.infoBanner.message="${BANNER_MESSAGE}" \
+          didwebvh-server-py-sandbox didwebvh-server-py/didwebvh-server-py
 
       - name: Rocket.Chat Notification
         uses: RocketChat/Rocket.Chat.GitHub.Action.Notification@1.1.1
