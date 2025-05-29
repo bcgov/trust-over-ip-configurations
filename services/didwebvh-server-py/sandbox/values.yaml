@@ -12,7 +12,7 @@ server:
     repository: ghcr.io/decentralized-identity/didwebvh-server-py
     tag: 0.2.2
     pullPolicy: Always
-  host: "didwebvh-server-py-sandbox.apps.silver.devops.gov.bc.ca"
+  host: "registry-sandbox.apps.silver.devops.gov.bc.ca"
   # This is a public key for the default sandbox witness.
   # It belongs to the ditp-demo-issuer Traction Dev tenant.
   default_witness_key: "z6MkrKBYqpPXXXG6pwsvctvBgTpP6ka5jfjUQWAfvkZ8uMi8"
