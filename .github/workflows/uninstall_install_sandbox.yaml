@@ -101,9 +101,6 @@ jobs:
           traction-sandbox traction/traction
 
       - name: Install DID WebVH Server via Helm
-        # Error: looks like "https://identity.foundation/didwebvh-server-py" is not a valid chart repository 
-        # or cannot be reached: failed to fetch https://identity.foundation/didwebvh-server-py/index.yaml : 403 Forbidden
-        # Using raw gh url as a temporary fix
         run: |
           helm repo add didwebvh-server-py ${{ vars.DIDWEBVH_HELM_REPO_URL }}
           helm upgrade --version 0.2.2 --install \
