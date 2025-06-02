@@ -44,7 +44,7 @@ jobs:
 
       - name: Uninstall DID WebVH Server via Helm
         run: |
-          helm uninstall didwebvh-server-py -n ${{ secrets.OPENSHIFT_NAMESPACE_SANDBOX }} --wait --timeout=20m || true
+          helm uninstall didwebvh-server-py-sandbox -n ${{ secrets.OPENSHIFT_NAMESPACE_SANDBOX }} --wait --timeout=20m || true
 
       - name: Remove DID WebVH Server Openshift Objects
         run: |
@@ -101,9 +101,12 @@ jobs:
           traction-sandbox traction/traction
 
       - name: Install DID WebVH Server via Helm
+        # Error: looks like "https://identity.foundation/didwebvh-server-py" is not a valid chart repository 
+        # or cannot be reached: failed to fetch https://identity.foundation/didwebvh-server-py/index.yaml : 403 Forbidden
+        # Using raw gh url as a temporary fix
         run: |
-          helm repo add didwebvh-server-py https://identity.foundation/didwebvh-server-py
-          helm upgrade --install \
+          helm repo add didwebvh-server-py https://raw.githubusercontent.com/decentralized-identity/didwebvh-server-py/refs/heads/gh-pages
+          helm upgrade --version 0.2.2 --install \
           -n ${{ secrets.OPENSHIFT_NAMESPACE_SANDBOX }} --wait --timeout=7m \
           -f ./services/didwebvh-server-py/sandbox/values.yaml \
           --set ui.ux.infoBanner.message="${BANNER_MESSAGE}" \
