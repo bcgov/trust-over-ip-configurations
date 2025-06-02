@@ -105,7 +105,7 @@ jobs:
         # or cannot be reached: failed to fetch https://identity.foundation/didwebvh-server-py/index.yaml : 403 Forbidden
         # Using raw gh url as a temporary fix
         run: |
-          helm repo add didwebvh-server-py https://raw.githubusercontent.com/decentralized-identity/didwebvh-server-py/refs/heads/gh-pages
+          helm repo add didwebvh-server-py ${{ vars.DIDWEBVH_HELM_REPO_URL }}
           helm upgrade --version 0.2.2 --install \
           -n ${{ secrets.OPENSHIFT_NAMESPACE_SANDBOX }} --wait --timeout=7m \
           -f ./services/didwebvh-server-py/sandbox/values.yaml \
