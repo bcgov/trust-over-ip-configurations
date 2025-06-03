@@ -2,9 +2,9 @@ apiVersion: v2
 name: didwebvh-server-py
 description: didwebvh-server-py - dev
 type: application
-version: 0.0.10
-appVersion: "0.1.1"
+version: 0.0.22
+appVersion: "0.2.0"
 dependencies:
   - name: didwebvh-server-py
-    version: 0.0.10
+    version: 0.0.22
     repository: https://identity.foundation/didwebvh-server-py
