@@ -1,0 +1,8 @@
+apiVersion: postgres-operator.crunchydata.com/v1beta1
+kind: PGUpgrade
+metadata:
+  name: vcauthn-upgrade
+spec:
+  postgresClusterName: vc-authn-oidc-agent-database
+  fromPostgresVersion: 14
+  toPostgresVersion: 16
