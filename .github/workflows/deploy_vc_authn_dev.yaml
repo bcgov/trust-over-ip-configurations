@@ -1,0 +1,52 @@
+name: Deploy vc-authn-oidc
+
+on:
+  workflow_dispatch:
+    inputs:
+      ref:
+        description: 'Branch or full SHA to deploy'
+        required: false
+        default: 'main'
+
+jobs:
+  deploy_dev:
+    name: Deploy to dev
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Checkout acapy-vc-authn-oidc
+        uses: actions/checkout@v4
+        with:
+          repository: openwallet-foundation/acapy-vc-authn-oidc
+          fetch-depth: 0
+          ref: ${{ github.event.inputs.ref }}
+          sparse-checkout: |
+            charts
+          path: acapy-vc-authn-oidc
+
+      - name: Get short SHA
+        id: slug
+        run: |
+          cd acapy-vc-authn-oidc
+          echo "SHORT_SHA=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
+
+      - name: Install OpenShift CLI tools
+        uses: redhat-actions/openshift-tools-installer@v1
+        with:
+          oc: "4.16"
+
+      - name: Authenticate and set context
+        uses: redhat-actions/oc-login@v1
+        with:
+          openshift_server_url: ${{ secrets.OPENSHIFT_SERVER }}
+          openshift_token: ${{ secrets.OPENSHIFT_TOKEN_VC_AUTHN_DEV }}
+          certificate_authority_data: ${{ secrets.OPENSHIFT_CA_CRT }}
+          namespace: ${{ secrets.OPENSHIFT_NAMESPACE_VC_AUTHN_DEV }}
+
+      - name: Deploy vc-authn-oidc to Development
+        run: |
+          cp services/vc-authn-oidc/charts/dev/values.yaml ./dev-values.yaml
+          yq e -i 'del(.vc-authn-oidc) | . *= load("services/vc-authn-oidc/charts/dev/values.yaml").vc-authn-oidc' ./dev-values.yaml
+          helm upgrade --install vc-authn-oidc -f ./dev-values.yaml --set image.tag=sha-${{ steps.slug.outputs.SHORT_SHA }} ./acapy-vc-authn-oidc/charts/vc-authn-oidc --wait

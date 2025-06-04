@@ -1,0 +1,8 @@
+apiVersion: postgres-operator.crunchydata.com/v1beta1
+kind: PGUpgrade
+metadata:
+  name: traction-upgrade
+spec:
+  postgresClusterName: traction-database
+  fromPostgresVersion: 14
+  toPostgresVersion: 16

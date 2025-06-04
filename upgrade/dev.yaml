@@ -1,0 +1,286 @@
+apiVersion: postgres-operator.crunchydata.com/v1beta1
+kind: PostgresCluster
+metadata:
+  annotations:
+    argocd.argoproj.io/tracking-id: bc0192-dev-traction-database:postgres-operator.crunchydata.com/PostgresCluster:bc0192-dev/traction-database
+    kubectl.kubernetes.io/last-applied-configuration: |
+      {"apiVersion":"postgres-operator.crunchydata.com/v1beta1","kind":"PostgresCluster","metadata":{"annotations":{"argocd.argoproj.io/tracking-id":"bc0192-dev-traction-database:postgres-operator.crunchydata.com/PostgresCluster:bc0192-dev/traction-database"},"labels":{"devops.gov.bc.ca/gitops-app-shared":"bc0192-dev-traction-database"},"name":"traction-database","namespace":"bc0192-dev"},"spec":{"backups":{"pgbackrest":{"global":{"repo1-retention-archive":"1","repo1-retention-archive-type":"incr","repo1-retention-diff":"6","repo1-retention-full":"1","repo1-retention-full-type":"count"},"repoHost":{"resources":{"limits":{"cpu":"500m","memory":"1Gi"},"requests":{"cpu":"150m","memory":"256Mi"}}},"repos":[{"name":"repo1","schedules":{"differential":"0 0 * * 1-6","full":"0 0 * * 0","incremental":"30 1,4,12,16,20 * * *"},"volume":{"volumeClaimSpec":{"accessModes":["ReadWriteOnce"],"resources":{"requests":{"storage":"5Gi"}},"storageClassName":"netapp-file-backup"}}}],"sidecars":{"pgbackrest":{"resources":{"limits":{"cpu":"500m","memory":"1Gi"},"requests":{"cpu":"250m","memory":"256Mi"}}}}}},"instances":[{"affinity":{"podAntiAffinity":{"preferredDuringSchedulingIgnoredDuringExecution":[{"podAffinityTerm":{"labelSelector":{"matchLabels":{"postgres-operator.crunchydata.com/cluster":"traction-database","postgres-operator.crunchydata.com/instance-set":"ha"}},"topologyKey":"kubernetes.io/hostname"},"weight":1}]}},"dataVolumeClaimSpec":{"accessModes":["ReadWriteOnce"],"resources":{"requests":{"storage":"5Gi"}},"storageClassName":"netapp-block-standard"},"name":"ha","replicas":2,"resources":{"limits":{"cpu":"500m","memory":"1Gi"},"requests":{"cpu":"100m","memory":"256Mi"}},"sidecars":{"replicaCertCopy":{"resources":{"limits":{"cpu":"100m","memory":"64Mi"},"requests":{"cpu":"1m","memory":"32Mi"}}}}}],"monitoring":{"pgmonitor":{"exporter":{"resources":{"limits":{"cpu":"250m","memory":"128Mi"},"requests":{"cpu":"100m","memory":"64Mi"}}}}},"openshift":true,"patroni":{"dynamicConfiguration":{"postgresql":{"parameters":{"max_connections":500,"max_slot_wal_keep_size":"128MB","max_wal_size":"128MB","min_wal_size":"32MB","shared_buffers":"250MB","wal_buffers":"-1"},"pg_hba":["host all all 0.0.0.0/0 md5","host all all 0.0.0.0/0 trust","host all all ::1/128 trust"]}},"leaderLeaseDurationSeconds":30,"port":8008,"syncPeriodSeconds":10},"port":5432,"postgresVersion":14,"proxy":{"pgBouncer":{"affinity":{"podAntiAffinity":{"preferredDuringSchedulingIgnoredDuringExecution":[{"podAffinityTerm":{"labelSelector":{"matchLabels":{"postgres-operator.crunchydata.com/cluster":"traction-database","postgres-operator.crunchydata.com/role":"pgbouncer"}},"topologyKey":"kubernetes.io/hostname"},"weight":1}]}},"config":{"global":{"client_tls_sslmode":"disable"}},"port":5432,"replicas":1,"resources":{"limits":{"cpu":"50m","memory":"128Mi"},"requests":{"cpu":"1m","memory":"64Mi"}}}},"userInterface":{"pgAdmin":{"dataVolumeClaimSpec":{"accessModes":["ReadWriteOnce"],"resources":{"requests":{"storage":"1Gi"}}}}},"users":[{"name":"acapy","options":"CREATEDB CREATEROLE"},{"name":"walletman","options":"CREATEDB CREATEROLE"},{"name":"pgadmin","options":"SUPERUSER"}]}}
+  creationTimestamp: "2023-10-23T16:20:00Z"
+  finalizers:
+    - postgres-operator.crunchydata.com/finalizer
+  generation: 16
+  labels:
+    devops.gov.bc.ca/gitops-app-shared: bc0192-dev-traction-database
+  name: traction-database
+  namespace: bc0192-dev
+spec:
+  shutdown: false
+  backups:
+    pgbackrest:
+      manual:
+        repoName: repo1
+        options:
+          - --type=full
+      global:
+        repo1-retention-archive: "1"
+        repo1-retention-archive-type: incr
+        repo1-retention-diff: "6"
+        repo1-retention-full: "1"
+        repo1-retention-full-type: count
+      repoHost:
+        resources:
+          limits:
+            cpu: 500m
+            memory: 1Gi
+          requests:
+            cpu: 150m
+            memory: 256Mi
+      repos:
+        - name: repo1
+          schedules:
+            differential: 0 0 * * 1-6
+            full: 0 0 * * 0
+            incremental: 30 1,4,12,16,20 * * *
+          volume:
+            volumeClaimSpec:
+              accessModes:
+                - ReadWriteOnce
+              resources:
+                requests:
+                  storage: 5Gi
+              storageClassName: netapp-file-backup
+      sidecars:
+        pgbackrest:
+          resources:
+            limits:
+              cpu: 500m
+              memory: 1Gi
+            requests:
+              cpu: 250m
+              memory: 256Mi
+  instances:
+    - affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - podAffinityTerm:
+                labelSelector:
+                  matchLabels:
+                    postgres-operator.crunchydata.com/cluster: traction-database
+                    postgres-operator.crunchydata.com/instance-set: ha
+                topologyKey: kubernetes.io/hostname
+              weight: 1
+      dataVolumeClaimSpec:
+        accessModes:
+          - ReadWriteOnce
+        resources:
+          requests:
+            storage: 5Gi
+        storageClassName: netapp-block-standard
+      name: ha
+      replicas: 2
+      resources:
+        limits:
+          cpu: 500m
+          memory: 1Gi
+        requests:
+          cpu: 100m
+          memory: 256Mi
+      sidecars:
+        replicaCertCopy:
+          resources:
+            limits:
+              cpu: 100m
+              memory: 64Mi
+            requests:
+              cpu: 1m
+              memory: 32Mi
+  monitoring:
+    pgmonitor:
+      exporter:
+        resources:
+          limits:
+            cpu: 250m
+            memory: 128Mi
+          requests:
+            cpu: 100m
+            memory: 64Mi
+  openshift: true
+  patroni:
+    dynamicConfiguration:
+      postgresql:
+        parameters:
+          max_connections: 500
+          max_slot_wal_keep_size: 128MB
+          max_wal_size: 128MB
+          min_wal_size: 32MB
+          shared_buffers: 250MB
+          wal_buffers: "-1"
+        pg_hba:
+          - host all all 0.0.0.0/0 md5
+          - host all all 0.0.0.0/0 trust
+          - host all all ::1/128 trust
+    leaderLeaseDurationSeconds: 30
+    port: 8008
+    syncPeriodSeconds: 10
+  port: 5432
+  postgresVersion: 16
+  proxy:
+    pgBouncer:
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - podAffinityTerm:
+                labelSelector:
+                  matchLabels:
+                    postgres-operator.crunchydata.com/cluster: traction-database
+                    postgres-operator.crunchydata.com/role: pgbouncer
+                topologyKey: kubernetes.io/hostname
+              weight: 1
+      config:
+        global:
+          client_tls_sslmode: disable
+      port: 5432
+      replicas: 1
+      resources:
+        limits:
+          cpu: 50m
+          memory: 128Mi
+        requests:
+          cpu: 1m
+          memory: 64Mi
+  userInterface:
+    pgAdmin:
+      dataVolumeClaimSpec:
+        accessModes:
+          - ReadWriteOnce
+        resources:
+          requests:
+            storage: 1Gi
+      replicas: 1
+  users:
+    - name: acapy
+      options: CREATEDB CREATEROLE
+    - name: walletman
+      options: CREATEDB CREATEROLE
+    - name: pgadmin
+      options: SUPERUSER
+status:
+  conditions:
+    - lastTransitionTime: "2024-09-24T20:31:19Z"
+      message: pgBackRest dedicated repository host is ready
+      observedGeneration: 16
+      reason: RepoHostReady
+      status: "True"
+      type: PGBackRestRepoHostReady
+    - lastTransitionTime: "2024-04-16T14:08:58Z"
+      message: Status is missing for the replica creation repo
+      observedGeneration: 16
+      reason: RepoStatusMissing
+      status: Unknown
+      type: PGBackRestReplicaRepoReady
+    - lastTransitionTime: "2024-04-16T14:08:58Z"
+      message: Status is missing for the replica create repo
+      observedGeneration: 16
+      reason: RepoStatusMissing
+      status: Unknown
+      type: PGBackRestReplicaCreate
+    - lastTransitionTime: "2024-09-18T16:33:51Z"
+      message: Deployment has minimum availability.
+      observedGeneration: 16
+      reason: MinimumReplicasAvailable
+      status: "True"
+      type: ProxyAvailable
+    - lastTransitionTime: "2024-11-19T03:49:09Z"
+      message: One or more volumes cannot be resized
+      observedGeneration: 16
+      reason: Invalid
+      status: "False"
+      type: PersistentVolumeResizing
+  databaseRevision: 559678bf8f
+  instances:
+    - name: ha
+      readyReplicas: 2
+      replicas: 2
+      updatedReplicas: 2
+  monitoring:
+    exporterConfiguration: 778f7b7499
+  observedGeneration: 16
+  patroni:
+    systemIdentifier: "7293189632169922641"
+  pgbackrest:
+    repoHost:
+      apiVersion: apps/v1
+      kind: StatefulSet
+      ready: true
+    scheduledBackups:
+      - completionTime: "2024-11-16T00:04:38Z"
+        cronJobName: traction-database-repo1-diff
+        failed: 4
+        repo: repo1
+        startTime: "2024-11-16T00:00:02Z"
+        succeeded: 1
+        type: diff
+      - completionTime: "2024-11-18T00:08:23Z"
+        cronJobName: traction-database-repo1-diff
+        failed: 5
+        repo: repo1
+        startTime: "2024-11-18T00:00:02Z"
+        succeeded: 1
+        type: diff
+      - completionTime: "2024-11-19T00:07:20Z"
+        cronJobName: traction-database-repo1-diff
+        failed: 5
+        repo: repo1
+        startTime: "2024-11-19T00:00:02Z"
+        succeeded: 1
+        type: diff
+      - completionTime: "2024-11-16T08:00:39Z"
+        cronJobName: traction-database-repo1-full
+        repo: repo1
+        startTime: "2024-11-16T08:00:00Z"
+        succeeded: 1
+        type: full
+      - completionTime: "2024-11-17T08:02:09Z"
+        cronJobName: traction-database-repo1-full
+        repo: repo1
+        startTime: "2024-11-17T08:00:01Z"
+        succeeded: 1
+        type: full
+      - completionTime: "2024-11-18T08:03:09Z"
+        cronJobName: traction-database-repo1-full
+        repo: repo1
+        startTime: "2024-11-18T08:00:01Z"
+        succeeded: 1
+        type: full
+      - cronJobName: traction-database-repo1-incr
+        failed: 7
+        repo: repo1
+        startTime: "2024-08-19T20:00:00Z"
+        type: incr
+      - completionTime: "2024-11-18T16:01:58Z"
+        cronJobName: traction-database-repo1-incr
+        repo: repo1
+        startTime: "2024-11-18T16:00:00Z"
+        succeeded: 1
+        type: incr
+      - completionTime: "2024-11-18T20:01:53Z"
+        cronJobName: traction-database-repo1-incr
+        repo: repo1
+        startTime: "2024-11-18T20:00:00Z"
+        succeeded: 1
+        type: incr
+      - completionTime: "2024-11-19T00:02:59Z"
+        cronJobName: traction-database-repo1-incr
+        repo: repo1
+        startTime: "2024-11-19T00:00:01Z"
+        succeeded: 1
+        type: incr
+  proxy:
+    pgBouncer:
+      postgresRevision: 7cb6b9777d
+      readyReplicas: 1
+      replicas: 1
+  userInterface:
+    pgAdmin:
+      usersRevision: 676984b7c7
+  usersRevision: fdd77878
