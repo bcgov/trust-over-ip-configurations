@@ -13,7 +13,7 @@ on:
 jobs:
   uninstall_sandbox:
     if: (github.repository == 'bcgov/trust-over-ip-configurations') || (github.event_name == 'workflow_dispatch')
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
 
     steps:
       - name: Checkout Repository
@@ -22,7 +22,11 @@ jobs:
       - name: Run Your Job
         run: |
           echo "This job runs biweekly on 1st and 15th of every month at 2:00 AM PST"
-
+      
+      - name: Install OpenShift CLI tools
+        uses: redhat-actions/openshift-tools-installer@v1
+        with:
+          oc: "4.14"
       - name: Authenticate and set context
         uses: redhat-actions/oc-login@v1
         with:
@@ -37,6 +41,14 @@ jobs:
       - name: Remove Traction Openshift Objects
         run: |
           oc delete -n ${{ secrets.OPENSHIFT_NAMESPACE_SANDBOX }} all,secret,pod,networkpolicy,configmap,pvc --selector "app.kubernetes.io/instance"=traction-sandbox
+
+      - name: Uninstall DID WebVH Server via Helm
+        run: |
+          helm uninstall didwebvh-server-py-sandbox -n ${{ secrets.OPENSHIFT_NAMESPACE_SANDBOX }} --wait --timeout=20m || true
+
+      - name: Remove DID WebVH Server Openshift Objects
+        run: |
+          oc delete -n ${{ secrets.OPENSHIFT_NAMESPACE_SANDBOX }} all,secret,pod,networkpolicy,configmap,pvc --selector "app.kubernetes.io/instance"=didwebvh-server-py-sandbox
 
       - name: Rocket.Chat Notification
         uses: RocketChat/Rocket.Chat.GitHub.Action.Notification@1.1.1
@@ -54,7 +66,7 @@ jobs:
     name: Install Sandbox
     if: (github.repository == 'bcgov/trust-over-ip-configurations') || (github.event_name == 'workflow_dispatch')
     needs: uninstall_sandbox
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
 
     steps:
       - name: Checkout Repository
@@ -63,6 +75,11 @@ jobs:
       - name: Run Your Job
         run: |
           echo "This job runs biweekly on 1st and 15th of every month at 2:00 AM PST"
+      
+      - name: Install OpenShift CLI tools
+        uses: redhat-actions/openshift-tools-installer@v1
+        with:
+          oc: "4.14"
 
       - name: Authenticate and set context
         uses: redhat-actions/oc-login@v1
@@ -82,6 +99,15 @@ jobs:
           -f ./services/traction/sandbox/values.yaml \
           --set ui.ux.infoBanner.message="${BANNER_MESSAGE}" \
           traction-sandbox traction/traction
+
+      - name: Install DID WebVH Server via Helm
+        run: |
+          helm repo add didwebvh-server-py ${{ vars.DIDWEBVH_HELM_REPO_URL }}
+          helm upgrade --version 0.2.2 --install \
+          -n ${{ secrets.OPENSHIFT_NAMESPACE_SANDBOX }} --wait --timeout=7m \
+          -f ./services/didwebvh-server-py/sandbox/values.yaml \
+          --set ui.ux.infoBanner.message="${BANNER_MESSAGE}" \
+          didwebvh-server-py-sandbox didwebvh-server-py/didwebvh-server-py
 
       - name: Rocket.Chat Notification
         uses: RocketChat/Rocket.Chat.GitHub.Action.Notification@1.1.1
