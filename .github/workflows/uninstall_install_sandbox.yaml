@@ -103,7 +103,7 @@ jobs:
       - name: Install DID WebVH Server via Helm
         run: |
           helm repo add didwebvh-server-py ${{ vars.DIDWEBVH_HELM_REPO_URL }}
-          helm upgrade --version 0.2.2 --install \
+          helm upgrade --install \
           -n ${{ secrets.OPENSHIFT_NAMESPACE_SANDBOX }} --wait --timeout=7m \
           -f ./services/didwebvh-server-py/sandbox/values.yaml \
           --set ui.ux.infoBanner.message="${BANNER_MESSAGE}" \
