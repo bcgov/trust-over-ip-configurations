@@ -15,6 +15,7 @@ server:
   host: "registry-sandbox.apps.silver.devops.gov.bc.ca"
   # This is a public key for the default sandbox witness.
   # It belongs to the ditp-demo-issuer Traction Dev tenant.
+  # Once endorser service is setup for webvh, we will update this value
   default_witness_key: "z6MkrKBYqpPXXXG6pwsvctvBgTpP6ka5jfjUQWAfvkZ8uMi8"
   autoscaling:
     enabled: true

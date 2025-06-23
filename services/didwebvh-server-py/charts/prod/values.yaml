@@ -17,6 +17,7 @@ server:
     tag: 0.2.2
     pullPolicy: Always
   host: "registry.digitaltrust.gov.bc.ca"
+  default_witness_key: null
   autoscaling:
     enabled: true
     minReplicas: 1
