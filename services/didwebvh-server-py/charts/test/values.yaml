@@ -1,46 +1,48 @@
 ---
-ingress:
-  annotations:
-    route.openshift.io/termination: edge
-  tls:
-    - secretName: webvh-server-tls
-      hosts:
-        - registry-test.digitaltrust.gov.bc.ca
-networkPolicy:
+didwebvh-server-py:
   ingress:
-    namespaceSelector:
-      network.openshift.io/policy-group: ingress
-
-server:
-  image:
-    repository: ghcr.io/decentralized-identity/didwebvh-server-py
-    tag: 0.2.2
-    pullPolicy: Always
-  host: "registry-test.digitaltrust.gov.bc.ca"
-  autoscaling:
-    enabled: true
-    minReplicas: 1
-    maxReplicas: 3
-    targetCPUUtilizationPercentage: 80
-    targetMemoryUtilizationPercentage: 80
-    stabilizationWindowSeconds: 300
-  resources:
-    limits:
-      cpu: 250m
-      memory: 512Mi
-    requests:
-      cpu: 50m
-      memory: 128Mi
+    annotations:
+      route.openshift.io/termination: edge
+    tls:
+      - secretName: webvh-server-tls
+        hosts:
+          - registry-test.digitaltrust.gov.bc.ca
   networkPolicy:
-    enabled: true
     ingress:
-      enabled: true
       namespaceSelector:
         network.openshift.io/policy-group: ingress
-postgresql:
-  commonLabels:
-    backup: "true"
-    env: test
-  primary:
-    persistence:
-      size: 5Gi
+
+  server:
+    image:
+      repository: ghcr.io/decentralized-identity/didwebvh-server-py
+      tag: 0.2.2
+      pullPolicy: Always
+    host: "registry-test.digitaltrust.gov.bc.ca"
+    default_witness_key: ""
+    autoscaling:
+      enabled: true
+      minReplicas: 1
+      maxReplicas: 3
+      targetCPUUtilizationPercentage: 80
+      targetMemoryUtilizationPercentage: 80
+      stabilizationWindowSeconds: 300
+    resources:
+      limits:
+        cpu: 250m
+        memory: 512Mi
+      requests:
+        cpu: 50m
+        memory: 128Mi
+    networkPolicy:
+      enabled: true
+      ingress:
+        enabled: true
+        namespaceSelector:
+          network.openshift.io/policy-group: ingress
+  postgresql:
+    commonLabels:
+      backup: "true"
+      env: test
+    primary:
+      persistence:
+        size: 5Gi
