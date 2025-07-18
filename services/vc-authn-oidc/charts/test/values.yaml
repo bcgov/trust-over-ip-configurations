@@ -11,12 +11,12 @@ vc-authn-oidc:
   useOobPresentProof: true
   useOobLocalDIDService: false
   useUrlDeepLink: true
-  
+
   controller:
     cameraRedirectUrl: wallet_howto
     presentationExpireTime: 300
     templateDirectory: /app/templates
-  
+
   useHTTPS: true
   logLevel: INFO
 
@@ -105,6 +105,7 @@ vc-authn-oidc:
         genesis_url: "http://test.bcovrin.vonx.io/genesis"
       - id: CANdyTest
         is_production: true
+        is_write: true
         genesis_url: "https://raw.githubusercontent.com/ICCS-ISAC/dtrust-reconu/main/CANdy/test/pool_transactions_genesis"
       - id: CANdyProd
         is_production: true
