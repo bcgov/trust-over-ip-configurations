@@ -3,19 +3,19 @@ vc-authn-oidc:
   image:
     repository: ghcr.io/bcgov/acapy-vc-authn-oidc
     pullPolicy: IfNotPresent
-  
+
   acapyTenancyMode: single
   setNonRevoked: true
   invitationLabel: BC Gov SSO Service (Dev)
   useOobPresentProof: true
   useOobLocalDIDService: false
   useUrlDeepLink: true
-  
+
   controller:
     cameraRedirectUrl: wallet_howto
     presentationExpireTime: 300
     templateDirectory: /app/templates
-  
+
   useHTTPS: true
   logLevel: INFO
 
@@ -89,6 +89,7 @@ vc-authn-oidc:
       - id: CANdyDev
         is_production: true
         genesis_url: "https://raw.githubusercontent.com/ICCS-ISAC/dtrust-reconu/main/CANdy/dev/pool_transactions_genesis"
+        is_write: true
       - id: CANdyProd
         is_production: true
         genesis_url: "https://raw.githubusercontent.com/ICCS-ISAC/dtrust-reconu/main/CANdy/prod/pool_transactions_genesis"
