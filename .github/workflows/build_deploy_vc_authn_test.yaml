@@ -71,8 +71,6 @@ jobs:
       - name: Create PR
         uses: peter-evans/create-pull-request@v7
         with:
-          author: ${{ github.actor }} <${{ github.event.pusher.email }}>
-          committer: ${{ github.actor }} <${{ github.event.pusher.email }}>
           signoff: true
           commit-message: "ci: bump versions"
           title: "[bot] Update VC-AuthN Chart and Image Tag"
