@@ -81,5 +81,7 @@ jobs:
           base: main
           branch: update-vc-authn-chart-${{ needs.build_image.outputs.image_version }}
           add-paths: |
-            services/vc-authn-oidc/charts/test/
-            services/vc-authn-oidc/charts/prod/
+            services/vc-authn-oidc/charts/test/values.yaml
+            services/vc-authn-oidc/charts/test/Chart.yaml
+            services/vc-authn-oidc/charts/prod/values.yaml
+            services/vc-authn-oidc/charts/prod/Chart.yaml
