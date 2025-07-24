@@ -42,6 +42,7 @@ jobs:
           app-id: ${{ vars.TEAM_CDT_GITHUB_APP_ID }}
           private-key: ${{ secrets.TEAM_CDT_GITHUB_APP_PRIVATE_KEY }}
           owner: ${{ github.repository_owner }}
+          repositories: ${{ github.event.repository.name }}
 
       - uses: actions/checkout@v4
         with:
