@@ -1,0 +1,5 @@
+fullnameOverride: mediator-credo-db
+
+auth:
+  username: mediator
+  database: mediator
