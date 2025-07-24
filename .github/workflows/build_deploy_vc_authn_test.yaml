@@ -36,7 +36,15 @@ jobs:
     needs:
       - build_image
     steps:
+      - uses: actions/create-github-app-token@v2
+        id: app-token
+        with:
+          app-id: ${{ vars.TEAM_CDT_GITHUB_APP_ID }}
+          private-key: ${{ secrets.TEAM_CDT_GITHUB_APP_PRIVATE_KEY }}
+
       - uses: actions/checkout@v4
+        with:
+          token: ${{ steps.app-token.outputs.token }}
 
       - name: Lookup latest chart
         id: chart_version
@@ -92,4 +100,3 @@ jobs:
           token: ${{ secrets.DITP_GITOPS_ARGO_SECRET}}
           action: sync
           appName: "e79518-test-vc-authn-oidc"
- 
