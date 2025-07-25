@@ -15,7 +15,8 @@ vc-authn-oidc:
     cameraRedirectUrl: wallet_howto
     presentationExpireTime: 300
     templateDirectory: /app/templates
-
+    useConnectionBasedVerification: true
+  
   useHTTPS: true
   logLevel: INFO
 
