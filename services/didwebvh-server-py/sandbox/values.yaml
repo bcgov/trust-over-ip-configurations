@@ -10,13 +10,22 @@ networkPolicy:
 server:
   image:
     repository: ghcr.io/decentralized-identity/didwebvh-server-py
-    tag: 0.2.2
+    tag: 0.3.2
     pullPolicy: Always
   host: "registry-sandbox.apps.silver.devops.gov.bc.ca"
+  workers: "4"
+  policies:
+    webvh_version: "1.0"
+    webvh_witness: "true"
+    webvh_watcher: ""
+    webvh_prerotation: "false"
+    webvh_portability: "false"
+    webvh_endorsement: "true"
+
   # This is a public key for the default sandbox witness.
   # It belongs to the ditp-demo-issuer Traction Dev tenant.
   # Once endorser service is setup for webvh, we will update this value
-  default_witness_key: "z6MkrKBYqpPXXXG6pwsvctvBgTpP6ka5jfjUQWAfvkZ8uMi8"
+  known_witness_key: "did:key:z6Mkv4HY4FAN618A5nybAaySNyvgVVTbCE2ERA2UWkrHWuvQ"
   autoscaling:
     enabled: true
     minReplicas: 1
