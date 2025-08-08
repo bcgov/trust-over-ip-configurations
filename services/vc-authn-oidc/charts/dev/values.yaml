@@ -12,6 +12,15 @@ vc-authn-oidc:
   controller:
     cameraRedirectUrl: wallet_howto
     presentationExpireTime: 300
+    sessionTimeout:
+      duration: 86400
+      config:
+        - expired
+        - failed
+        - abandoned
+        - not_started
+        - pending
+        - verified
     templateDirectory: /app/templates
     useConnectionBasedVerification: true
   
