@@ -1,7 +1,7 @@
 # This sets the container image more information can be found here: https://kubernetes.io/docs/concepts/containers/images/
 image:
   # Overrides the image tag whose default is the chart appVersion.
-  tag: "00ec3b9"
+  tag: "562620f"
 
 # This block is for setting up the ingress for more information can be found here: https://kubernetes.io/docs/concepts/services-networking/ingress/
 ingress:
@@ -32,6 +32,13 @@ networkPolicy:
     # network.openshift.io/policy-group: ingress
     podSelector: {}
 
+resources:
+  limits:
+    memory: 2Gi
+  requests:
+    cpu: 100m
+    memory: 256Mi
+
 environment:
   # This is for setting up environment variables more information can be found here: https://kubernetes.io/docs/concepts/configuration/overview/
   - name: AGENT_PORT
@@ -60,6 +67,13 @@ environment:
       secretKeyRef:
         name: mediator-credo-db
         key: postgres-password
+
+autoscaling:
+  enabled: true
+  minReplicas: 2
+  maxReplicas: 6
+  targetCPUUtilizationPercentage: 80
+  targetMemoryUtilizationPercentage: 80
 
 postgresql:
   commonLabels:
