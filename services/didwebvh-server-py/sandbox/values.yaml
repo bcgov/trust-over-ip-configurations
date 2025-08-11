@@ -25,7 +25,7 @@ server:
   # This is a public key for the default sandbox witness.
   # It belongs to the ditp-demo-issuer Traction Dev tenant.
   # Once endorser service is setup for webvh, we will update this value
-  known_witness_key: "did:key:z6Mkv4HY4FAN618A5nybAaySNyvgVVTbCE2ERA2UWkrHWuvQ"
+  known_witness_key: "z6Mkv4HY4FAN618A5nybAaySNyvgVVTbCE2ERA2UWkrHWuvQ"
   autoscaling:
     enabled: true
     minReplicas: 1
