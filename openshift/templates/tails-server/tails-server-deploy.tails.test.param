@@ -10,7 +10,6 @@
 # ROLE=tails
 APPLICATION_DOMAIN=tails-server-test.apps.silver.devops.gov.bc.ca
 # ROUTE_TIMEOUT=120s
-# IMAGE_NAMESPACE=e79518-tools
 TAG_NAME=test
 # LOG_LEVEL=WARNING
 # PORT=6543
