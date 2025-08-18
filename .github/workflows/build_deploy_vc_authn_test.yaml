@@ -14,7 +14,7 @@ jobs:
     runs-on: ubuntu-latest
     if: github.repository_owner == 'bcgov'
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Build VC-AuthN
         uses: ./.github/actions/build_image
         id: builder
@@ -44,7 +44,7 @@ jobs:
           owner: ${{ github.repository_owner }}
           repositories: ${{ github.event.repository.name }}
 
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           token: ${{ steps.app-token.outputs.token }}
 
