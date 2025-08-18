@@ -91,7 +91,7 @@ vc-authn-oidc:
       wallet-name: askar-wallet
       wallet-storage-type: postgres_storage
       wallet-type: askar
-      webhook-url: 'https://{{ include "vc-authn-oidc.host" . }}/webhooks'
+      webhook-url: https://vc-authn-oidc-dev.apps.silver.devops.gov.bc.ca/webhooks
     ledgers.yml:
       - id: BCovrinTest
         is_production: true
