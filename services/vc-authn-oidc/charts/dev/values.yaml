@@ -62,11 +62,14 @@ vc-authn-oidc:
   acapy:
     image:
       pullPolicy: IfNotPresent
-    existingSecret: "vc-authn-oidc-acapy-secret"
-    agentSeed:
-      existingSecret: "vc-authn-oidc-agent"
+    existingSecret: "vc-authn-oidc-acapy-api"
+
     walletStorageCredentials:
       existingSecret: "vc-authn-oidc-postgresql"
+
+    agentUrl: "https://vc-authn-oidc-acapy-dev.apps.silver.devops.gov.bc.ca"
+    adminUrl: "https://vc-authn-oidc-acapy-admin-dev.apps.silver.devops.gov.bc.ca"
+
     autoscaling:
       enabled: true
       minReplicas: 1
