@@ -75,8 +75,8 @@ objects:
         name: ${NAME}${SUFFIX}
         weight: 100
 
-  - kind: DeploymentConfig
-    apiVersion: v1
+  - kind: Deployment
+    apiVersion: apps/v1
     metadata:
       name: ${NAME}${SUFFIX}
       labels:
@@ -124,7 +124,7 @@ objects:
                   value: ${STORAGE_PATH}
                 - name: SERVER_LOG_LEVEL
                   value: ${LOG_LEVEL}
-              image:
+              image: ghcr.io/bcgov/tails-server:1.2.1
               ports:
                 - containerPort: ${{PORT}}
                   protocol: TCP
@@ -158,17 +158,6 @@ objects:
           schedulerName: default-scheduler
           securityContext: {}
           terminationGracePeriodSeconds: 30
-      triggers:
-        - type: ConfigChange
-        - type: ImageChange
-          imageChangeParams:
-            automatic: true
-            containerNames:
-              - ${NAME}${SUFFIX}
-            from:
-              kind: ImageStreamTag
-              name: ${NAME}:${TAG_NAME}
-              namespace: ${IMAGE_NAMESPACE}
 
   - kind: HorizontalPodAutoscaler
     apiVersion: autoscaling/v1
@@ -183,7 +172,7 @@ objects:
         env: ${TAG_NAME}
     spec:
       scaleTargetRef:
-        kind: DeploymentConfig
+        kind: Deployment
         name: ${NAME}${SUFFIX}
       minReplicas: ${{MIN_REPLICAS}}
       maxReplicas: ${{MAX_REPLICAS}}
@@ -243,10 +232,6 @@ parameters:
     description: The timeout for the application route.  When this timeout is exceeded the application's route will respond with a 504 Gateway Timeout error.
     required: true
     value: 120s
-  - name: IMAGE_NAMESPACE
-    displayName: Namespace containing application images.
-    required: true
-    value: e79518-tools
   - name: TAG_NAME
     displayName: Environment TAG name
     description: The TAG name for this environment, e.g., dev, test, prod.
