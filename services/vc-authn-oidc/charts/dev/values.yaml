@@ -1,7 +1,10 @@
-vc-authn-oidc:
+global:
   ingressSuffix: -dev.apps.silver.devops.gov.bc.ca
+
+vc-authn-oidc:
   image:
-    repository: ghcr.io/bcgov/acapy-vc-authn-oidc
+    registry: ghcr.io
+    repository: bcgov/acapy-vc-authn-oidc
     pullPolicy: IfNotPresent
 
   acapyTenancyMode: single
@@ -23,7 +26,7 @@ vc-authn-oidc:
         - verified
     templateDirectory: /app/templates
     useConnectionBasedVerification: true
-  
+
   useHTTPS: true
   logLevel: INFO
 
@@ -127,9 +130,3 @@ vc-authn-oidc:
     livenessProbe:
       enabled: true
       timeoutSeconds: 10
-  postgresql:
-    auth:
-      existingSecret: "vc-authn-oidc-postgresql"
-    primary:
-      persistence:
-        size: 5Gi
