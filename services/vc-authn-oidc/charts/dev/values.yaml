@@ -67,8 +67,8 @@ vc-authn-oidc:
     walletStorageCredentials:
       existingSecret: "vc-authn-oidc-postgresql"
 
-    agentUrl: "https://vc-authn-oidc-acapy-dev.apps.silver.devops.gov.bc.ca"
-    adminUrl: "https://vc-authn-oidc-acapy-admin-dev.apps.silver.devops.gov.bc.ca"
+    agentUrl: vc-authn-oidc-acapy-dev.apps.silver.devops.gov.bc.ca
+    adminUrl: vc-authn-oidc-acapy-admin-dev.apps.silver.devops.gov.bc.ca
 
     autoscaling:
       enabled: true
