@@ -62,14 +62,10 @@ vc-authn-oidc:
   acapy:
     image:
       pullPolicy: IfNotPresent
-    existingSecret: "vc-authn-oidc-acapy-api"
-
     walletStorageCredentials:
       existingSecret: "vc-authn-oidc-postgresql"
-
-    agentUrl: vc-authn-oidc-acapy-dev.apps.silver.devops.gov.bc.ca
-    adminUrl: vc-authn-oidc-acapy-admin-dev.apps.silver.devops.gov.bc.ca
-
+    agentUrl: "https://vc-authn-oidc-acapy-dev.apps.silver.devops.gov.bc.ca"
+    adminUrl: "https://vc-authn-oidc-acapy-admin-dev.apps.silver.devops.gov.bc.ca"
     autoscaling:
       enabled: true
       minReplicas: 1
@@ -95,6 +91,7 @@ vc-authn-oidc:
       wallet-storage-type: postgres_storage
       wallet-type: askar
       webhook-url: https://vc-authn-oidc-dev.apps.silver.devops.gov.bc.ca/webhooks
+
     ledgers.yml:
       - id: BCovrinTest
         is_production: true
@@ -111,10 +108,14 @@ vc-authn-oidc:
         genesis_url: "https://raw.githubusercontent.com/ICCS-ISAC/dtrust-reconu/main/CANdy/prod/pool_transactions_genesis"
     networkPolicy:
       enabled: true
-      ingress:
-        enabled: true
-        namespaceSelector:
-          network.openshift.io/policy-group: ingress
+
+    persistence:
+      enabled: true
+      storageClass: "netapp-file-standard"
+      accessModes:
+        - ReadWriteOnce
+      size: 1Gi
+
   mongodb:
     auth:
       existingSecret: "vc-authn-oidc-mongodb"
@@ -132,3 +133,4 @@ vc-authn-oidc:
     livenessProbe:
       enabled: true
       timeoutSeconds: 10
+
