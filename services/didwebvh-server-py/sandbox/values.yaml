@@ -2,6 +2,11 @@
 ingress:
   annotations:
     route.openshift.io/termination: edge
+  labels:
+    certbot-managed: "true"
+  tls:
+    - hosts: [sandbox.bcvh.vonx.io]
+      secretName: "sandbox-bcvh-tls"
 networkPolicy:
   ingress:
     namespaceSelector:
@@ -12,16 +17,15 @@ server:
     repository: ghcr.io/decentralized-identity/didwebvh-server-py
     tag: 0.3.2
     pullPolicy: Always
-  host: "registry-sandbox.apps.silver.devops.gov.bc.ca"
+  host: "sandbox.bcvh.vonx.io"
   workers: "4"
   policies:
     webvh_version: "1.0"
-    webvh_witness: "true"
+    webvh_witness: "false"
     webvh_watcher: ""
     webvh_prerotation: "false"
     webvh_portability: "false"
-    webvh_endorsement: "true"
-
+    webvh_endorsement: "false"
   # This is a public key for the default sandbox witness.
   # It belongs to the ditp-demo-issuer Traction Dev tenant.
   # Once endorser service is setup for webvh, we will update this value
