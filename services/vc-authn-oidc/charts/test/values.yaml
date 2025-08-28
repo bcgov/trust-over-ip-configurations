@@ -23,7 +23,7 @@ vc-authn-oidc:
         - pending
         - verified
     templateDirectory: /app/templates
-    useConnectionBasedVerification: false
+    useConnectionBasedVerification: true
   
   useHTTPS: true
   logLevel: INFO
