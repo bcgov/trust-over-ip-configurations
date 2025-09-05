@@ -92,7 +92,7 @@ jobs:
         with:
           owner: bcgov
           repo: trust-over-ip-configurations
-          github_token: ${{ secrets.DITP_CONFIGS_REPO_TOKEN }}
+          github_token: ${{ steps.app-token.outputs.token }}
           workflow_file_name: gitops_sync.yaml
 
       - name: Trigger ArgoCD Sync of e79518-test-vc-authn-oidc
