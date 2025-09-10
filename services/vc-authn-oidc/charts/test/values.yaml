@@ -72,10 +72,14 @@ vc-authn-oidc:
     image:
       pullPolicy: IfNotPresent
 
-    agentUrl: "https://vc-authn-oidc-acapy-test.apps.silver.devops.gov.bc.ca"
-    adminUrl: "https://vc-authn-oidc-acapy-admin-test.apps.silver.devops.gov.bc.ca"
+    agentUrl: "https://vc-authn-oidc-agent-test.apps.silver.devops.gov.bc.ca"
+    adminUrl: "https://vc-authn-oidc-agent-admin-test.apps.silver.devops.gov.bc.ca"
 
-    existingSecret: "vc-authn-oidc-acapy-secret"
+    secrets:
+      api:
+        existingSecret: "vc-authn-oidc-agent-api"
+      seed:
+        existingSecret: "vc-authn-oidc-agent-seed"
 
     walletStorageConfig:
       url: vc-authn-oidc-agent-database-primary:5432
