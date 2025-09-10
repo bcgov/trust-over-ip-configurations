@@ -1,8 +1,12 @@
-vc-authn-oidc:
+global:
   ingressSuffix: -test.apps.silver.devops.gov.bc.ca
+  security:
+    allowInsecureImages: true
 
+vc-authn-oidc:
   image:
-    repository: ghcr.io/bcgov/acapy-vc-authn-oidc
+    registry: ghcr.io
+    repository: bcgov/acapy-vc-authn-oidc
     pullPolicy: IfNotPresent
 
   acapyTenancyMode: single
@@ -24,7 +28,7 @@ vc-authn-oidc:
         - verified
     templateDirectory: /app/templates
     useConnectionBasedVerification: true
-  
+
   useHTTPS: true
   logLevel: INFO
 
@@ -64,12 +68,15 @@ vc-authn-oidc:
       route.openshift.io/termination: edge
 
   acapy:
+    nameOverride: agent
     image:
       pullPolicy: IfNotPresent
 
+    agentUrl: "https://vc-authn-oidc-acapy-test.apps.silver.devops.gov.bc.ca"
+    adminUrl: "https://vc-authn-oidc-acapy-admin-test.apps.silver.devops.gov.bc.ca"
+
     existingSecret: "vc-authn-oidc-acapy-secret"
-    agentSeed:
-      existingSecret: "vc-authn-oidc-agent"
+
     walletStorageConfig:
       url: vc-authn-oidc-agent-database-primary:5432
     walletStorageCredentials:
@@ -95,7 +102,6 @@ vc-authn-oidc:
       auto-respond-messages: true
       auto-verify-presentation: true
       genesis-transactions-list: /tmp/ledgers.yml
-      label: '{{ include "acapy.label" .}}'
       log-level: info
       monitor-ping: true
       multitenant-admin: false
@@ -105,7 +111,7 @@ vc-authn-oidc:
       wallet-name: askar-wallet
       wallet-storage-type: postgres_storage
       wallet-type: askar
-      webhook-url: 'https://{{ include "vc-authn-oidc.host" . }}/webhooks'
+      webhook-url: https://vc-authn-oidc-test.apps.silver.devops.gov.bc.ca/webhooks
 
     ledgers.yml:
       - id: BCovrinTest
@@ -125,7 +131,16 @@ vc-authn-oidc:
         enabled: true
         namespaceSelector:
           network.openshift.io/policy-group: ingress
+
+    postgresql:
+      enabled: false
+
   mongodb:
+    image:
+      registry: artifacts.developer.gov.bc.ca
+      repository: docker-remote/bitnamilegacy/mongodb
+      tag: 8.0.4-debian-12-r4
+      pullPolicy: IfNotPresent
     auth:
       existingSecret: "vc-authn-oidc-mongodb"
     persistence:
@@ -142,6 +157,3 @@ vc-authn-oidc:
     livenessProbe:
       enabled: true
       timeoutSeconds: 10
-
-  postgresql:
-    enabled: false
