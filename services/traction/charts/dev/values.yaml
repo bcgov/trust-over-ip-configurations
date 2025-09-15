@@ -72,6 +72,17 @@ traction:
         enabled: true
         namespaceSelector:
           network.openshift.io/policy-group: ingress
+    ingress:
+      agent:
+        enabled: true
+        hostname: '{{- printf "%s%s" (include "common.names.fullname" .) .Values.global.ingressSuffix }}'
+        annotations:
+          route.openshift.io/termination: edge
+      admin:
+        enabled: true
+        hostname: '{{- printf "%s-admin%s" (include "common.names.fullname" .) .Values.global.ingressSuffix }}'
+        annotations:
+          route.openshift.io/termination: edge
     resources:
       limits:
         memory: 500Mi
