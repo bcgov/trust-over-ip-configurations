@@ -157,6 +157,10 @@ vc-authn-oidc:
         memory: 450Mi
     metrics:
       enabled: true
+      image:
+        registry: artifacts.developer.gov.bc.ca
+        repository: docker-remote/bitnamilegacy/mongodb-exporter
+        tag: 0.43.1-debian-12-r1
     readinessProbe:
       enabled: true
       timeoutSeconds: 10
