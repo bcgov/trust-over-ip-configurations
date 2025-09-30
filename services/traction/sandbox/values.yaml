@@ -1,15 +1,15 @@
-ingressSuffix: .apps.silver.devops.gov.bc.ca
+global:
+  ingressSuffix: .apps.silver.devops.gov.bc.ca
+
 acapy:
   image:
+    repository: bcgov/traction-plugins-acapy
     pullPolicy: Always
-  secret:
-    adminApiKey:
-      generated: true
-    pluginInnkeeper:
-      generated: true
+
   argfile.yml:
     tails-server-base-url: https://tails-dev.vonx.io
     tails-server-upload-url: https://tails-dev.vonx.io
+
   ledgers.yml:
     - id: bcovrin-test
       is_production: true
@@ -29,20 +29,47 @@ acapy:
       is_production: true
       is_write: false
       genesis_url: "https://raw.githubusercontent.com/ICCS-ISAC/dtrust-reconu/main/CANdy/prod/pool_transactions_genesis"
+
+  multitenancyConfiguration:
+    json: ""
+    wallet_type: single-wallet-askar
+
   plugin-config.yml:
-    traction_innkeeper:
-      innkeeper_wallet:
-        print_key: true
-        print_token: true
-        connect_to_endorser:
-          - endorser_alias: bcovrin-test-endorser
-            ledger_id: bcovrin-test
-        create_public_did:
-          - bcovrin-test
-      reservation:
-        expiry_minutes: 2880
-        auto_approve: true
-        auto_issuer: true
+      traction_innkeeper:
+        innkeeper_wallet:
+          print_key: true
+          print_token: true
+          connect_to_endorser:
+            - endorser_alias: bcovrin-test-endorser
+              ledger_id: bcovrin-test
+          create_public_did:
+            - bcovrin-test
+        reservation:
+          expiry_minutes: 2880
+          auto_approve: true
+          auto_issuer: true
+
+  secrets:
+    api:
+      retainOnUninstall: false
+
+  service:
+    ports:
+      http: 8021
+      admin: 8022
+      ws: 8023
+  
+  extraArgs:
+    - --plugin 'aries_cloudagent.messaging.jsonld'
+    - --plugin traction_plugins.traction_innkeeper.v1_0
+    - --plugin multitenant_provider.v1_0
+    - --plugin basicmessage_storage.v1_0
+    - --plugin connections
+    - --plugin connection_update.v1_0
+    - --plugin rpc.v1_0
+    - --plugin webvh
+  
+  
   autoscaling:
     enabled: true
     minReplicas: 1
@@ -50,38 +77,46 @@ acapy:
     targetCPUUtilizationPercentage: 80
     targetMemoryUtilizationPercentage: 80
     stabilizationWindowSeconds: 300
+
   resources:
     limits:
       memory: 1600Mi
     requests:
       cpu: 200m
       memory: 820Mi
+
   networkPolicy:
     enabled: true
     ingress:
       enabled: true
       namespaceSelector:
         network.openshift.io/policy-group: ingress
+
 tenant_proxy:
   image:
     pullPolicy: Always
+  
   networkPolicy:
     enabled: true
     ingress:
       enabled: true
       namespaceSelector:
         network.openshift.io/policy-group: ingress
+
 ui:
   quickConnectEndorserName: "bcovrin-test-endorser"
   requireEmailForReservation: false
+  
   image:
     pullPolicy: Always
+  
   ux:
     aboutBusiness:
       linkTitle: "No service agreement available for Sandbox environment"
       link: " "
     infoBanner:
       showMessage: true
+  
   oidc:
     active: false
     showInnkeeperAdminLogin: true
@@ -111,37 +146,28 @@ ui:
           ]
         }
       }
-  ariesDetails:
-    ledgerDescription: "bcovrin-test"
+
   smtp:
     server: apps.smtp.gov.bc.ca
     port: 25
     senderAddress: DoNotReplyTractionSandbox@gov.bc.ca
     innkeeperInbox: ""
+
   networkPolicy:
     enabled: true
     ingress:
       enabled: true
       namespaceSelector:
         network.openshift.io/policy-group: ingress
+  
   autoscaling:
     enabled: true
     minReplicas: 2
     maxReplicas: 5
     targetCPUUtilizationPercentage: 80
     targetMemoryUtilizationPercentage: 80
+
 ingress:
+  enabled: true
   annotations:
     route.openshift.io/termination: edge
-postgresql:
-  auth:
-    database: null
-  primary:
-    persistence:
-      size: 5Gi
-    resources:
-      limits:
-        memory: 4000Mi
-      requests:
-        cpu: 200m
-        memory: 820Mi
