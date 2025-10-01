@@ -6,6 +6,8 @@ acapy:
     repository: bcgov/traction-plugins-acapy
     pullPolicy: Always
 
+  extraEnvVarsSecret: 'innkeeper-sandbox-secret'
+
   argfile.yml:
     tails-server-base-url: https://tails-dev.vonx.io
     tails-server-upload-url: https://tails-dev.vonx.io
@@ -121,6 +123,9 @@ ui:
   
   image:
     pullPolicy: Always
+
+  pluginInnkeeper:
+    existingSecret: innkeeper-sandbox-secret
   
   ux:
     aboutBusiness:
