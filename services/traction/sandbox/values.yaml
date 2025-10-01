@@ -58,6 +58,18 @@ acapy:
       http: 8021
       admin: 8022
       ws: 8023
+
+  ingress:
+    agent:
+      enabled: true
+      hostname: '{{- printf "%s%s" (include "common.names.fullname" .) .Values.global.ingressSuffix }}'
+      annotations:
+        route.openshift.io/termination: edge
+    admin:
+      enabled: true
+      hostname: '{{- printf "%s-admin%s" (include "common.names.fullname" .) .Values.global.ingressSuffix }}'
+      annotations:
+        route.openshift.io/termination: edge
   
   extraArgs:
     - --plugin 'aries_cloudagent.messaging.jsonld'
