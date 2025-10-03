@@ -89,7 +89,7 @@ traction:
           route.openshift.io/termination: edge
       admin:
         enabled: true
-        hostname: traction-acapy-dev-admin.apps.silver.devops.gov.bc.ca
+        hostname: traction-acapy-admin-dev.apps.silver.devops.gov.bc.ca
         annotations:
           route.openshift.io/termination: edge
 
