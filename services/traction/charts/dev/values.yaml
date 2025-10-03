@@ -1,20 +1,23 @@
 global:
   ingressSuffix: -dev.apps.silver.devops.gov.bc.ca
+
 traction:
   acapy:
     image:
-      tag: sha-872ea96
       pullPolicy: Always
+
     secrets:
       api:
-        existingSecret: 'traction-acapy-api'
+        retainOnUninstall: true
+        existingSecret: "traction-acapy-api"
 
-    extraEnvVarsSecret: 'traction-acapy-plugin-innkeeper'
+    extraEnvVarsSecret: "traction-acapy-plugin-innkeeper"
 
     argfile.yml:
       preserve-exchange-records: false
       tails-server-base-url: https://tails-dev.vonx.io
       tails-server-upload-url: https://tails-dev.vonx.io
+
     ledgers.yml:
       - id: bcovrin-test
         is_production: true
@@ -36,6 +39,7 @@ traction:
         is_production: true
         is_write: false
         genesis_url: "https://raw.githubusercontent.com/ICCS-ISAC/dtrust-reconu/main/CANdy/prod/pool_transactions_genesis"
+
     plugin-config.yml:
       traction_innkeeper:
         innkeeper_wallet:
@@ -51,14 +55,17 @@ traction:
             - candy-dev
         reservation:
           expiry_minutes: 7200
+
     walletStorageConfig:
       url: traction-database-primary:5432
+
     walletStorageCredentials:
       admin_account: walletman
       existingSecret: traction-database-acapy
       secretKeys:
         adminPasswordKey: walletman-password
         userPasswordKey: acapy-password
+
     autoscaling:
       enabled: true
       minReplicas: 1
@@ -66,50 +73,65 @@ traction:
       targetMemoryUtilizationPercentage: 0
       targetCPUUtilizationPercentage: 80
       stabilizationWindowSeconds: 0
+
     networkPolicy:
       enabled: true
       ingress:
         enabled: true
         namespaceSelector:
           network.openshift.io/policy-group: ingress
+
     ingress:
       agent:
         enabled: true
-        hostname: '{{- printf "%s%s" (include "common.names.fullname" .) .Values.global.ingressSuffix }}'
+        hostname: traction-acapy-dev.apps.silver.devops.gov.bc.ca
         annotations:
           route.openshift.io/termination: edge
       admin:
         enabled: true
-        hostname: '{{- printf "%s-admin%s" (include "common.names.fullname" .) .Values.global.ingressSuffix }}'
+        hostname: traction-acapy-admin-dev.apps.silver.devops.gov.bc.ca
         annotations:
           route.openshift.io/termination: edge
+
     resources:
       limits:
         memory: 500Mi
     postgresql:
       enabled: false
+
   tenant_proxy:
     image:
-      tag: sha-872ea96
       pullPolicy: Always
+
     networkPolicy:
       enabled: true
       ingress:
         enabled: true
         namespaceSelector:
           network.openshift.io/policy-group: ingress
+    
+    autoscaling:
+      enabled: true
+      minReplicas: 1
+      maxReplicas: 2
+      targetCPUUtilizationPercentage: 80
+      targetMemoryUtilizationPercentage: 80
+
   ui:
     showOIDCReservationLogin: true
     quickConnectEndorserName: "bcovrin-test-endorser"
+
     image:
-      tag: sha-872ea96
       pullPolicy: Always
+
     existingSecret: ""
+
     ux:
       infoBanner:
         message: "Traction DEV Environment"
         messageLevel: info
         showMessage: true
+
     oidc:
       active: true
       authority: https://dev.loginproxy.gov.bc.ca/auth/realms/digitaltrust-citz
@@ -156,17 +178,20 @@ traction:
             ]
           }
         }
+
     smtp:
       server: apps.smtp.gov.bc.ca
       port: 25
       senderAddress: DoNotReplyTractionDEV@gov.bc.ca
       innkeeperInbox: "lucas.o'neil@gov.bc.ca,emiliano.sune@quartech.com"
+
     networkPolicy:
       enabled: true
       ingress:
         enabled: true
         namespaceSelector:
           network.openshift.io/policy-group: ingress
+
     autoscaling:
       enabled: true
       minReplicas: 1
@@ -176,5 +201,6 @@ traction:
       stabilizationWindowSeconds: 0
 
   ingress:
+    enabled: true
     annotations:
       route.openshift.io/termination: edge

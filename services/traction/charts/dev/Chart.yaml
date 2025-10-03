@@ -2,9 +2,9 @@ apiVersion: v2
 name: traction
 description: traction - dev
 type: application
-version: "0.3.8"
-appVersion: "1.2.0"
+version: "0.4.1"
+appVersion: "1.2.1"
 dependencies:
   - name: traction
-    version: "0.3.8"
+    version: "0.4.1"
     repository: https://bcgov.github.io/traction
