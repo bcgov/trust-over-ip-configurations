@@ -84,6 +84,9 @@ traction:
         cpu: 250m
         memory: 250Mi
 
+    postgresql:
+      enabled: false
+
   tenant_proxy:
     image:
       pullPolicy: Always
@@ -107,7 +110,7 @@ traction:
       pullPolicy: Always
 
     showOIDCReservationLogin: true
-    
+
     oidc:
       active: true
       showInnkeeperAdminLogin: true
@@ -157,21 +160,21 @@ traction:
             ]
           }
         }
-    
+
     smtp:
       server: apps.smtp.gov.bc.ca
       port: 25
       senderAddress: DoNotReplyTractionPROD@gov.bc.ca
       innkeeperInbox: "lucas.o'neil@gov.bc.ca,emiliano.sune@quartech.com"
-    
+
     networkPolicy:
       enabled: true
       ingress:
         enabled: true
         namespaceSelector:
           network.openshift.io/policy-group: ingress
-    
-    
+
+
     autoscaling:
       enabled: true
       minReplicas: 2
@@ -185,7 +188,7 @@ traction:
       requests:
         cpu: 120m
         memory: 128Mi
-  
+
   ingress:
     enabled: true
     annotations:
