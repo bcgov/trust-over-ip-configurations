@@ -5,7 +5,7 @@ traction:
   acapy:
     image:
       pullPolicy: Always
-    
+
     secrets:
       api:
         retainOnUninstall: true
@@ -17,7 +17,7 @@ traction:
       preserve-exchange-records: false
       tails-server-base-url: https://tails-test.vonx.io
       tails-server-upload-url: https://tails-test.vonx.io
-    
+
     ledgers.yml:
       - id: bcovrin-test
         is_production: true
@@ -35,7 +35,7 @@ traction:
         is_production: true
         is_write: false
         genesis_url: "https://raw.githubusercontent.com/ICCS-ISAC/dtrust-reconu/main/CANdy/prod/pool_transactions_genesis"
-    
+
     plugin-config.yml:
       traction_innkeeper:
         innkeeper_wallet:
@@ -53,24 +53,24 @@ traction:
           expiry_minutes: 2880
           auto_approve: false
           auto_issuer: false
-    
+
     walletStorageConfig:
       url: traction-database-primary:5432
-    
+
     walletStorageCredentials:
       admin_account: walletman
       existingSecret: traction-database-acapy
       secretKeys:
         adminPasswordKey: walletman-password
         userPasswordKey: acapy-password
-    
+
     autoscaling:
       enabled: true
       minReplicas: 3
       maxReplicas: 5
       targetCPUUtilizationPercentage: 80
       targetMemoryUtilizationPercentage: 80
-    
+
     networkPolicy:
       enabled: true
       ingress:
@@ -89,42 +89,45 @@ traction:
         hostname: traction-acapy-admin-test.apps.silver.devops.gov.bc.ca
         annotations:
           route.openshift.io/termination: edge
-    
+
     resources:
       limits:
         memory: 500Mi
       requests:
         cpu: 250m
         memory: 250Mi
-  
+
+    postgresql:
+      enabled: false
+
   tenant_proxy:
     image:
       pullPolicy: Always
-    
+
     networkPolicy:
       enabled: true
       ingress:
         enabled: true
         namespaceSelector:
           network.openshift.io/policy-group: ingress
-    
+
     autoscaling:
       enabled: true
       minReplicas: 2
       maxReplicas: 5
       targetCPUUtilizationPercentage: 80
       targetMemoryUtilizationPercentage: 80
-  
+
   ui:
     image:
       pullPolicy: Always
-    
+
     ux:
       infoBanner:
         message: "Traction TEST Environment"
         messageLevel: info
         showMessage: true
-    
+
     showOIDCReservationLogin: true
     oidc:
       active: true
@@ -174,13 +177,13 @@ traction:
             ]
           }
         }
-    
+
     smtp:
       server: apps.smtp.gov.bc.ca
       port: 25
       senderAddress: DoNotReplyTractionTEST@gov.bc.ca
       innkeeperInbox: "lucas.o'neil@gov.bc.ca,emiliano.sune@quartech.com"
-    
+
     networkPolicy:
       enabled: true
       ingress:
@@ -195,7 +198,7 @@ traction:
       targetMemoryUtilizationPercentage: 0
       targetCPUUtilizationPercentage: 80
       stabilizationWindowSeconds: 0
-  
+
   ingress:
     enabled: true
     annotations:
