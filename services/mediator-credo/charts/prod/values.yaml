@@ -1,0 +1,107 @@
+ingress:
+  enabled: true
+  className: ""
+  annotations:
+    route.openshift.io/termination: edge
+    # kubernetes.io/ingress.class: nginx
+    # kubernetes.io/tls-acme: "true"
+  labels:
+    certbot-managed: "true"
+  hosts:
+    - host: mediator.digitaltrust.gov.bc.ca
+      paths:
+        - path: /
+          pathType: ImplementationSpecific
+    - host: mediator-credo.apps.silver.devops.gov.bc.ca
+      paths:
+        - path: /
+          pathType: ImplementationSpecific
+  tls:
+    - secretName: mediator-credo-tls
+      hosts:
+        - mediator.digitaltrust.gov.bc.ca
+
+networkPolicy:
+  enabled: true
+  ingress:
+    enabled: true
+    namespaceSelector:
+      network.openshift.io/policy-group: ingress
+    # namespaceSelector: []
+    ## Example:
+    # network.openshift.io/policy-group: ingress
+    podSelector: {}
+
+resources:
+  limits:
+    memory: 2Gi
+  requests:
+    cpu: 100m
+    memory: 256Mi
+
+environment:
+  - name: LOG_LEVEL
+    value: "2"
+  - name: AGENT_PORT
+    value: "3000"
+  - name: AGENT_NAME
+    value: BC Mediator (Prod)
+  - name: AGENT_ENDPOINTS
+    value: "https://mediator.digitaltrust.gov.bc.ca,wss://mediator.digitaltrust.gov.bc.ca"
+  - name: WALLET_NAME
+    value: mediator-wallet
+  - name: PICKUP_TYPE
+    value: postgres
+  - name: PICKUP_STRATEGY
+    value: QueueAndLiveModeDelivery
+  - name: CREATE_NEW_INVITATION
+    value: "false"
+  - name: GOAL_CODE
+    value: "vc.mediate"
+  - name: USE_PUSH_NOTIFICATIONS
+    value: "true"
+  - name: PUSH_NOTIFICATION_TITLE
+    value: "You have a new message"
+  - name: PUSH_NOTIFICATION_BODY
+    value: "Open your app to read it"
+  - name: NODE_OPTIONS
+    value: "--max-old-space-size=240"
+  - name: MALLOC_CONF
+    value: "background_thread:true,dirty_decay_ms:5000,muzzy_decay_ms:5000"
+  - name: LD_PRELOAD
+    value: /usr/lib/x86_64-linux-gnu/libjemalloc.so.2
+  - name: POSTGRES_HOST
+    value: aries-mediator-db
+  - name: POSTGRES_USER
+    valueFrom:
+      secretKeyRef:
+        name: aries-mediator-db
+        key: database-user
+  - name: POSTGRES_ADMIN_USER
+    value: postgres
+  - name: POSTGRES_PASSWORD
+    valueFrom:
+      secretKeyRef:
+        name: aries-mediator-db
+        key: database-password
+  - name: POSTGRES_ADMIN_PASSWORD
+    valueFrom:
+      secretKeyRef:
+        name: aries-mediator-db
+        key: admin-password
+
+autoscaling:
+  enabled: true
+  minReplicas: 2
+  maxReplicas: 6
+  targetCPUUtilizationPercentage: 80
+  targetMemoryUtilizationPercentage: 80
+
+postgresql:
+  enabled: true
+  selectorLabels:
+    app: aries-mediator-service
+    app-group: aries-mediator-service
+    env: prod
+    name: aries-mediator-db
+    role: db
