@@ -49,7 +49,7 @@ environment:
   - name: AGENT_ENDPOINTS
     value: "https://mediator-test.digitaltrust.gov.bc.ca,wss://mediator-test.digitaltrust.gov.bc.ca"
   - name: WALLET_NAME
-    value: mediator-wallet
+    value: aries-mediator-agent-wallet
   - name: PICKUP_TYPE
     value: postgres
   - name: PICKUP_STRATEGY
@@ -61,11 +61,11 @@ environment:
   - name: USE_PUSH_NOTIFICATIONS
     value: "true"
   - name: PUSH_NOTIFICATION_TITLE
-    value: "You have a new message"
+    value: "You have important information in your digital wallet"
   - name: PUSH_NOTIFICATION_BODY
-    value: "Open your app to read it"
+    value: "Please open your wallet"
   - name: NODE_OPTIONS
-    value: "--max-old-space-size=240"
+    value: "--max-old-space-size=120"
   - name: MALLOC_CONF
     value: "background_thread:true,dirty_decay_ms:5000,muzzy_decay_ms:5000"
   - name: LD_PRELOAD
