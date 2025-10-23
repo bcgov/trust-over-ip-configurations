@@ -65,11 +65,7 @@ environment:
   - name: PUSH_NOTIFICATION_BODY
     value: "Please open your wallet"
   - name: NODE_OPTIONS
-    value: "--max-old-space-size=120"
-  - name: MALLOC_CONF
-    value: "background_thread:true,dirty_decay_ms:5000,muzzy_decay_ms:5000"
-  - name: LD_PRELOAD
-    value: /usr/lib/x86_64-linux-gnu/libjemalloc.so.2
+    value: "--max-old-space-size=128"
   - name: POSTGRES_HOST
     value: aries-mediator-db
   - name: POSTGRES_USER

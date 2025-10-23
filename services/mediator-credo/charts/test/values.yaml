@@ -37,7 +37,7 @@ resources:
     memory: 2Gi
   requests:
     cpu: 100m
-    memory: 256Mi
+    memory: 512Mi
 
 environment:
   - name: LOG_LEVEL
@@ -65,7 +65,7 @@ environment:
   - name: PUSH_NOTIFICATION_BODY
     value: "Please open your wallet"
   - name: NODE_OPTIONS
-    value: "--max-old-space-size=120"
+    value: "--max-old-space-size=256"
   - name: MALLOC_CONF
     value: "background_thread:true,dirty_decay_ms:5000,muzzy_decay_ms:5000"
   - name: LD_PRELOAD
