@@ -68,12 +68,12 @@ traction:
     ingress:
       agent:
         enabled: true
-        hostname: traction-acapy.apps.silver.devops.gov.bc.ca
+        hostname: traction-acapy-prod.apps.silver.devops.gov.bc.ca
         annotations:
           route.openshift.io/termination: edge
       admin:
         enabled: true
-        hostname: traction-acapy-admin.apps.silver.devops.gov.bc.ca
+        hostname: traction-acapy-admin-prod.apps.silver.devops.gov.bc.ca
         annotations:
           route.openshift.io/termination: edge
 
