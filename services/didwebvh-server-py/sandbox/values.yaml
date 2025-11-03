@@ -15,7 +15,7 @@ networkPolicy:
 server:
   image:
     repository: ghcr.io/decentralized-identity/didwebvh-server-py
-    tag: 0.4.0
+    tag: 0.4.1
     pullPolicy: Always
   host: "sandbox.bcvh.vonx.io"
   workers: "4"
