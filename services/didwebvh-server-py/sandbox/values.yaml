@@ -15,7 +15,7 @@ networkPolicy:
 server:
   image:
     repository: ghcr.io/decentralized-identity/didwebvh-server-py
-    tag: 0.4.1
+    tag: 0.4.5
     pullPolicy: Always
   host: "sandbox.bcvh.vonx.io"
   workers: "4"
@@ -34,9 +34,9 @@ server:
     app_description: "BC Gov community Sandbox WebVH server deployment."
     app_icon: "https://www2.gov.bc.ca/favicon.ico"
     app_logo: "https://www2.gov.bc.ca/images/BCID_H_rgb_pos.png"
-    app_primary_color: "#e3a82b"
-    app_secondary_color: "#234075"
-    app_accent_color: "#00bcd4"
+    app_primary_color: "#234075"
+    app_secondary_color: "#e3a82b"
+    app_accent_color: "#82B1FF"
     
   autoscaling:
     enabled: true
