@@ -44,6 +44,10 @@ vc-authn-oidc:
   database:
     existingSecret: "vc-authn-oidc-mongodb"
 
+  cleanup:
+    cronjob:
+      enabled: true
+
   resources:
     limits:
       memory: 512Mi
