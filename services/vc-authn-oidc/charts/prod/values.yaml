@@ -119,6 +119,7 @@ vc-authn-oidc:
       multitenant-admin: false
       multitenant: false
       public-invites: true
+      preserve-exchange-records: false
       read-only-ledger: true
       wallet-name: askar-wallet
       wallet-storage-type: postgres_storage
