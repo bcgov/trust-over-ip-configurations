@@ -15,10 +15,29 @@ didwebvh-server-py:
   server:
     image:
       repository: ghcr.io/decentralized-identity/didwebvh-server-py
-      tag: 0.2.2
+      tag: 0.4.5
       pullPolicy: Always
     host: "registry-test.digitaltrust.gov.bc.ca"
-    default_witness_key: ""
+    workers: "4"
+    policies:
+      webvh_version: "1.0"
+      webvh_witness: "false"
+      webvh_watcher: ""
+      webvh_prerotation: "false"
+      webvh_portability: "false"
+      webvh_endorsement: "true"
+      webvh_known_witness_key: ""
+      webvh_known_registry_url: ""
+
+    branding:
+      app_name: "BC Gov WebVH Test"
+      app_description: "BC Gov Test WebVH server deployment."
+      app_icon: "https://www2.gov.bc.ca/favicon.ico"
+      app_logo: "https://www2.gov.bc.ca/images/BCID_H_rgb_pos.png"
+      app_primary_color: "#234075"
+      app_secondary_color: "#e3a82b"
+      app_accent_color: "#82B1FF"
+
     autoscaling:
       enabled: true
       minReplicas: 1
@@ -40,6 +59,10 @@ didwebvh-server-py:
         namespaceSelector:
           network.openshift.io/policy-group: ingress
   postgresql:
+    image:
+      registry: artifacts.developer.gov.bc.ca
+      repository: docker-remote/bitnamilegacy/postgresql
+      tag: 14.5.0-debian-11-r35
     commonLabels:
       backup: "true"
       env: test
