@@ -20,7 +20,7 @@ didwebvh-server-py:
     workers: "4"
     policies:
       webvh_version: "1.0"
-      webvh_witness: "false"
+      webvh_witness: "true"
       webvh_watcher: ""
       webvh_prerotation: "false"
       webvh_portability: "false"
