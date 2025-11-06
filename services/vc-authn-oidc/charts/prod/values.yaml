@@ -154,7 +154,7 @@ vc-authn-oidc:
       existingSecret: "vc-authn-oidc-mongodb"
     persistence:
       storageClass: netapp-block-standard
-      size: 10Gi
+      size: 8Gi
     resources:
       limits:
         memory: 1000Mi
