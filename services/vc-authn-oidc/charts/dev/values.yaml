@@ -60,12 +60,13 @@ vc-authn-oidc:
     annotations:
       route.openshift.io/termination: edge
   acapy:
+    nameOverride: agent
     image:
       pullPolicy: IfNotPresent
     walletStorageCredentials:
       existingSecret: "vc-authn-oidc-postgresql"
-    agentUrl: "https://vc-authn-oidc-acapy-dev.apps.silver.devops.gov.bc.ca"
-    adminUrl: "https://vc-authn-oidc-acapy-admin-dev.apps.silver.devops.gov.bc.ca"
+    agentUrl: "https://vc-authn-oidc-agent-dev.apps.silver.devops.gov.bc.ca"
+    adminUrl: "https://vc-authn-oidc-agent-admin-dev.apps.silver.devops.gov.bc.ca"
     autoscaling:
       enabled: true
       minReplicas: 1
@@ -108,13 +109,6 @@ vc-authn-oidc:
         genesis_url: "https://raw.githubusercontent.com/ICCS-ISAC/dtrust-reconu/main/CANdy/prod/pool_transactions_genesis"
     networkPolicy:
       enabled: true
-
-    persistence:
-      enabled: true
-      storageClass: "netapp-file-standard"
-      accessModes:
-        - ReadWriteOnce
-      size: 1Gi
 
   mongodb:
     auth:
