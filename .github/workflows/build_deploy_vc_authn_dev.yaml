@@ -74,7 +74,7 @@ jobs:
 
       - name: Deploy vc-authn-oidc to Development
         run: |
-          helm upgrade --install vc-authn-oidc openwallet-foundation/vc-authn-oidc \
-            -f services/vc-authn-oidc/charts/dev/values.yaml \
-            --set image.tag=dev \
-            --wait
+          cp services/vc-authn-oidc/charts/dev/values.yaml ./dev-values.yaml
+          yq e -i 'del(.vc-authn-oidc) | . *= load("services/vc-authn-oidc/charts/dev/values.yaml").vc-authn-oidc' ./dev-values.yaml
+          helm upgrade --install vc-authn-oidc -f ./dev-values.yaml --set image.tag=dev openwallet-foundation/vc-authn-oidc --wait
+
