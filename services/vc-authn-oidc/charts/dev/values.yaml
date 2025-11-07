@@ -60,6 +60,7 @@ vc-authn-oidc:
     annotations:
       route.openshift.io/termination: edge
   acapy:
+    nameOverride: agent
     image:
       pullPolicy: IfNotPresent
     walletStorageCredentials:
@@ -108,13 +109,6 @@ vc-authn-oidc:
         genesis_url: "https://raw.githubusercontent.com/ICCS-ISAC/dtrust-reconu/main/CANdy/prod/pool_transactions_genesis"
     networkPolicy:
       enabled: true
-
-    persistence:
-      enabled: true
-      storageClass: "netapp-file-standard"
-      accessModes:
-        - ReadWriteOnce
-      size: 1Gi
 
   mongodb:
     auth:
