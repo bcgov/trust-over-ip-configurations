@@ -65,8 +65,8 @@ vc-authn-oidc:
       pullPolicy: IfNotPresent
     walletStorageCredentials:
       existingSecret: "vc-authn-oidc-postgresql"
-    agentUrl: "https://vc-authn-oidc-acapy-dev.apps.silver.devops.gov.bc.ca"
-    adminUrl: "https://vc-authn-oidc-acapy-admin-dev.apps.silver.devops.gov.bc.ca"
+    agentUrl: "https://vc-authn-oidc-agent-dev.apps.silver.devops.gov.bc.ca"
+    adminUrl: "https://vc-authn-oidc-agent-admin-dev.apps.silver.devops.gov.bc.ca"
     autoscaling:
       enabled: true
       minReplicas: 1
