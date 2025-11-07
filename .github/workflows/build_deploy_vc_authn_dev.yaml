@@ -54,15 +54,10 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v5
 
-      - name: Checkout acapy-vc-authn-oidc
-        uses: actions/checkout@v5
-        with:
-          repository: openwallet-foundation/acapy-vc-authn-oidc
-          fetch-depth: 0
-          ref: main
-          sparse-checkout: |
-            charts
-          path: acapy-vc-authn-oidc
+      - name: Add OpenWallet Foundation Helm repository
+        run: |
+          helm repo add openwallet-foundation https://openwallet-foundation.github.io/helm-charts/
+          helm repo update
 
       - name: Install OpenShift CLI tools
         uses: redhat-actions/openshift-tools-installer@v1
@@ -79,6 +74,7 @@ jobs:
 
       - name: Deploy vc-authn-oidc to Development
         run: |
-          cp services/vc-authn-oidc/charts/dev/values.yaml ./dev-values.yaml
-          yq e -i 'del(.vc-authn-oidc) | . *= load("services/vc-authn-oidc/charts/dev/values.yaml").vc-authn-oidc' ./dev-values.yaml
-          helm upgrade --install vc-authn-oidc -f ./dev-values.yaml --set image.tag=dev ./acapy-vc-authn-oidc/charts/vc-authn-oidc --wait
+          helm upgrade --install vc-authn-oidc openwallet-foundation/vc-authn-oidc \
+            -f services/vc-authn-oidc/charts/dev/values.yaml \
+            --set image.tag=dev \
+            --wait
