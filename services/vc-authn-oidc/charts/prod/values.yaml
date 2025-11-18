@@ -9,6 +9,7 @@ vc-authn-oidc:
   image:
     registry: ghcr.io
     repository: bcgov/acapy-vc-authn-oidc
+    tag: "2.3.2"
     pullPolicy: IfNotPresent
 
   acapyTenancyMode: single
