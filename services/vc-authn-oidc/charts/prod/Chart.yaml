@@ -2,9 +2,9 @@ apiVersion: v2
 name: vc-authn-oidc
 description: vc-authn-oidc - prod
 type: application
-version: "0.4.4"
-appVersion: "2.3.2"
+version: "0.4.5"
+appVersion: "2.3.1"
 dependencies:
   - name: vc-authn-oidc
-    version: "0.4.4"
+    version: "0.4.5"
     repository: https://openwallet-foundation.github.io/helm-charts/
