@@ -96,9 +96,9 @@ jobs:
           workflow_file_name: gitops_sync.yaml
 
       - name: Trigger ArgoCD Sync of e79518-test-vc-authn-oidc
-        uses: OpsVerseIO/argocd-sync@v2
+        uses: safe2008/argocd-app-actions@main
         with:
           address: gitops-shared.apps.silver.devops.gov.bc.ca
           token: ${{ secrets.DITP_GITOPS_ARGO_SECRET}}
-          action: sync
+          insecure: false
           appName: "e79518-test-vc-authn-oidc"
