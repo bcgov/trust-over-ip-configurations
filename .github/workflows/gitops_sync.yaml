@@ -11,10 +11,10 @@ jobs:
     runs-on: ubuntu-latest
     if: github.repository_owner == 'bcgov'
     steps:
-    - uses: actions/checkout@v5
+    - uses: actions/checkout@v6
 
     - name: Checkout GitOps repo
-      uses: actions/checkout@v5
+      uses: actions/checkout@v6
       with:
         repository: bcgov-c/ministry-gitops-ditp
         ssh-key: ${{ secrets.DITP_GITOPS_REPO_SECRET }}
