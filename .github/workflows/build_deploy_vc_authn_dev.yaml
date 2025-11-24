@@ -22,7 +22,7 @@ jobs:
       short-sha: ${{ steps.slug.outputs.SHORT_SHA }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
 
   build_dev:
     needs: [prepare]
@@ -30,7 +30,7 @@ jobs:
     runs-on: ubuntu-latest
     if: github.repository_owner == 'bcgov'
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
       - name: Build VC-AuthN
         uses: ./.github/actions/build_image
         id: builder
@@ -52,7 +52,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
 
       - name: Add OpenWallet Foundation Helm repository
         run: |
