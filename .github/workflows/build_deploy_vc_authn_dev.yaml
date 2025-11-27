@@ -3,10 +3,10 @@ name: Build and Deploy VC-AuthN to DEV
 on:
   workflow_dispatch:
     inputs:
-      ref:
-        description: 'Branch or full SHA to deploy'
+      tag:
+        description: 'Tag to build (leave empty for dev)'
         required: false
-        default: 'main'
+        default: 'dev'
 
   push:
     branches:
@@ -38,7 +38,7 @@ jobs:
           context: "./services/vc-authn-oidc"
           dockerfile: "./services/vc-authn-oidc/Dockerfile"
           image_name: ${{ github.repository_owner}}/acapy-vc-authn-oidc
-          image_tag: dev
+          image_tag: ${{ inputs.tag }}
           registry: ghcr.io
           registry_username: ${{ github.repository_owner}}
           registry_password: ${{ secrets.GITHUB_TOKEN }}
