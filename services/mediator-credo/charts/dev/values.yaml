@@ -1,102 +1,104 @@
-ingress:
-  enabled: true
-  className: ""
-  annotations:
-    route.openshift.io/termination: edge
-    # kubernetes.io/ingress.class: nginx
-    # kubernetes.io/tls-acme: "true"
-  labels:
-    certbot-managed: "true"
-  hosts:
-    - host: mediator-dev.digitaltrust.gov.bc.ca
-      paths:
-        - path: /
-          pathType: ImplementationSpecific
-    - host: mediator-credo-dev.apps.silver.devops.gov.bc.ca
-      paths:
-        - path: /
-          pathType: ImplementationSpecific
-  tls:
-    - secretName: mediator-credo-tls
-      hosts:
-        - mediator-dev.digitaltrust.gov.bc.ca
-
-networkPolicy:
-  enabled: true
+didcomm-mediator-credo:
   ingress:
     enabled: true
-    namespaceSelector:
-      network.openshift.io/policy-group: ingress
-    # namespaceSelector: []
-    ## Example:
-    # network.openshift.io/policy-group: ingress
-    podSelector: {}
+    className: ""
+    annotations:
+      route.openshift.io/termination: edge
+      # kubernetes.io/ingress.class: nginx
+      # kubernetes.io/tls-acme: "true"
+    labels:
+      certbot-managed: "true"
+    hosts:
+      - host: mediator-dev.digitaltrust.gov.bc.ca
+        paths:
+          - path: /
+            pathType: ImplementationSpecific
+      - host: mediator-credo-dev.apps.silver.devops.gov.bc.ca
+        paths:
+          - path: /
+            pathType: ImplementationSpecific
+    tls:
+      - secretName: mediator-credo-tls
+        hosts:
+          - mediator-dev.digitaltrust.gov.bc.ca
 
-resources:
-  limits:
-    memory: 2Gi
-  requests:
-    cpu: 100m
-    memory: 256Mi
+  networkPolicy:
+    enabled: true
+    ingress:
+      enabled: true
+      namespaceSelector:
+        network.openshift.io/policy-group: ingress
+      # namespaceSelector: []
+      ## Example:
+      # network.openshift.io/policy-group: ingress
+      podSelector: {}
 
-environment:
-  - name: LOG_LEVEL
-    value: "2"
-  - name: AGENT_PORT
-    value: "3000"
-  - name: AGENT_NAME
-    value: BC Mediator (Dev)
-  - name: AGENT_ENDPOINTS
-    value: "https://mediator-dev.digitaltrust.gov.bc.ca,wss://mediator-dev.digitaltrust.gov.bc.ca"
-  - name: WALLET_NAME
-    value: aries-mediator-agent-wallet
-  - name: PICKUP_TYPE
-    value: postgres
-  - name: PICKUP_STRATEGY
-    value: QueueAndLiveModeDelivery
-  - name: CREATE_NEW_INVITATION
-    value: "false"
-  - name: GOAL_CODE
-    value: "vc.mediate"
-  - name: USE_PUSH_NOTIFICATIONS
-    value: "true"
-  - name: PUSH_NOTIFICATION_TITLE
-    value: "You have important information in your digital wallet"
-  - name: PUSH_NOTIFICATION_BODY
-    value: "Please open your wallet"
-  - name: NODE_OPTIONS
-    value: "--max-old-space-size=128"
-  - name: POSTGRES_HOST
-    value: aries-mediator-db
-  - name: POSTGRES_USER
-    valueFrom:
-      secretKeyRef:
-        name: aries-mediator-db
-        key: database-user
-  - name: POSTGRES_ADMIN_USER
-    value: postgres
-  - name: POSTGRES_PASSWORD
-    valueFrom:
-      secretKeyRef:
-        name: aries-mediator-db
-        key: database-password
-  - name: POSTGRES_ADMIN_PASSWORD
-    valueFrom:
-      secretKeyRef:
-        name: aries-mediator-db
-        key: admin-password
+  resources:
+    limits:
+      memory: 2Gi
+    requests:
+      cpu: 100m
+      memory: 256Mi
 
-autoscaling:
-  enabled: true
-  minReplicas: 2
-  maxReplicas: 6
-  targetCPUUtilizationPercentage: 80
+  environment:
+    - name: LOG_LEVEL
+      value: "2"
+    - name: AGENT_PORT
+      value: "3000"
+    - name: AGENT_NAME
+      value: BC Mediator (Dev)
+    - name: AGENT_ENDPOINTS
+      value: "https://mediator-dev.digitaltrust.gov.bc.ca,wss://mediator-dev.digitaltrust.gov.bc.ca"
+    - name: WALLET_NAME
+      value: aries-mediator-agent-wallet
+    - name: PICKUP_TYPE
+      value: postgres
+    - name: PICKUP_STRATEGY
+      value: QueueAndLiveModeDelivery
+    - name: CREATE_NEW_INVITATION
+      value: "false"
+    - name: GOAL_CODE
+      value: "vc.mediate"
+    - name: USE_PUSH_NOTIFICATIONS
+      value: "true"
+    - name: PUSH_NOTIFICATION_TITLE
+      value: "You have important information in your digital wallet"
+    - name: PUSH_NOTIFICATION_BODY
+      value: "Please open your wallet"
+    - name: NODE_OPTIONS
+      value: "--max-old-space-size=128"
+    - name: POSTGRES_HOST
+      value: aries-mediator-db
+    - name: POSTGRES_USER
+      valueFrom:
+        secretKeyRef:
+          name: aries-mediator-db
+          key: database-user
+    - name: POSTGRES_ADMIN_USER
+      value: postgres
+    - name: POSTGRES_PASSWORD
+      valueFrom:
+        secretKeyRef:
+          name: aries-mediator-db
+          key: database-password
+    - name: POSTGRES_ADMIN_PASSWORD
+      valueFrom:
+        secretKeyRef:
+          name: aries-mediator-db
+          key: admin-password
 
-postgresql:
-  enabled: true
-  selectorLabels:
-    app: aries-mediator-service
-    app-group: aries-mediator-service
-    env: dev
-    name: aries-mediator-db
-    role: db
+  autoscaling:
+    enabled: true
+    minReplicas: 2
+    maxReplicas: 6
+    targetCPUUtilizationPercentage: 80
+    targetMemoryUtilizationPercentage: 80
+
+  postgresql:
+    enabled: true
+    selectorLabels:
+      app: aries-mediator-service
+      app-group: aries-mediator-service
+      env: dev
+      name: aries-mediator-db
+      role: db
