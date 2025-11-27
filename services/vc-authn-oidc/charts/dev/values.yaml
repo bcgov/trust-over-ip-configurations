@@ -6,7 +6,7 @@ vc-authn-oidc:
     registry: ghcr.io
     repository: bcgov/acapy-vc-authn-oidc
     tag: "dev"
-    pullPolicy: IfNotPresent
+    pullPolicy: Always
 
   acapyTenancyMode: single
   setNonRevoked: true
