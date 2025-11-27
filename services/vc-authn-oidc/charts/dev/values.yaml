@@ -82,6 +82,7 @@ vc-authn-oidc:
       auto-respond-credential-offer: true
       auto-respond-messages: true
       auto-verify-presentation: true
+      preserve-exchange-records: true
       genesis-transactions-list: /tmp/ledgers.yml
       log-level: info
       monitor-ping: true
