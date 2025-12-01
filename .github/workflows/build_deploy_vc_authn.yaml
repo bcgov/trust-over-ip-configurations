@@ -1,10 +1,10 @@
-name: Build VC-AuthN Release and update ArgoCD configurations for TEST,PROD
+name: Build and Deploy VC-AuthN to DEV/TEST/PROD
 
 on:
   workflow_dispatch:
     inputs:
       tag:
-        description: 'Tag to build (leave empty for latest)'
+        description: 'Upstream image tag to use as base (e.g., 2.3.0)'
         required: false
         default: ''
 
@@ -56,6 +56,17 @@ jobs:
           echo "APP_VERSION=$(helm search repo openwallet-foundation/vc-authn-oidc -ojson | jq -r '.[0].app_version')" >> $GITHUB_OUTPUT
           echo "CHART_VERSION=$(helm search repo openwallet-foundation/vc-authn-oidc -ojson | jq -r '.[0].version')" >> $GITHUB_OUTPUT
 
+      - name: Update dev
+        env:
+          APP_VERSION: ${{ steps.chart_version.outputs.APP_VERSION }}
+          CHART_VERSION: ${{ steps.chart_version.outputs.CHART_VERSION }}
+          IMAGE_TAG: ${{ needs.build_image.outputs.image_version }}
+        run: |
+          yq e -i '.vc-authn-oidc.image.tag = env(IMAGE_TAG)' services/vc-authn-oidc/charts/dev/values.yaml
+          yq e -i '.appVersion = env(APP_VERSION)' services/vc-authn-oidc/charts/dev/Chart.yaml
+          yq e -i '.version = env(CHART_VERSION)' services/vc-authn-oidc/charts/dev/Chart.yaml
+          yq e -i '.dependencies[0].version = env(CHART_VERSION)' services/vc-authn-oidc/charts/dev/Chart.yaml
+
       - name: Update test
         env:
           APP_VERSION: ${{ steps.chart_version.outputs.APP_VERSION }}
@@ -82,8 +93,10 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add services/vc-authn-oidc/charts/test/Chart.yaml services/vc-authn-oidc/charts/prod/Chart.yaml
-          git commit -m "Update chart and app versions, and set image tag" || echo "No changes to commit"
+          git add services/vc-authn-oidc/charts/dev/Chart.yaml services/vc-authn-oidc/charts/dev/values.yaml
+          git add services/vc-authn-oidc/charts/test/Chart.yaml services/vc-authn-oidc/charts/test/values.yaml
+          git add services/vc-authn-oidc/charts/prod/Chart.yaml services/vc-authn-oidc/charts/prod/values.yaml
+          git commit -m "Update chart and app versions, and set image tag for dev/test/prod" || echo "No changes to commit"
           git push origin main
 
       - name: Trigger and wait for GitOps sync workflow
@@ -95,7 +108,15 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           workflow_file_name: gitops_sync.yaml
 
-      - name: Trigger ArgoCD Sync of e79518-test-vc-authn-oidc
+      - name: Trigger ArgoCD Sync of e79518-dev-vc-authn-oidc (auto-sync)
+        uses: OpsVerseIO/argocd-sync@0.2.0
+        with:
+          address: gitops-shared.apps.silver.devops.gov.bc.ca
+          token: ${{ secrets.DITP_GITOPS_ARGO_SECRET}}
+          action: sync
+          appName: "e79518-dev-vc-authn-oidc"
+
+      - name: Trigger ArgoCD Sync of e79518-test-vc-authn-oidc (manual confirmation required)
         uses: OpsVerseIO/argocd-sync@0.2.0
         with:
           address: gitops-shared.apps.silver.devops.gov.bc.ca
