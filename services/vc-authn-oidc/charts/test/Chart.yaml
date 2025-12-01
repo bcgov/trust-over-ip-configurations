@@ -3,7 +3,7 @@ name: vc-authn-oidc
 description: vc-authn-oidc - test
 type: application
 version: "0.4.5"
-appVersion: "2.3.4"
+appVersion: "2.3.1"
 dependencies:
   - name: vc-authn-oidc
     version: "0.4.5"
