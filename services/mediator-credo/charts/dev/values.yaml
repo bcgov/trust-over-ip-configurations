@@ -92,7 +92,6 @@ didcomm-mediator-credo:
     minReplicas: 2
     maxReplicas: 6
     targetCPUUtilizationPercentage: 80
-    targetMemoryUtilizationPercentage: 80
 
   postgresql:
     enabled: true
