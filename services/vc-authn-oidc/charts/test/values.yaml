@@ -2,19 +2,16 @@ global:
   ingressSuffix: -test.apps.silver.devops.gov.bc.ca
   security:
     allowInsecureImages: true
-
 vc-authn-oidc:
   image:
     registry: ghcr.io
     repository: bcgov/acapy-vc-authn-oidc
     tag: "2.3.5"
     pullPolicy: IfNotPresent
-
   acapyTenancyMode: single
   setNonRevoked: true
   invitationLabel: BC Gov SSO Service (Test)
   useOobLocalDIDService: false
-
   controller:
     cameraRedirectUrl: wallet_howto
     presentationExpireTime: 300
@@ -29,59 +26,48 @@ vc-authn-oidc:
         - verified
     templateDirectory: /app/templates
     useConnectionBasedVerification: true
-
   useHTTPS: true
   logLevel: INFO
-
   auth:
     api:
       existingSecret: "vc-authn-oidc-api-key"
     token:
       privateKey:
         existingSecret: "vc-authn-oidc-jwt-token"
-
   database:
     existingSecret: "vc-authn-oidc-mongodb"
-
   resources:
     limits:
       memory: 512Mi
     requests:
       cpu: 10m
       memory: 128Mi
-
   autoscaling:
     enabled: false
     minReplicas: 2
     maxReplicas: 4
     targetCPUUtilizationPercentage: 80
-
   networkPolicy:
     enabled: true
     ingress:
       enabled: true
       namespaceSelector:
         network.openshift.io/policy-group: ingress
-
   ingress:
     enabled: true
     annotations:
       route.openshift.io/termination: edge
-
   acapy:
     nameOverride: agent
     image:
       pullPolicy: IfNotPresent
-
     agentUrl: "https://vc-authn-oidc-agent-test.apps.silver.devops.gov.bc.ca"
     adminUrl: "https://vc-authn-oidc-agent-admin-test.apps.silver.devops.gov.bc.ca"
-
     secrets:
       api:
         existingSecret: "vc-authn-oidc-agent-api"
       seed:
         existingSecret: "vc-authn-oidc-agent-seed"
-
     walletStorageConfig:
       url: vc-authn-oidc-agent-database-primary:5432
     walletStorageCredentials:
@@ -89,14 +75,12 @@ vc-authn-oidc:
       secretKeys:
         adminPasswordKey: admin-password
         userPasswordKey: acapy-password
-
     autoscaling:
       enabled: true
       minReplicas: 2
       maxReplicas: 4
       targetCPUUtilizationPercentage: 80
       stabilizationWindowSeconds: 0
-
     argfile.yml:
       admin-insecure-mode: false
       auto-accept-invites: true
@@ -118,7 +102,6 @@ vc-authn-oidc:
       wallet-storage-type: postgres_storage
       wallet-type: askar
       webhook-url: https://vc-authn-oidc-test.apps.silver.devops.gov.bc.ca/webhooks
-
     ledgers.yml:
       - id: BCovrinTest
         is_production: true
@@ -130,17 +113,14 @@ vc-authn-oidc:
       - id: CANdyProd
         is_production: true
         genesis_url: "https://raw.githubusercontent.com/ICCS-ISAC/dtrust-reconu/main/CANdy/prod/pool_transactions_genesis"
-
     networkPolicy:
       enabled: true
       ingress:
         enabled: true
         namespaceSelector:
           network.openshift.io/policy-group: ingress
-
     postgresql:
       enabled: false
-
   mongodb:
     image:
       registry: artifacts.developer.gov.bc.ca

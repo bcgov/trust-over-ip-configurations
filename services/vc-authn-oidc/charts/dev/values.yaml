@@ -1,18 +1,15 @@
 global:
   ingressSuffix: -dev.apps.silver.devops.gov.bc.ca
-
 vc-authn-oidc:
   image:
     registry: ghcr.io
     repository: bcgov/acapy-vc-authn-oidc
     tag: "2.3.5"
     pullPolicy: Always
-
   acapyTenancyMode: single
   setNonRevoked: true
   invitationLabel: BC Gov SSO Service (Dev)
   useOobLocalDIDService: false
-
   controller:
     cameraRedirectUrl: wallet_howto
     presentationExpireTime: 300
@@ -27,10 +24,8 @@ vc-authn-oidc:
         - verified
     templateDirectory: /app/templates
     useConnectionBasedVerification: true
-
   useHTTPS: true
   logLevel: INFO
-
   auth:
     api:
       existingSecret: "vc-authn-oidc-api-key"
@@ -94,7 +89,6 @@ vc-authn-oidc:
       wallet-storage-type: postgres_storage
       wallet-type: askar
       webhook-url: https://vc-authn-oidc-dev.apps.silver.devops.gov.bc.ca/webhooks
-
     ledgers.yml:
       - id: BCovrinTest
         is_production: true
@@ -109,20 +103,16 @@ vc-authn-oidc:
       - id: CANdyProd
         is_production: true
         genesis_url: "https://raw.githubusercontent.com/ICCS-ISAC/dtrust-reconu/main/CANdy/prod/pool_transactions_genesis"
-
     secrets:
       api:
         existingSecret: "vc-authn-oidc-agent-api"
       seed:
         existingSecret: "vc-authn-oidc-agent-seed"
-
     networkPolicy:
       enabled: true
-
     postgresql:
       auth:
         existingSecret: "vc-authn-oidc-postgresql"
-
   mongodb:
     auth:
       existingSecret: "vc-authn-oidc-mongodb"
@@ -140,4 +130,3 @@ vc-authn-oidc:
     livenessProbe:
       enabled: true
       timeoutSeconds: 10
-
