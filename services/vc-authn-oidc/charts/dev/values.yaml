@@ -112,6 +112,10 @@ vc-authn-oidc:
     networkPolicy:
       enabled: true
 
+    postgresql:
+      auth:
+        existingSecret: "vc-authn-oidc-postgresql"
+
   mongodb:
     auth:
       existingSecret: "vc-authn-oidc-mongodb"
