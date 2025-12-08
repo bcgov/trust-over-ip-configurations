@@ -26,7 +26,7 @@ redis:
     ## Security parameters
     ##
     security:
-      ## @param global.security.allowInsecureImages Allows skipping image verification
+      ## @param global.security.allowInsecureImages This does not do any actual security validation. This is just a flag to allow the substitution of images which were not originally set by the chart defaults.
       allowInsecureImages: true
     redis:
       password: ""
