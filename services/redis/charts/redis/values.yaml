@@ -26,8 +26,8 @@ redis:
     ## Security parameters
     ##
     security:
-      ## @param global.security.allowInsecureImages Allows skipping image verification
-      allowInsecureImages: false
+      ## @param global.security.allowInsecureImages This does not do any actual security validation. This is just a flag to allow the substitution of images which were not originally set by the chart defaults.
+      allowInsecureImages: true
     redis:
       password: ""
     ## Compatibility adaptations for Kubernetes platforms
@@ -114,7 +114,7 @@ redis:
   ##
   image:
     registry: docker.io
-    repository: bitnami/redis
+    repository: bitnamilegacy/redis
     tag: 7.4.2-debian-12-r6
     digest: ""
     ## Specify a imagePullPolicy
@@ -1186,7 +1186,7 @@ redis:
     ##
     image:
       registry: docker.io
-      repository: bitnami/redis-sentinel
+      repository: bitnamilegacy/redis-sentinel
       tag: 7.4.2-debian-12-r6
       digest: ""
       ## Specify a imagePullPolicy
@@ -1790,7 +1790,7 @@ redis:
     ##
     image:
       registry: docker.io
-      repository: bitnami/redis-exporter
+      repository: bitnamilegacy/redis-exporter
       tag: 1.69.0-debian-12-r1
       digest: ""
       pullPolicy: IfNotPresent
@@ -2162,7 +2162,7 @@ redis:
     ##
     image:
       registry: docker.io
-      repository: bitnami/os-shell
+      repository: bitnamilegacy/os-shell
       tag: 12-debian-12-r40
       digest: ""
       pullPolicy: IfNotPresent
@@ -2226,7 +2226,7 @@ redis:
     ##
     image:
       registry: docker.io
-      repository: bitnami/kubectl
+      repository: bitnamilegacy/kubectl
       tag: 1.32.3-debian-12-r1
       digest: ""
       ## Specify a imagePullPolicy
@@ -2295,7 +2295,7 @@ redis:
     ##
     image:
       registry: docker.io
-      repository: bitnami/os-shell
+      repository: bitnamilegacy/os-shell
       tag: 12-debian-12-r40
       digest: ""
       pullPolicy: IfNotPresent
