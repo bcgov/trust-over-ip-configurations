@@ -72,24 +72,30 @@ didcomm-mediator-credo:
     - name: LD_PRELOAD
       value: /usr/lib/x86_64-linux-gnu/libjemalloc.so.2
     - name: POSTGRES_HOST
-      value: aries-mediator-db
+      valueFrom:
+        secretKeyRef:
+          name: mediator-database-pguser-credomediator
+          key: host
     - name: POSTGRES_USER
       valueFrom:
         secretKeyRef:
-          name: aries-mediator-db
-          key: database-user
+          name: mediator-database-pguser-credomediator
+          key: user
     - name: POSTGRES_ADMIN_USER
-      value: postgres
+      valueFrom:
+        secretKeyRef:
+          name: mediator-database-pguser-pgadmin
+          key: user
     - name: POSTGRES_PASSWORD
       valueFrom:
         secretKeyRef:
-          name: aries-mediator-db
-          key: database-password
+          name: mediator-database-pguser-credomediator
+          key: password
     - name: POSTGRES_ADMIN_PASSWORD
       valueFrom:
         secretKeyRef:
-          name: aries-mediator-db
-          key: admin-password
+          name: mediator-database-pguser-pgadmin
+          key: password
 
   autoscaling:
     enabled: true
@@ -100,8 +106,6 @@ didcomm-mediator-credo:
   postgresql:
     enabled: true
     selectorLabels:
-      app: aries-mediator-service
-      app-group: aries-mediator-service
-      env: prod
-      name: aries-mediator-db
-      role: db
+      postgres-operator.crunchydata.com/cluster: mediator-database
+      postgres-operator.crunchydata.com/instance-set: ha
+      postgres-operator.crunchydata.com/data: postgres
