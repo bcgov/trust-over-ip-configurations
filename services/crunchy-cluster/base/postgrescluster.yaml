@@ -34,8 +34,6 @@ spec:
             storage: 1Gi
         storageClassName: netapp-block-standard
       resources:
-        limits:
-          memory: 250Mi
         requests:
           cpu: 100m
           memory: 150Mi
@@ -92,12 +90,10 @@ spec:
               resources:
                 requests:
                   storage: 1Gi
-              storageClassName: netapp-file-standard
+              storageClassName: netapp-block-standard
       sidecars:
         pgbackrest:
           resources:
-            limits:
-              memory: 1Gi
             requests:
               cpu: 250m
               memory: 256Mi
@@ -105,8 +101,6 @@ spec:
     pgmonitor:
       exporter:
         resources:
-          limits:
-            memory: 128Mi
           requests:
             cpu: 100m
             memory: 64Mi
