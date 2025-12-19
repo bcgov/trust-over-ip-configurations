@@ -130,3 +130,5 @@ vc-authn-oidc:
     livenessProbe:
       enabled: true
       timeoutSeconds: 10
+  redis:
+    enabled: true
