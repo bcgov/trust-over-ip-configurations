@@ -1,9 +1,9 @@
 apiVersion: v2
 name: redis
 type: application
-version: 20.12.2
-appVersion: 7.4.2
+version: 2.2.1
+appVersion: 8.4.0
 dependencies:
   - name: redis
-    version: 20.12.2
-    repository: https://charts.bitnami.com/bitnami/
+    version: 2.2.1
+    repository: https://groundhog2k.github.io/helm-charts/
