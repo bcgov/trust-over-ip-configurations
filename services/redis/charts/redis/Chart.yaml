@@ -1,9 +1,9 @@
 apiVersion: v2
 name: redis
 type: application
-version: 2.2.1
+version: 0.20.6
 appVersion: 8.4.0
 dependencies:
   - name: redis
-    version: 2.2.1
-    repository: https://groundhog2k.github.io/helm-charts/
+    version: 0.20.6
+    repository: oci://registry-1.docker.io/cloudpirates
