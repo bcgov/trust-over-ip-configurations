@@ -1,39 +1,40 @@
 global:
   ingressSuffix: -sandbox.apps.silver.devops.gov.bc.ca
 
-api:
-  acapyAdminUrl: https://endorser-agent-webvh-admin-sandbox.apps.silver.devops.gov.bc.ca
-  publicName: "BC Endorser Service (sandbox)"
-  publicDesc: "An endorser service for BC issuer agents"
-  adminUser: endorser-admin
-  logLevel: info
-  autoAcceptConnections: true
-  autoAcceptAuthors: true
-  autoEndorseRequests: true
-  autoEndorseTxnTypes: ""
+endorser-service:
+  api:
+    acapyAdminUrl: https://endorser-agent-webvh-admin-sandbox.apps.silver.devops.gov.bc.ca
+    publicName: "BC Endorser Service (sandbox)"
+    publicDesc: "An endorser service for BC issuer agents"
+    adminUser: endorser-admin
+    logLevel: info
+    autoAcceptConnections: true
+    autoAcceptAuthors: true
+    autoEndorseRequests: true
+    autoEndorseTxnTypes: ""
 
-acapy:
-  agentUrl: "https://endorser-agent-webvh-sandbox.apps.silver.devops.gov.bc.ca"
-  adminUrl: "https://endorser-agent-webvh-admin-sandbox.apps.silver.devops.gov.bc.ca"
-  plugin-config.yml:
-    webvh:
-      server_url: "https://sandbox.bcvh.vonx.io"
+  acapy:
+    agentUrl: "https://endorser-agent-webvh-sandbox.apps.silver.devops.gov.bc.ca"
+    adminUrl: "https://endorser-agent-webvh-admin-sandbox.apps.silver.devops.gov.bc.ca"
+    plugin-config.yml:
+      webvh:
+        server_url: "https://sandbox.bcvh.vonx.io"
 
-proxy:
-   ingress:
-    hosts:
-      - host: endorser-agent-webvh-sandbox.apps.silver.devops.gov.bc.ca
-        paths:
-          - path: /
-            pathType: ImplementationSpecific
-            servicePort: agent
-      - host: endorser-agent-webvh-admin-sandbox.apps.silver.devops.gov.bc.ca
-        paths:
-          - path: /
-            pathType: ImplementationSpecific
-            servicePort: admin
-      - host: endorser-api-webvh-sandbox.apps.silver.devops.gov.bc.ca
-        paths:
-          - path: /
-            pathType: ImplementationSpecific
-            servicePort: endorser
+  proxy:
+    ingress:
+      hosts:
+        - host: endorser-agent-webvh-sandbox.apps.silver.devops.gov.bc.ca
+          paths:
+            - path: /
+              pathType: ImplementationSpecific
+              servicePort: agent
+        - host: endorser-agent-webvh-admin-sandbox.apps.silver.devops.gov.bc.ca
+          paths:
+            - path: /
+              pathType: ImplementationSpecific
+              servicePort: admin
+        - host: endorser-api-webvh-sandbox.apps.silver.devops.gov.bc.ca
+          paths:
+            - path: /
+              pathType: ImplementationSpecific
+              servicePort: endorser

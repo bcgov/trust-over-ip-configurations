@@ -1,107 +1,43 @@
-ingress:
-  enabled: true
-  className: ""
-  annotations:
-    route.openshift.io/termination: edge
-    # kubernetes.io/ingress.class: nginx
-    # kubernetes.io/tls-acme: "true"
-  labels:
-    certbot-managed: "true"
-  hosts:
-    - host: mediator-test.digitaltrust.gov.bc.ca
-      paths:
-        - path: /
-          pathType: ImplementationSpecific
-    - host: mediator-credo-test.apps.silver.devops.gov.bc.ca
-      paths:
-        - path: /
-          pathType: ImplementationSpecific
-  tls:
-    - secretName: mediator-credo-tls
+global:
+  ingressSuffix: -test.apps.silver.devops.gov.bc.ca
+
+endorser-service:
+  api:
+    acapyAdminUrl: https://endorser-agent-webvh-admin-test.apps.silver.devops.gov.bc.ca
+    publicName: "BC Endorser Service (test)"
+    publicDesc: "An endorser service for BC issuer agents"
+    adminUser: endorser-admin
+    logLevel: info
+    autoAcceptConnections: true
+    autoAcceptAuthors: true
+    autoEndorseRequests: true
+    autoEndorseTxnTypes: ""
+
+  acapy:
+    agentUrl: "https://endorser-agent-webvh-test.apps.silver.devops.gov.bc.ca"
+    adminUrl: "https://endorser-agent-webvh-admin-test.apps.silver.devops.gov.bc.ca"
+    plugin-config.yml:
+      webvh:
+        server_url: "https://test.bcvh.vonx.io"
+
+  proxy:
+    ingress:
       hosts:
-        - mediator-test.digitaltrust.gov.bc.ca
-
-networkPolicy:
-  enabled: true
-  ingress:
-    enabled: true
-    namespaceSelector:
-      network.openshift.io/policy-group: ingress
-    # namespaceSelector: []
-    ## Example:
-    # network.openshift.io/policy-group: ingress
-    podSelector: {}
-
-resources:
-  limits:
-    memory: 2Gi
-  requests:
-    cpu: 100m
-    memory: 512Mi
-
-environment:
-  - name: LOG_LEVEL
-    value: "2"
-  - name: AGENT_PORT
-    value: "3000"
-  - name: AGENT_NAME
-    value: BC Mediator (Test)
-  - name: AGENT_ENDPOINTS
-    value: "https://mediator-test.digitaltrust.gov.bc.ca,wss://mediator-test.digitaltrust.gov.bc.ca"
-  - name: WALLET_NAME
-    value: aries-mediator-agent-wallet
-  - name: PICKUP_TYPE
-    value: postgres
-  - name: PICKUP_STRATEGY
-    value: QueueAndLiveModeDelivery
-  - name: CREATE_NEW_INVITATION
-    value: "false"
-  - name: GOAL_CODE
-    value: "vc.mediate"
-  - name: USE_PUSH_NOTIFICATIONS
-    value: "true"
-  - name: PUSH_NOTIFICATION_TITLE
-    value: "You have important information in your digital wallet"
-  - name: PUSH_NOTIFICATION_BODY
-    value: "Please open your wallet"
-  - name: NODE_OPTIONS
-    value: "--max-old-space-size=256"
-  - name: MALLOC_CONF
-    value: "background_thread:true,dirty_decay_ms:5000,muzzy_decay_ms:5000"
-  - name: LD_PRELOAD
-    value: /usr/lib/x86_64-linux-gnu/libjemalloc.so.2
-  - name: POSTGRES_HOST
-    value: aries-mediator-db
-  - name: POSTGRES_USER
-    valueFrom:
-      secretKeyRef:
-        name: aries-mediator-db
-        key: database-user
-  - name: POSTGRES_ADMIN_USER
-    value: postgres
-  - name: POSTGRES_PASSWORD
-    valueFrom:
-      secretKeyRef:
-        name: aries-mediator-db
-        key: database-password
-  - name: POSTGRES_ADMIN_PASSWORD
-    valueFrom:
-      secretKeyRef:
-        name: aries-mediator-db
-        key: admin-password
-
-autoscaling:
-  enabled: true
-  minReplicas: 2
-  maxReplicas: 6
-  targetCPUUtilizationPercentage: 80
-  targetMemoryUtilizationPercentage: 80
-
-postgresql:
-  enabled: true
-  selectorLabels:
-    app: aries-mediator-service
-    app-group: aries-mediator-service
-    env: test
-    name: aries-mediator-db
-    role: db
+        - host: endorser-agent-webvh-test.apps.silver.devops.gov.bc.ca
+          paths:
+            - path: /
+              pathType: ImplementationSpecific
+              servicePort: agent
+        - host: endorser-agent-webvh-admin-test.apps.silver.devops.gov.bc.ca
+          paths:
+            - path: /
+              pathType: ImplementationSpecific
+              servicePort: admin
+        - host: endorser-api-webvh-test.apps.silver.devops.gov.bc.ca
+          paths:
+            - path: /
+              pathType: ImplementationSpecific
+              servicePort: endorser
+            - path: /
+              pathType: ImplementationSpecific
+              servicePort: endorser
