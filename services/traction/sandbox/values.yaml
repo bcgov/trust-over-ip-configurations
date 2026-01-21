@@ -50,6 +50,9 @@ acapy:
           expiry_minutes: 2880
           auto_approve: true
           auto_issuer: true
+      webvh:
+        server_url: https://sandbox.bcvh.vonx.io
+        witness_id: did:key:z6Mktqm2pXW48BZzSNnDzaA3yxo3zhfCUzAktVzFmzZHbVNn
 
   secrets:
     api:
