@@ -113,6 +113,10 @@ vc-authn-oidc:
     postgresql:
       auth:
         existingSecret: "vc-authn-oidc-postgresql"
+  cleanup:
+    cronjob:
+      enabled: true
+      schedule: "0 * * * *"
   mongodb:
     auth:
       existingSecret: "vc-authn-oidc-mongodb"
