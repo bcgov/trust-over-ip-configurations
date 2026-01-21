@@ -3,7 +3,7 @@ name: endorser-service
 description: endorser-service - prod
 type: application
 version: 0.1.0
-appVersion: "0.1.1"
+appVersion: "1.1.1"
 dependencies:
   - name: endorser-service
     version: 0.1.0

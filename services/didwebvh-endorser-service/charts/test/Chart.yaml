@@ -3,8 +3,8 @@ name: endorser-service
 description: endorser-service - test
 type: application
 version: 0.1.0
-appVersion: "0.1.1"
+appVersion: "1.1.1"
 dependencies:
   - name: endorser-service
-    version: 0.1.1
+    version: 0.1.0
     repository: https://openwallet-foundation.github.io/helm-charts
