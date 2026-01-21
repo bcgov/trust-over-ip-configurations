@@ -18,7 +18,7 @@ endorser-service:
     adminUrl: "https://endorser-agent-webvh-admin-test.apps.silver.devops.gov.bc.ca"
     plugin-config.yml:
       webvh:
-        server_url: "https://test.bcvh.vonx.io"
+        server_url: "https://registry-test.digitaltrust.gov.bc.ca"
 
   proxy:
     ingress:
