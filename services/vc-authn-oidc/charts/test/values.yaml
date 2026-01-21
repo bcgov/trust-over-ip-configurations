@@ -43,7 +43,7 @@ vc-authn-oidc:
       cpu: 10m
       memory: 128Mi
   autoscaling:
-    enabled: false
+    enabled: true
     minReplicas: 2
     maxReplicas: 4
     targetCPUUtilizationPercentage: 80
@@ -121,6 +121,10 @@ vc-authn-oidc:
           network.openshift.io/policy-group: ingress
     postgresql:
       enabled: false
+  cleanup:
+    cronjob:
+      enabled: true
+      schedule: "0 * * * *"
   mongodb:
     image:
       registry: artifacts.developer.gov.bc.ca
@@ -143,3 +147,16 @@ vc-authn-oidc:
     livenessProbe:
       enabled: true
       timeoutSeconds: 10
+  redis:
+    enabled: false
+  externalRedis:
+    host: "redis-shared-headless"
+    port: 6379
+    database: 0
+    auth:
+      enabled: true
+      existingSecret: redis-shared
+      password: ""
+    tls:
+      enabled: false
+      existingSecret: ""
