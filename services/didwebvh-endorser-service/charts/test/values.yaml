@@ -8,9 +8,9 @@ endorser-service:
     publicDesc: "An endorser service for BC issuer agents"
     adminUser: endorser-admin
     logLevel: info
-    autoAcceptConnections: true
-    autoAcceptAuthors: true
-    autoEndorseRequests: true
+    autoAcceptConnections: false
+    autoAcceptAuthors: false
+    autoEndorseRequests: false
     autoEndorseTxnTypes: ""
 
   acapy:
