@@ -1,0 +1,25 @@
+global:
+  ingressSuffix: -dev.apps.silver.devops.gov.bc.ca
+
+acapy:
+  agentUrl: "https://didwebvh-endorser-service-acapy-dev.apps.silver.devops.gov.bc.ca"
+  adminUrl: "https://didwebvh-endorser-service-acapy-admin-dev.apps.silver.devops.gov.bc.ca"
+
+proxy:
+   ingress:
+    hosts:
+      - host: didwebvh-endorser-service-acapy-dev.apps.silver.devops.gov.bc.ca
+        paths:
+          - path: /
+            pathType: ImplementationSpecific
+            servicePort: agent
+      - host: didwebvh-endorser-service-acapy-admin-dev.apps.silver.devops.gov.bc.ca
+        paths:
+          - path: /
+            pathType: ImplementationSpecific
+            servicePort: admin
+      - host: didwebvh-endorser-service-dev.apps.silver.devops.gov.bc.ca
+        paths:
+          - path: /
+            pathType: ImplementationSpecific
+            servicePort: endorser
