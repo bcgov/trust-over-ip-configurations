@@ -1,0 +1,43 @@
+global:
+  ingressSuffix: -dev.apps.silver.devops.gov.bc.ca
+
+endorser-service:
+  api:
+    acapyAdminUrl: https://endorser-agent-webvh-admin-dev.apps.silver.devops.gov.bc.ca
+    publicName: "BC Endorser Service (dev)"
+    publicDesc: "An endorser service for BC issuer agents"
+    adminUser: endorser-admin
+    logLevel: info
+    autoAcceptConnections: false
+    autoAcceptAuthors: false
+    autoEndorseRequests: false
+    autoEndorseTxnTypes: ""
+
+  acapy:
+    agentUrl: "https://endorser-agent-webvh-dev.apps.silver.devops.gov.bc.ca"
+    adminUrl: "https://endorser-agent-webvh-admin-dev.apps.silver.devops.gov.bc.ca"
+    plugin-config.yml:
+      webvh:
+        server_url: "https://registry-dev.digitaltrust.gov.bc.ca"
+
+  proxy:
+    ingress:
+      hosts:
+        - host: endorser-agent-webvh-dev.apps.silver.devops.gov.bc.ca
+          paths:
+            - path: /
+              pathType: ImplementationSpecific
+              servicePort: agent
+        - host: endorser-agent-webvh-admin-dev.apps.silver.devops.gov.bc.ca
+          paths:
+            - path: /
+              pathType: ImplementationSpecific
+              servicePort: admin
+        - host: endorser-api-webvh-dev.apps.silver.devops.gov.bc.ca
+          paths:
+            - path: /
+              pathType: ImplementationSpecific
+              servicePort: endorser
+            - path: /
+              pathType: ImplementationSpecific
+              servicePort: endorser
