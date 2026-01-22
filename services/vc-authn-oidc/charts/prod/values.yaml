@@ -7,7 +7,7 @@ global:
 vc-authn-oidc:
   image:
     registry: ghcr.io
-    repository: bcgov/acapy-vc-authn-oidc
+    repository: openwallet-foundation/acapy-vc-authn-oidc
     tag: "2.3.5"
     pullPolicy: IfNotPresent
   acapyTenancyMode: single
