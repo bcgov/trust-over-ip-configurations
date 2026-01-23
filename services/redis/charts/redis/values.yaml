@@ -23,7 +23,7 @@ redis:
   ## @section Redis image parameters
   image:
     ## @param image.registry Redis image registry
-    registry: docker.io
+    registry: artifacts.developer.gov.bc.ca/docker-remote
     ## @param image.repository Redis image repository
     repository: redis
     ## @param image.tag Redis image tag
@@ -343,6 +343,7 @@ redis:
     enabled: false
     ## @param sentinel.image.repository Redis Sentinel image repository
     image:
+      registry: artifacts.developer.gov.bc.ca/docker-remote
       repository: redis
       tag: "8.4.0@sha256:47200b04138293fae39737e50878a238b13ec0781083126b1b0c63cf5d992e8d"
       pullPolicy: Always
@@ -465,7 +466,7 @@ redis:
     ## @param metrics.image.tag Redis exporter image tag
     ## @param metrics.image.pullPolicy Redis exporter image pull policy
     image:
-      registry: docker.io
+      registry: artifacts.developer.gov.bc.ca/docker-remote
       repository: oliver006/redis_exporter
       tag: "v1.80.1-alpine"
       pullPolicy: Always
