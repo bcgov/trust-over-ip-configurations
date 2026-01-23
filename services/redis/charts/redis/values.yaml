@@ -232,31 +232,31 @@ redis:
   ## @param topologySpreadConstraints Topology Spread Constraints for pod assignment
   topologySpreadConstraints: []
 
-  containerSecurityContext: null
-    # ## @param containerSecurityContext.runAsUser User ID to run the container
-    # runAsUser: 999
-    # ## @param containerSecurityContext.runAsGroup Group ID to run the container
-    # runAsGroup: 999
-    # ## @param containerSecurityContext.runAsNonRoot Run as non-root user
-    # runAsNonRoot: true
-    # ## @param containerSecurityContext.privileged Set container's privileged mode
-    # privileged: false
-    # ## @param containerSecurityContext.allowPrivilegeEscalation Set Redis container's privilege escalation
-    # allowPrivilegeEscalation: false
-    # ## @param containerSecurityContext.readOnlyRootFilesystem Read-only root filesystem
-    # readOnlyRootFilesystem: true
-    # ## @param containerSecurityContext.capabilities Linux capabilities to be dropped
-    # capabilities:
-    #   drop:
-    #     - ALL
-    # ## @param containerSecurityContext.seccompProfile Seccomp profile for the container
-    # seccompProfile:
-    #   type: RuntimeDefault
+  containerSecurityContext:
+    ## @param containerSecurityContext.runAsUser User ID to run the container
+    runAsUser: 999
+    ## @param containerSecurityContext.runAsGroup Group ID to run the container
+    runAsGroup: 999
+    ## @param containerSecurityContext.runAsNonRoot Run as non-root user
+    runAsNonRoot: true
+    ## @param containerSecurityContext.privileged Set container's privileged mode
+    privileged: false
+    ## @param containerSecurityContext.allowPrivilegeEscalation Set Redis container's privilege escalation
+    allowPrivilegeEscalation: false
+    ## @param containerSecurityContext.readOnlyRootFilesystem Read-only root filesystem
+    readOnlyRootFilesystem: true
+    ## @param containerSecurityContext.capabilities Linux capabilities to be dropped
+    capabilities:
+      drop:
+        - ALL
+    ## @param containerSecurityContext.seccompProfile Seccomp profile for the container
+    seccompProfile:
+      type: RuntimeDefault
 
   ## @param podSecurityContext Security context for the pod
-  podSecurityContext: null
-    # ## @param podSecurityContext.fsGroup Set Redis pod's Security Context fsGroup
-    # fsGroup: 999
+  podSecurityContext:
+    ## @param podSecurityContext.fsGroup Set Redis pod's Security Context fsGroup
+    fsGroup: 999
 
   livenessProbe:
     ## @param livenessProbe.enabled Enable liveness probe
