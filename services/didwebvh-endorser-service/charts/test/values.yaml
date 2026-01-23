@@ -3,6 +3,8 @@ global:
 
 endorser-service:
   api:
+    image:
+      tag: 1.1.2
     acapyAdminUrl: https://endorser-agent-webvh-admin-test.apps.silver.devops.gov.bc.ca
     publicName: "BC Endorser Service (test)"
     publicDesc: "An endorser service for BC issuer agents"
@@ -14,10 +16,12 @@ endorser-service:
     autoEndorseTxnTypes: ""
 
   acapy:
+    image:
+      tag: 1.1.2
     agentUrl: "https://endorser-agent-webvh-test.apps.silver.devops.gov.bc.ca"
     adminUrl: "https://endorser-agent-webvh-admin-test.apps.silver.devops.gov.bc.ca"
     plugin-config.yml:
-      did-webvh:
+      webvh:
         server_url: "https://registry-test.digitaltrust.gov.bc.ca"
 
   proxy:
