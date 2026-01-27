@@ -14,7 +14,7 @@ didwebvh-server-py:
   server:
     image:
       repository: ghcr.io/decentralized-identity/didwebvh-server-py
-      tag: 0.4.5
+      tag: 0.5.0
       pullPolicy: Always
     host: "registry-dev.digitaltrust.gov.bc.ca"
     workers: "4"
@@ -22,17 +22,18 @@ didwebvh-server-py:
       webvh_version: "1.0"
       webvh_witness: "true"
       webvh_watcher: ""
-      webvh_prerotation: "false"
-      webvh_portability: "false"
+      webvh_prerotation: "true"
+      webvh_portability: "true"
       webvh_endorsement: "true"
-      webvh_known_witness_key: ""
+      webvh_known_witness_key: "z6MkjV3rqLT8viLNYqhHSiqSW2DcTrbCL4L53YDyV6wcmGC5"
       webvh_known_registry_url: ""
 
     branding:
-      app_name: "BC Gov WebVH Dev"
-      app_description: "BC Gov Dev WebVH server deployment."
-      app_icon: "https://www2.gov.bc.ca/favicon.ico"
-      app_logo: "https://www2.gov.bc.ca/images/BCID_H_rgb_pos.png"
+      app_name: "BCVH (Dev)"
+      app_description: "BC Gov WebVH server (Development)."
+      icon: "https://www2.gov.bc.ca/favicon.ico"
+      logo_vertical : "https://www2.gov.bc.ca/images/BCID_H_rgb_pos.png"
+      logo_horizontal  : "https://www2.gov.bc.ca/images/BCID_H_rgb_pos.png"
       app_primary_color: "#234075"
       app_secondary_color: "#e3a82b"
       app_accent_color: "#82B1FF"
