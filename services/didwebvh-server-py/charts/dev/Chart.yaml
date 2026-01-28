@@ -7,4 +7,4 @@ appVersion: "0.5.0"
 dependencies:
   - name: didwebvh-server-py
     version: 0.5.0
-    repository: https://github.com/decentralized-identity/didwebvh-server-py/tree/gh-pages
+    repository: https://raw.githubusercontent.com/decentralized-identity/didwebvh-server-py/refs/heads/gh-pages
