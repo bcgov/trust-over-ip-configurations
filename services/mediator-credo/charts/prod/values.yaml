@@ -58,7 +58,7 @@ didcomm-mediator-credo:
     - name: CREATE_NEW_INVITATION
       value: "false"
     - name: GOAL_CODE
-      value: "vc.mediate"
+      value: "aries.vc.mediate"
     - name: USE_PUSH_NOTIFICATIONS
       value: "true"
     - name: PUSH_NOTIFICATION_TITLE
