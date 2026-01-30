@@ -41,7 +41,7 @@ vc-authn-oidc:
       cpu: 10m
       memory: 128Mi
   autoscaling:
-    enabled: false
+    enabled: true
     minReplicas: 1
     maxReplicas: 2
     targetCPUUtilizationPercentage: 80
@@ -118,21 +118,17 @@ vc-authn-oidc:
       enabled: true
       schedule: "0 * * * *"
   mongodb:
+    enabled: false
+  externalMongodb:
+    host: "mongodb"
+    port: 27017
+    database: "vcauthn"
     auth:
-      existingSecret: "vc-authn-oidc-mongodb"
-    persistence:
-      storageClass: netapp-block-standard
-    resources:
-      limits:
-        memory: 1000Mi
-      requests:
-        cpu: 400m
-        memory: 450Mi
-    readinessProbe:
       enabled: true
-      timeoutSeconds: 10
-    livenessProbe:
-      enabled: true
-      timeoutSeconds: 10
+      username: "vcauthn"
+      password: ""
+      existingSecret: "mongodb-custom-user-secret"
+      existingSecretPasswordKey: "CUSTOM_PASSWORD"
+      retainOnUninstall: true
   redis:
     enabled: true
