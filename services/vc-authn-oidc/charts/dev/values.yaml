@@ -33,7 +33,7 @@ vc-authn-oidc:
       privateKey:
         existingSecret: "vc-authn-oidc-jwt-token"
   database:
-    existingSecret: "vc-authn-oidc-mongodb"
+    existingSecret: ""
   resources:
     limits:
       memory: 512Mi
@@ -41,7 +41,7 @@ vc-authn-oidc:
       cpu: 10m
       memory: 128Mi
   autoscaling:
-    enabled: false
+    enabled: true
     minReplicas: 1
     maxReplicas: 2
     targetCPUUtilizationPercentage: 80
@@ -118,8 +118,8 @@ vc-authn-oidc:
       enabled: true
       schedule: "0 * * * *"
   mongodb:
-    auth:
-      existingSecret: "vc-authn-oidc-mongodb"
+    image:
+      registry: artifacts.developer.gov.bc.ca/docker-remote
     persistence:
       storageClass: netapp-block-standard
     resources:
@@ -128,11 +128,28 @@ vc-authn-oidc:
       requests:
         cpu: 400m
         memory: 450Mi
-    readinessProbe:
-      enabled: true
-      timeoutSeconds: 10
-    livenessProbe:
-      enabled: true
-      timeoutSeconds: 10
+    extraObjects:
+      - |
+        apiVersion: networking.k8s.io/v1
+        kind: NetworkPolicy
+        metadata:
+          name: {{ include "mongodb.fullname" . }}-ingress
+          labels:
+            {{- include "mongodb.labels" . | nindent 4 }}
+        spec:
+          podSelector:
+            matchLabels:
+              {{- include "mongodb.selectorLabels" . | nindent 6 }}
+          policyTypes:
+            - Ingress
+          ingress:
+            - from:
+                - podSelector:
+                    matchLabels:
+                      app.kubernetes.io/name: vc-authn-oidc
+                      app.kubernetes.io/instance: {{ .Release.Name }}
+              ports:
+                - port: {{ .Values.service.port | default 27017 }}
+                  protocol: TCP
   redis:
     enabled: true
