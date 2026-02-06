@@ -146,8 +146,8 @@ vc-authn-oidc:
             - from:
                 - podSelector:
                     matchLabels:
-                      app.kubernetes.io/name: vc-authn-oidc
-                      app.kubernetes.io/instance: {{ .Release.Name }}
+                      app.kubernetes.io/instance: vc-authn-oidc
+                      component: controller
               ports:
                 - port: {{ .Values.service.port | default 27017 }}
                   protocol: TCP
