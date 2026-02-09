@@ -4,8 +4,9 @@ didcomm-mediator-credo:
     className: ""
     annotations:
       route.openshift.io/termination: edge
-      # kubernetes.io/ingress.class: nginx
-      # kubernetes.io/tls-acme: "true"
+      haproxy.router.openshift.io/disable_cookies: "false"
+      haproxy.router.openshift.io/cookie_name: ROUTEID
+      haproxy.router.openshift.io/timeout: "3600s"
     labels:
       certbot-managed: "true"
     hosts:
