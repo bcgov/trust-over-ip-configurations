@@ -6,7 +6,7 @@ didcomm-mediator-credo:
       route.openshift.io/termination: edge
       haproxy.router.openshift.io/disable_cookies: "false"
       haproxy.router.openshift.io/cookie_name: ROUTEID
-      haproxy.router.openshift.io/timeout: 1h
+      haproxy.router.openshift.io/timeout: "3600s"
     labels:
       certbot-managed: "true"
     hosts:
