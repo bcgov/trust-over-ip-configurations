@@ -127,43 +127,49 @@ vc-authn-oidc:
       enabled: false
   mongodb:
     image:
-      registry: artifacts.developer.gov.bc.ca
-      repository: docker-remote/bitnamilegacy/mongodb
-      tag: 8.0.4-debian-12-r4
-      pullPolicy: IfNotPresent
-    auth:
-      existingSecret: "vc-authn-oidc-mongodb"
+      registry: artifacts.developer.gov.bc.ca/docker-remote
     persistence:
       storageClass: netapp-block-standard
-      size: 8Gi
+    targetPlatform: openshift
     resources:
       limits:
         memory: 1000Mi
       requests:
         cpu: 400m
         memory: 450Mi
-    metrics:
-      enabled: true
-      image:
-        registry: artifacts.developer.gov.bc.ca
-        repository: docker-remote/bitnamilegacy/mongodb-exporter
-        tag: 0.43.1-debian-12-r1
-    readinessProbe:
-      enabled: true
-      timeoutSeconds: 10
-    livenessProbe:
-      enabled: true
-      timeoutSeconds: 10
+    extraObjects:
+      - |
+        apiVersion: networking.k8s.io/v1
+        kind: NetworkPolicy
+        metadata:
+          name: {{ include "mongodb.fullname" . }}-ingress
+          labels:
+            {{- include "mongodb.labels" . | nindent 4 }}
+        spec:
+          podSelector:
+            matchLabels:
+              {{- include "mongodb.selectorLabels" . | nindent 6 }}
+          policyTypes:
+            - Ingress
+          ingress:
+            - from:
+                - podSelector:
+                    matchLabels:
+                      app.kubernetes.io/instance: vc-authn-oidc
+                      component: controller
+              ports:
+                - port: {{ .Values.service.port | default 27017 }}
+                  protocol: TCP
   redis:
-    enabled: false
-  externalRedis:
-    host: "redis-shared-headless"
-    port: 6379
-    database: 0
-    auth:
-      enabled: true
-      existingSecret: redis-shared
-      password: ""
-    tls:
-      enabled: false
-      existingSecret: ""
+    enabled: true
+  # externalRedis:
+  #   host: "redis-shared-headless"
+  #   port: 6379
+  #   database: 0
+  #   auth:
+  #     enabled: true
+  #     existingSecret: redis-shared
+  #     password: ""
+  #   tls:
+  #     enabled: false
+  #     existingSecret: ""
