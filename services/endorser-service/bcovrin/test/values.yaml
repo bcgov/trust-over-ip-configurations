@@ -1,0 +1,295 @@
+global:
+  ingressSuffix: ".apps.silver.devops.gov.bc.ca"
+  security:
+    allowInsecureImages: true
+
+endorser-service:
+  # Use fullnameOverride to produce clean resource names independent of chart name
+  fullnameOverride: "bcovrin-endorser"
+
+  # =============================================================================
+  # Endorser API
+  # =============================================================================
+
+  replicaCount: 1
+
+  image:
+    repository: ghcr.io/openwallet-foundation/acapy-endorser-service/endorser
+    pullPolicy: IfNotPresent
+    tag: ""  # defaults to chart appVersion
+
+  resources:
+    limits:
+      cpu: 100m
+      memory: 512Mi
+    requests:
+      cpu: 10m
+      memory: 256Mi
+
+  api:
+    publicName: "BC Endorser Service"
+    publicDesc: "An endorser service for BC issuer agents"
+    adminUser: endorser-admin
+    logLevel: INFO
+    autoAcceptConnections: false
+    autoAcceptAuthors: false
+    autoEndorseRequests: false
+    autoEndorseTxnTypes: ""
+    rejectByDefault: false
+    webConcurrency: "2"
+    environment: test
+    jwtAccessTokenExpireMinutes: 300
+    # acapyAdminUrl is informational only; internal URL is auto-derived from
+    # the ACA-Py subchart service name by the chart's _helpers.tpl
+    acapyAdminUrl: "https://bcovrin-endorser-acapy-admin.apps.silver.devops.gov.bc.ca"
+
+  # =============================================================================
+  # Secrets
+  # =============================================================================
+
+  secrets:
+    api:
+      # Point to pre-created secret; chart will NOT generate a new one
+      existingSecret: "bcovrin-endorser-api"
+      keys:
+        endorserAdminApiKey: endorser-admin-api-key
+        webhookApiKey: webhook-api-key
+    database:
+      retainOnUninstall: true
+    jwt:
+      retainOnUninstall: true
+
+  # =============================================================================
+  # ACA-Py Agent
+  # =============================================================================
+
+  acapy:
+    enabled: true
+    image:
+      registry: ghcr.io
+      repository: openwallet-foundation/acapy-endorser-service/agent
+      tag: "1.1.2"
+
+    argfile.yml:
+      # Overrides the auto-generated label (fullname) in the configmap.
+      # The configmap sets label: from fullname first; ACA-Py (Python/PyYAML)
+      # takes the last occurrence of duplicate keys, so this value wins.
+      label: "Government of British Columbia - Endorser"
+      endorser-protocol-role: endorser
+      requests-through-public-did: true
+      auto-promote-author-did: false
+      public-invites: true
+      notify-revocation: true
+      monitor-revocation-notification: true
+      # Wallet name must match the existing wallet in the database
+      wallet-name: aries-endorser-agent-bcovrin-wallet
+      wallet-type: askar
+      wallet-storage-type: postgres_storage
+      read-only-ledger: false
+      no-ledger: false        # override default true; BCovrin uses a real ledger
+      auto-provision: true
+      emit-new-didcomm-prefix: true
+      auto-ping-connection: true
+      monitor-ping: true
+      log-level: WARNING
+      plugin: []              # override default [webvh]; not needed for BCovrin
+      webhook-url: http://bcovrin-endorser:5000/webhooks#$(ACAPY_WEBHOOK_API_KEY)
+
+    # BCovrin Test genesis
+    ledgers.yml:
+      - id: BCovrin Test
+        is_production: true
+        is_write: true
+        genesis_url: "http://test.bcovrin.vonx.io/genesis"
+
+    # Clear default webvh plugin config (no plugins loaded)
+    plugin-config.yml:
+      did-webvh: null
+
+    # Wallet storage: max_connections matches original deployment
+    walletStorageConfig:
+      max_connections: 5
+      wallet_scheme: DatabasePerWallet
+
+    # ACA-Py agent & admin API secrets — chart skips creation via existingSecret
+    secrets:
+      api:
+        existingSecret: "bcovrin-endorser-acapy-api"
+        secretKeys:
+          adminApiKey: adminApiKey
+          walletKey: walletKey
+          jwtKey: jwt
+      seed:
+        enabled: true
+        existingSecret: "bcovrin-endorser-agent-wallet-credentials"
+        secretKeys:
+          seed: seed
+
+    extraEnvVarsSecret: "bcovrin-endorser-agent-webhook"
+
+    # Public agent endpoint (used in argfile endpoint: and wss: entries)
+    agentUrl: "https://bcovrin-endorser-agent-test.apps.silver.devops.gov.bc.ca"
+    adminUrl: "https://bcovrin-endorser-agent-admin-test.apps.silver.devops.gov.bc.ca"
+
+    websockets:
+      enabled: true
+
+    service:
+      ports:
+        http: 8050
+        admin: 8051
+        ws: 8052
+
+    resources:
+      limits:
+        cpu: 100m
+        memory: 256Mi
+      requests:
+        cpu: 10m
+        memory: 160Mi
+
+    # No persistent tails storage (matches original deployment)
+    persistence:
+      enabled: false
+
+    # Network policies are managed by the parent chart
+    networkPolicy:
+      enabled: false
+
+    # -------------------------------------------------------------------
+    # Wallet PostgreSQL (separate from controller DB)
+    # Service name: bcovrin-endorser-acapy-postgres
+    # -------------------------------------------------------------------
+    postgres:
+      enabled: true
+      nameOverride: acapy-postgres
+      # OpenShift: omit runAsUser/runAsGroup from security context
+      targetPlatform: "openshift"
+      auth:
+        # Pre-created secret; chart reads postgres-password from it
+        existingSecret: "bcovrin-endorser-acapy-postgres"
+        secretKeys:
+          adminPasswordKey: postgres-password
+      customUser:
+        # Must match credentials in the existing wallet database
+        name: "User_yyhxeNni"
+        database: "default_wallet"
+        existingSecret: "bcovrin-endorser-acapy-postgres"
+        secretKeys:
+          name: user
+          database: database
+          password: password
+      persistence:
+        enabled: true
+        size: 1Gi
+        storageClass: netapp-block-standard
+      resources:
+        limits:
+          cpu: 500m
+          memory: 512Mi
+        requests:
+          cpu: 10m
+          memory: 10Mi
+
+  # =============================================================================
+  # Controller PostgreSQL (for endorser API)
+  # Service name: bcovrin-endorser-postgres
+  # Secret name:  bcovrin-endorser-postgres (managed by chart's database-secret.yaml;
+  #               password/postgres-password preserved from pre-created secret via
+  #               getOrGeneratePass lookup; user/database written from values below)
+  # =============================================================================
+
+  postgres:
+    enabled: true
+    # OpenShift: omit runAsUser/runAsGroup from security context
+    targetPlatform: "openshift"
+    auth:
+      # Same consolidated secret created by the chart's database-secret.yaml
+      existingSecret: "bcovrin-endorser-postgres"
+      secretKeys:
+        adminPasswordKey: postgres-password
+    customUser:
+      # Must match credentials in the existing controller database
+      name: "User_DTf7dbql"
+      database: "endorser_controller_db"
+      existingSecret: "bcovrin-endorser-postgres"
+      secretKeys:
+        name: user
+        database: database
+        password: password
+    persistence:
+      enabled: true
+      size: 2Gi
+      storageClass: netapp-block-standard
+    resources:
+      limits:
+        cpu: 500m
+        memory: 512Mi
+      requests:
+        cpu: 10m
+        memory: 10Mi
+    config:
+      postgresql:
+        max_connections: 500
+
+  # =============================================================================
+  # Caddy Reverse Proxy
+  # =============================================================================
+
+  proxy:
+    enabled: true
+    replicaCount: 1
+    resources:
+      limits:
+        cpu: 300m
+        memory: 128Mi
+      requests:
+        cpu: 10m
+        memory: 64Mi
+
+    ingress:
+      enabled: true
+      annotations:
+        route.openshift.io/termination: edge
+        haproxy.router.openshift.io/timeout: 60s
+      hosts:
+        # ACA-Py agent (HTTP + WebSocket)
+        - host: bcovrin-endorser-agent-test.apps.silver.devops.gov.bc.ca
+          paths:
+            - path: /
+              pathType: ImplementationSpecific
+              servicePort: agent
+        # ACA-Py admin API
+        - host: bcovrin-endorser-agent-admin-test.apps.silver.devops.gov.bc.ca
+          paths:
+            - path: /
+              pathType: ImplementationSpecific
+              servicePort: admin
+        # Endorser service API
+        - host: bcovrin-endorser-service-test.apps.silver.devops.gov.bc.ca
+          paths:
+            - path: /
+              pathType: ImplementationSpecific
+              servicePort: endorser
+
+  extraObjects:
+    - apiVersion: networking.k8s.io/v1
+      kind: NetworkPolicy
+      metadata:
+        name: bcovrin-endorser-acapy-postgres
+      spec:
+        podSelector:
+          matchLabels:
+            app.kubernetes.io/name: acapy-postgres
+            app.kubernetes.io/instance: bcovrin-endorser
+        policyTypes:
+          - Ingress
+        ingress:
+          - from:
+              - podSelector:
+                  matchLabels:
+                    app.kubernetes.io/name: acapy
+                    app.kubernetes.io/instance: bcovrin-endorser
+            ports:
+              - port: 5432
+                protocol: TCP
