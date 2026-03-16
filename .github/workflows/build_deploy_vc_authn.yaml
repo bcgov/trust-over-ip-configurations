@@ -36,7 +36,7 @@ jobs:
     needs:
       - build_image
     steps:
-      - uses: actions/create-github-app-token@v2
+      - uses: actions/create-github-app-token@v3
         id: app-token
         with:
           app-id: ${{ vars.TEAM_CDT_GITHUB_APP_ID }}
