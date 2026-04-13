@@ -2,9 +2,9 @@ global:
   ingressSuffix: -sandbox.apps.silver.devops.gov.bc.ca
 
 endorser-service:
+  image:
+    tag: 1.1.3
   api:
-    image:
-      tag: 1.1.3
     acapyAdminUrl: https://endorser-agent-webvh-admin-sandbox.apps.silver.devops.gov.bc.ca
     publicName: "BC Endorser Service (sandbox)"
     publicDesc: "An endorser service for BC issuer agents"
@@ -21,7 +21,7 @@ endorser-service:
     agentUrl: "https://endorser-agent-webvh-sandbox.apps.silver.devops.gov.bc.ca"
     adminUrl: "https://endorser-agent-webvh-admin-sandbox.apps.silver.devops.gov.bc.ca"
     plugin-config.yml:
-      webvh:
+      did-webvh:
         server_url: "https://sandbox.bcvh.vonx.io"
 
     extraDeploy:
