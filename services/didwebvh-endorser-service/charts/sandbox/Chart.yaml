@@ -3,7 +3,7 @@ name: endorser-service
 description: endorser-service - sandbox
 type: application
 version: 1.0.0
-appVersion: "1.1.1"
+appVersion: "1.1.3"
 dependencies:
   - name: endorser-service
     version: 1.0.0
