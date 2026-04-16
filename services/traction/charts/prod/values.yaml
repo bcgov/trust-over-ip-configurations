@@ -114,7 +114,7 @@ traction:
     oidc:
       active: true
       showInnkeeperAdminLogin: true
-      showWritableComponents: false
+      showWritableComponents: true
       authority: https://loginproxy.gov.bc.ca/auth/realms/digitaltrust-citz
       jwksUri: https://loginproxy.gov.bc.ca/auth/realms/digitaltrust-citz/protocol/openid-connect/certs
       extraQueryParams: '{"kc_idp_hint":"idir"}'
