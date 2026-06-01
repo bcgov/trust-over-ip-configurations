@@ -15,12 +15,20 @@ jobs:
     if: github.repository_owner == 'bcgov'
     steps:
       - uses: actions/checkout@v6
+      - name: Checkout GitOps repo (Dockerfile and templates)
+        uses: actions/checkout@v6
+        with:
+          repository: bcgov-c/ministry-gitops-ditp
+          ssh-key: ${{ secrets.DITP_GITOPS_REPO_SECRET }}
+          sparse-checkout: |
+            services/vc-authn-oidc
+          path: ministry-gitops-ditp
       - name: Build VC-AuthN
         uses: ./.github/actions/build_image
         id: builder
         with:
-          context: "./services/vc-authn-oidc"
-          dockerfile: "./services/vc-authn-oidc/Dockerfile"
+          context: "./ministry-gitops-ditp/services/vc-authn-oidc"
+          dockerfile: "./ministry-gitops-ditp/services/vc-authn-oidc/Dockerfile"
           image_name: ${{ github.repository_owner}}/acapy-vc-authn-oidc
           image_tag: ${{ inputs.tag }}
           registry: ghcr.io
