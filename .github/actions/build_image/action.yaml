@@ -1,10 +1,6 @@
 name: Build Image
 description: Build Image
 inputs:
-  ref:
-    description: 'The branch, tag or SHA to checkout'
-    required: false
-    default: ''  
   context:
     description: 'The build context'
     required: true
@@ -46,10 +42,6 @@ outputs:
 runs:
   using: "composite"
   steps:
-    - uses: actions/checkout@v4   
-      with:
-        ref: ${{ inputs.ref != '' && inputs.ref ||  env.GITHUB_REF }}
-
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v3
 
