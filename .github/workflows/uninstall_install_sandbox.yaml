@@ -76,20 +76,11 @@ jobs:
         run: |
           echo "This job runs biweekly on 1st and 15th of every month at 2:00 AM PST"
 
-      - name: Create GitHub App token for GitOps repo
-        uses: actions/create-github-app-token@v3
-        id: app-token
-        with:
-          client-id: ${{ vars.TEAM_CDT_GITHUB_APP_ID }}
-          private-key: ${{ secrets.TEAM_CDT_GITHUB_APP_PRIVATE_KEY }}
-          owner: bcgov-c
-          repositories: ministry-gitops-ditp
-
       - name: Checkout GitOps repo (values files)
         uses: actions/checkout@v6
         with:
           repository: bcgov-c/ministry-gitops-ditp
-          token: ${{ steps.app-token.outputs.token }}
+          ssh-key: ${{ secrets.DITP_GITOPS_REPO_SECRET }}
           sparse-checkout: |
             services/traction/sandbox
             services/didwebvh-server-py/sandbox

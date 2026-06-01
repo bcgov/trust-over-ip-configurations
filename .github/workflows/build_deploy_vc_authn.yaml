@@ -36,20 +36,11 @@ jobs:
     needs:
       - build_image
     steps:
-      - name: Create GitHub App token for GitOps repo
-        uses: actions/create-github-app-token@v3
-        id: app-token
-        with:
-          client-id: ${{ vars.TEAM_CDT_GITHUB_APP_ID }}
-          private-key: ${{ secrets.TEAM_CDT_GITHUB_APP_PRIVATE_KEY }}
-          owner: bcgov-c
-          repositories: ministry-gitops-ditp
-
       - name: Checkout GitOps repo
         uses: actions/checkout@v6
         with:
           repository: bcgov-c/ministry-gitops-ditp
-          token: ${{ steps.app-token.outputs.token }}
+          ssh-key: ${{ secrets.DITP_GITOPS_REPO_SECRET }}
           sparse-checkout: |
             services/vc-authn-oidc/charts
 
@@ -60,13 +51,10 @@ jobs:
           helm repo update
           echo "CHART_VERSION=$(helm search repo openwallet-foundation/vc-authn-oidc -ojson | jq -r '.[0].version')" >> $GITHUB_OUTPUT
 
-      - name: Create branch
-        env:
-          IMAGE_VERSION: ${{ needs.build_image.outputs.image_version }}
+      - name: Configure git
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git checkout -b chore/vc-authn-${IMAGE_VERSION}
 
       - name: Update dev
         env:
@@ -101,28 +89,13 @@ jobs:
           yq e -i '.version = env(CHART_VERSION)' services/vc-authn-oidc/charts/prod/Chart.yaml
           yq e -i '.dependencies[0].version = env(CHART_VERSION)' services/vc-authn-oidc/charts/prod/Chart.yaml
 
-      - name: Commit, push, and open PR
+      - name: Commit and push
         env:
-          GH_TOKEN: ${{ steps.app-token.outputs.token }}
           IMAGE_VERSION: ${{ needs.build_image.outputs.image_version }}
           CHART_VERSION: ${{ steps.chart_version.outputs.CHART_VERSION }}
         run: |
           git add services/vc-authn-oidc/charts/dev/Chart.yaml services/vc-authn-oidc/charts/dev/values.yaml
           git add services/vc-authn-oidc/charts/test/Chart.yaml services/vc-authn-oidc/charts/test/values.yaml
           git add services/vc-authn-oidc/charts/prod/Chart.yaml services/vc-authn-oidc/charts/prod/values.yaml
-          git commit -m "chore: update vc-authn-oidc to ${IMAGE_VERSION} (chart ${CHART_VERSION})"
-          git push origin chore/vc-authn-${IMAGE_VERSION}
-          cat > /tmp/pr-body.md << EOF
-          Automated update from trust-over-ip-configurations CI.
-
-          ## Changes
-          - Image tag: \`${IMAGE_VERSION}\`
-          - Helm chart version: \`${CHART_VERSION}\`
-          - Environments updated: dev, test, prod
-          EOF
-          gh pr create \
-            --repo bcgov-c/ministry-gitops-ditp \
-            --base main \
-            --head chore/vc-authn-${IMAGE_VERSION} \
-            --title "chore: update vc-authn-oidc to ${IMAGE_VERSION}" \
-            --body-file /tmp/pr-body.md
+          git commit -m "chore: update vc-authn-oidc to ${IMAGE_VERSION} (chart ${CHART_VERSION})" || echo "No changes to commit"
+          git push origin main
