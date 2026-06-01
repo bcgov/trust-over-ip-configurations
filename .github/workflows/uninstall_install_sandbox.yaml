@@ -59,7 +59,7 @@ jobs:
           mention: "here"
           mention_if: "failure"
           channel: "#ditp-gha-notifications"
-          url: ${{ secrets.ROCKETCHAT_WEBHOOK }}
+          url: ${{ secrets.TEAMS_WEBHOOK }}
           commit: true
 
   install_sandbox:
