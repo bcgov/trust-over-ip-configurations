@@ -40,7 +40,7 @@ jobs:
 
       - name: Remove Traction Openshift Objects
         run: |
-          oc delete -n ${{ secrets.OPENSHIFT_NAMESPACE_SANDBOX }} all,secret,pod,networkpolicy,configmap,pvc --selector "app.kubernetes.io/instance"=traction-sandbox
+          oc delete -n ${{ secrets.OPENSHIFT_NAMESPACE_SANDBOX }} all,secret,pod,networkpolicy,configmap,pvc --selector "app.kubernetes.io/instance"=traction-sandbox || true
 
       # - name: Uninstall DID WebVH Server via Helm
       #   run: |
