@@ -1,0 +1,9 @@
+# Uses the 'testConnection' script from https://github.com/BCDevOps/openshift-developer-tools
+# Example:
+# echo -e "agent-bcvcpilot\n api-bcvcpilot\n" | xargs -I {} testConnection -n a99fd4-dev -f TestConnections.txt -p {}
+
+google.com:80
+issuer-db-bcvcpilot:27017
+agent-bcvcpilot:8024
+api-bcvcpilot:8080
+issuer-kit-wallet:5432

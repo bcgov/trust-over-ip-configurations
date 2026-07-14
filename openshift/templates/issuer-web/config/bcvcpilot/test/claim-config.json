@@ -1,0 +1,49 @@
+{
+  "questions": [
+    {
+      "type": "text",
+      "name": "name",
+      "title": "Name:",
+      "isRequired": true,
+      "requiredErrorText": "Required Field",
+      "readOnly": true
+    },
+    {
+      "type": "text",
+      "name": "emailAddress",
+      "title": "Email Address:",
+      "isRequired": true,
+      "requiredErrorText": "Required Field",
+      "readOnly": true
+    },
+    {
+      "type": "text",
+      "name": "program",
+      "title": "Program:",
+      "isRequired": true,
+      "requiredErrorText": "Required Field",
+      "readOnly": true
+    },
+    {
+      "type": "number",
+      "name": "iss_dateint",
+      "title": "iss_dateint:",
+      "readOnly": true,
+      "isRequired": true
+    },
+    {
+      "type": "text",
+      "name": "placeholder",
+      "defaultValue": "placeholder",
+      "readOnly": true,
+      "visibleIf": "{iss_dateint} empty"
+    }
+  ],
+  "triggers": [
+    {
+      "type": "runexpression",
+      "expression": "{placeholder} notempty",
+      "runExpression": "setCurrentISODate('iss_dateint')"
+    }
+  ]
+}

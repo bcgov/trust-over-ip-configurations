@@ -1,0 +1,42 @@
+#=========================================================
+# OpenShift template parameters for:
+# Component: .
+# Template File: ../openshift/templates/backup/backup-deploy.yaml
+#=========================================================
+# NAME=backup-postgres
+# PREFIX=
+# APP_NAME=backup-container
+# APP_GROUP=backup-postgres
+# ROLE=backup-container
+# NAMESPACE_NAME=e79518
+# SOURCE_IMAGE_NAME=backup
+# IMAGE_NAMESPACE=e79518-tools
+TAG_NAME=test
+# VC_AUTHN_DB_HOST=vc-authn-database
+# VC_AUTHN_WALLET_DB_HOST=vc-authn-wallet
+# LCRB_WALLET_DB_HOST=wallet-lcrb
+# DB_USER_KEY_NAME=database-user
+# DB_PASSWORD_KEY_NAME=database-password
+# BACKUP_STRATEGY=rolling
+# WEBHOOK_URL=
+ENVIRONMENT_FRIENDLY_NAME=Access to Audio Trust Over IP (test)
+ENVIRONMENT_NAME=e79518-test
+# BACKUP_DIR=/backups/
+# DAILY_BACKUPS=
+# WEEKLY_BACKUPS=
+# MONTHLY_BACKUPS=
+# DATABASE_SERVER_TIMEOUT=300
+# CONFIG_FILE_NAME=backup.conf
+# CONFIG_MAP_NAME=backup-conf
+# CONFIG_MOUNT_PATH=/
+# BACKUP_VOLUME_NAME=backup
+# BACKUP_VOLUME_SIZE=5Gi
+# BACKUP_VOLUME_CLASS=netapp-file-backup
+# VERIFICATION_VOLUME_NAME=backup-verification
+# VERIFICATION_VOLUME_SIZE=5Gi
+# VERIFICATION_VOLUME_CLASS=netapp-file-standard
+# VERIFICATION_VOLUME_MOUNT_PATH=/var/lib/pgsql/data
+# CPU_REQUEST=0
+# CPU_LIMIT=0
+# MEMORY_REQUEST=0Mi
+# MEMORY_LIMIT=0Mi

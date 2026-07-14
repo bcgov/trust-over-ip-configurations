@@ -1,0 +1,63 @@
+{
+  "questions": [
+    {
+      "type": "text",
+      "name": "PPID",
+      "title": "PPID:",
+      "isRequired": true,
+      "requiredErrorText": "Required Field"
+    },
+    {
+      "type": "text",
+      "name": "Given Name",
+      "title": "First Name:",
+      "isRequired": true,
+      "requiredErrorText": "Required Field"
+    },
+    {
+      "type": "text",
+      "name": "Surname",
+      "title": "Last Name:",
+      "isRequired": true,
+      "requiredErrorText": "Required Field"
+    },
+    {
+      "type": "text",
+      "name": "Member Status",
+      "title": "Member Status:",
+      "isRequired": true,
+      "requiredErrorText": "Required Field",
+      "readOnly": true
+    },
+    {
+      "type": "radiogroup",
+      "name": "Member Status Code",
+      "title": "Member Status Code:",
+      "isRequired": true,
+      "requiredErrorText": "Required Field",
+      "hasNone": false,
+      "colCount": 3,
+      "choices": [
+        "PRAC",
+        "RET",
+        "OTHER"
+      ]
+    },
+    {
+      "type": "text",
+      "name": "Issuer",
+      "title": "Issuer:",
+      "isRequired": true,
+      "requiredErrorText": "Required Field",
+      "readOnly": true,
+      "defaultValue": "LSBC Demo Issuer (DEV)"
+    }
+  ],
+  "triggers": [
+    {
+      "type": "runexpression",
+      "expression": "{Member Status Code} notempty",
+      "runExpression": "updateStatus()"
+    }
+  ]
+}
