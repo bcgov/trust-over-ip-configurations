@@ -8,11 +8,17 @@ on:
         required: false
         default: ''
 
+permissions:
+  contents: read
+
 jobs:
   build_image:
     name: "Build BCGov VC-AuthN Controller"
     runs-on: ubuntu-latest
     if: github.repository_owner == 'bcgov'
+    permissions:
+      contents: read
+      packages: write
     steps:
       - uses: actions/checkout@v6
       - name: Checkout GitOps repo (Dockerfile and templates)
